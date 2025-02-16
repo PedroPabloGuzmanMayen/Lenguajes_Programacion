@@ -1,2 +1,29 @@
 # Lenguajes_Programacion
 Repositorio para el curso lenguajes de programación. 
+
+## Instrucciones para complilación: 
+
+1. Clonar el repositorio y dirigirse a él
+2. Una vez en el directorio del repositrio, ejecturar estos comandos:
+ ```bash
+  rm -rf build
+  mkdir build
+  cd build
+```
+3. En la carpeta build, ejecutar este comando:
+ ```bash
+  cmake ..
+```
+4. Finalmente, ejecutar el comando (en la carpeta build):
+ ```bash
+  make
+```
+5. Para ejecutar el programa, ejecutar:
+ ```bash
+  ./my_program
+```
+6. Para compliar nuevamente, simplemente ejecutar el comando:
+ ```bash
+  make
+```
+desde la carpeta build
