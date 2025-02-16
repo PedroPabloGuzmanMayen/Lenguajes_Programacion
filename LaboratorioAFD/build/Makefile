@@ -31,9 +31,6 @@ default_target: all
 
 .SUFFIXES: .hpux_make_needs_suffix_list
 
-# Produce verbose output by default.
-VERBOSE = 1
-
 # Command-line flag to silence nested $(MAKE).
 $(VERBOSE)MAKESILENT = -s
 
@@ -156,6 +153,30 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_program.dir/build.make CMakeFiles/my_program.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/shunting_yard.o: src/shunting_yard.cpp.o
+.PHONY : src/shunting_yard.o
+
+# target to build an object file
+src/shunting_yard.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_program.dir/build.make CMakeFiles/my_program.dir/src/shunting_yard.cpp.o
+.PHONY : src/shunting_yard.cpp.o
+
+src/shunting_yard.i: src/shunting_yard.cpp.i
+.PHONY : src/shunting_yard.i
+
+# target to preprocess a source file
+src/shunting_yard.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_program.dir/build.make CMakeFiles/my_program.dir/src/shunting_yard.cpp.i
+.PHONY : src/shunting_yard.cpp.i
+
+src/shunting_yard.s: src/shunting_yard.cpp.s
+.PHONY : src/shunting_yard.s
+
+# target to generate assembly for a file
+src/shunting_yard.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_program.dir/build.make CMakeFiles/my_program.dir/src/shunting_yard.cpp.s
+.PHONY : src/shunting_yard.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -168,6 +189,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/shunting_yard.o"
+	@echo "... src/shunting_yard.i"
+	@echo "... src/shunting_yard.s"
 .PHONY : help
 
 

@@ -1,7 +1,7 @@
 #ifndef SHUNTING_YARD_H
 #define SHUNTING_YARD_H
+#include <string>
 
-char* add_concatenation(const char* expression);
-
+std::string add_concatenation(std::string& expression);
 
 #endif

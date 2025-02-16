@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/my_program.dir/src/main.cpp.o"
   "CMakeFiles/my_program.dir/src/main.cpp.o.d"
+  "CMakeFiles/my_program.dir/src/shunting_yard.cpp.o"
+  "CMakeFiles/my_program.dir/src/shunting_yard.cpp.o.d"
   "my_program"
   "my_program.pdb"
 )
