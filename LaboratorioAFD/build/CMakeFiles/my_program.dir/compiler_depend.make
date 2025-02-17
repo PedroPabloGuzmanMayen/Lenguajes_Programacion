@@ -350,8 +350,43 @@ CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: ../src/shunting_yard.cpp \
   /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
   /usr/include/c++/11/bits/charconv.h \
   /usr/include/c++/11/bits/basic_string.tcc \
+  /usr/include/c++/11/map \
+  /usr/include/c++/11/bits/stl_tree.h \
+  /usr/include/c++/11/ext/aligned_buffer.h \
+  /usr/include/c++/11/bits/node_handle.h \
+  /usr/include/c++/11/bits/stl_map.h \
+  /usr/include/c++/11/tuple \
+  /usr/include/c++/11/utility \
+  /usr/include/c++/11/bits/stl_relops.h \
+  /usr/include/c++/11/array \
+  /usr/include/c++/11/bits/uses_allocator.h \
+  /usr/include/c++/11/bits/invoke.h \
+  /usr/include/c++/11/bits/stl_multimap.h \
+  /usr/include/c++/11/bits/erase_if.h \
+  /usr/include/c++/11/stack \
+  /usr/include/c++/11/deque \
+  /usr/include/c++/11/bits/stl_uninitialized.h \
+  /usr/include/c++/11/bits/stl_deque.h \
+  /usr/include/c++/11/bits/deque.tcc \
+  /usr/include/c++/11/bits/stl_stack.h \
   ../include/shunting_yard.h
 
+
+/usr/include/c++/11/bits/stl_stack.h:
+
+/usr/include/c++/11/bits/stl_deque.h:
+
+/usr/include/c++/11/bits/stl_uninitialized.h:
+
+/usr/include/c++/11/bits/erase_if.h:
+
+/usr/include/c++/11/bits/uses_allocator.h:
+
+/usr/include/c++/11/array:
+
+/usr/include/c++/11/bits/stl_relops.h:
+
+/usr/include/c++/11/bits/stl_map.h:
 
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 
@@ -405,6 +440,8 @@ CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: ../src/shunting_yard.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/errno.h:
 
+/usr/include/c++/11/utility:
+
 /usr/include/errno.h:
 
 /usr/include/c++/11/cerrno:
@@ -420,6 +457,8 @@ CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: ../src/shunting_yard.cpp \
 /usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
 
 /usr/include/x86_64-linux-gnu/bits/byteswap.h:
+
+/usr/include/c++/11/ext/aligned_buffer.h:
 
 /usr/include/endian.h:
 
@@ -469,6 +508,8 @@ CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: ../src/shunting_yard.cpp \
 
 /usr/include/c++/11/bits/exception.h:
 
+/usr/include/c++/11/map:
+
 /usr/include/c++/11/bits/range_access.h:
 
 /usr/include/c++/11/bits/nested_exception.h:
@@ -497,6 +538,10 @@ CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: ../src/shunting_yard.cpp \
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h:
 
+/usr/include/c++/11/tuple:
+
+/usr/include/c++/11/bits/stl_tree.h:
+
 /usr/include/c++/11/type_traits:
 
 /usr/include/x86_64-linux-gnu/bits/types/time_t.h:
@@ -515,6 +560,8 @@ CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: ../src/shunting_yard.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/wordsize.h:
 
+/usr/include/c++/11/stack:
+
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
 /usr/include/x86_64-linux-gnu/sys/cdefs.h:
@@ -526,6 +573,8 @@ CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: ../src/shunting_yard.cpp \
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++locale.h:
 
 /usr/include/stdio.h:
+
+/usr/include/c++/11/deque:
 
 /usr/include/c++/11/ios:
 
@@ -575,6 +624,8 @@ CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: ../src/shunting_yard.cpp \
 
 /usr/include/x86_64-linux-gnu/sys/single_threaded.h:
 
+/usr/include/c++/11/bits/stl_multimap.h:
+
 /usr/include/features.h:
 
 /usr/include/c++/11/ext/numeric_traits.h:
@@ -588,6 +639,8 @@ CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: ../src/shunting_yard.cpp \
 /usr/include/x86_64-linux-gnu/bits/waitstatus.h:
 
 /usr/include/c++/11/bits/postypes.h:
+
+/usr/include/c++/11/bits/invoke.h:
 
 /usr/include/x86_64-linux-gnu/bits/timex.h:
 
@@ -614,6 +667,8 @@ CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: ../src/shunting_yard.cpp \
 /usr/include/stdc-predef.h:
 
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
+
+/usr/include/c++/11/bits/node_handle.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
 
@@ -726,6 +781,8 @@ CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: ../src/shunting_yard.cpp \
 /usr/include/c++/11/ext/alloc_traits.h:
 
 /usr/include/c++/11/bits/cxxabi_forced.h:
+
+/usr/include/c++/11/bits/deque.tcc:
 
 /usr/include/x86_64-linux-gnu/bits/select.h:
 
