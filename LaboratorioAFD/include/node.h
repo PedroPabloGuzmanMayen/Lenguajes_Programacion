@@ -12,17 +12,17 @@ class Node {
         Node* rightSon;
 
     public:
-        Node(std::string value){ value = value; }
+        Node(std::string value, int id);
 
-        void setFirstPos(int pos){ firstPos = pos; }
+        void setFirstPos(int pos);
 
-        int getFirstPos(){ return firstPos; }
+        int getFirstPos();
 
-        void setLastPos(int pos){ lastPos = pos; }
+        void setLastPos(int pos);
 
-        void setSon(Node* son, int position){ position == 0 ? leftSon = son: rightSon = son; } //0 para hijo izquierdo, 1 para hijo derecho
+        void setSon(Node* son, int position);
 
-        Node* getSon(int pos){pos == 0 ? leftSon: rightSon; }
+        Node* getSon(int pos);
 };
 
 #endif
