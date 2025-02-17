@@ -43,45 +43,33 @@ std::string add_concatenation(std::string& expression){
     }
 }
 
-std::string shunting_yard(std::string& expression){
-
+std::string shunting_yard(std::string& expression) {
     std::string out;
     std::stack<char> holding;
-    std::map <char, int> operators_precedence;
-    operators_precedence['|'] = 1;
-    operators_precedence['.'] = 2;
-    operators_precedence['*'] = 3;
+    std::map<char, int> operators_precedence = {{'|', 1}, {'.', 2}, {'*', 3}};
 
-    for (int i = 0; i< expression.length(); i++){
-        if (!is_present(expression[i], operators) || expression[i] == '('){
+    for (int i = 0; i < expression.length(); i++) {
+        if (!is_present(expression[i], operators) || expression[i] == '(') {
             out += expression[i];
-        }
-        else if (expression[i] == ')'){
-            while (holding.top() != '('){
+        } 
+        else if (expression[i] == ')') {
+            while (!holding.empty() && holding.top() != '(') {
                 out += holding.top();
                 holding.pop();
             }
-            holding.pop();
-
-        }
+            if (!holding.empty()) {
+                holding.pop();
+            }
+        } 
         else {
-            if (holding.empty()){
-                holding.push(expression[i]);
+            while (!holding.empty() && operators_precedence[holding.top()] >= operators_precedence[expression[i]]) {
+                out += holding.top();
+                holding.pop();
             }
-            else {
-                if (operators_precedence[expression[i]] > operators_precedence[holding.top()]){
-                    holding.push(expression[i]);
-                }
-                else {
-                    while (operators_precedence[holding.top()] >= operators_precedence[expression[i]]){
-                        out += holding.top();
-                        holding.pop();
-                    }
-                    holding.push(expression[i]);   
-                }
-            }
+            holding.push(expression[i]);
         }
     }
+
     while (!holding.empty()) {
         out += holding.top();
         holding.pop();
@@ -89,4 +77,5 @@ std::string shunting_yard(std::string& expression){
 
     return out;
 }
+
 

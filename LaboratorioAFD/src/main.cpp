@@ -12,5 +12,7 @@ int main() {
 
     std::cout << newStr << std::endl;
 
+    std::cout << shunting_yard(newStr) << std::endl;
+
     return 0;
 }
