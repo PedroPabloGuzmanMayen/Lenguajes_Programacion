@@ -1,11 +1,7 @@
 #include <vector>
 #include <string>
 #include <unordered_set>
-
-
-
-#pragma once
-#include <string>
+#include <iostream>
 
 class Transicion {
 public:
@@ -15,6 +11,10 @@ public:
     std::string getInitialState() const { return q0; }
     std::string getFinalState() const { return qf; }
     char getValor() const { return valor; }
+
+    void print() const {
+        std::cout << "Transicion: " << q0 << " --" << valor << "--> " << qf << std::endl;
+    }
 
 private:
     std::string q0;
@@ -31,10 +31,15 @@ public:
     bool isAceptacion() const { return aceptacion; }
     std::string getNumero() const { return numero; }
 
+    void print() const {
+        std::cout << "Estado: " << numero << (aceptacion ? " (Aceptacion)" : "") << std::endl;
+    }
+
 private:
     std::string numero;
     bool aceptacion;
 };
+
 
 
 
@@ -57,3 +62,18 @@ private:
     std::vector<std::string> F_;
     int state_count;
 };
+
+
+
+int main() {
+  Estado estado1("q0");
+  Estado estado2("q1", true);
+
+  Transicion transicion1("q0", "q1", 'a');
+
+  estado1.print();
+  estado2.print();
+  transicion1.print();
+
+  return 0;
+}
