@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <iostream>
 #include <string>
 #include <map>
 #include <stack>
 #include "shunting_yard.h"
 
-char operators[4] = {'*', '|', '(', ')'};
+char operators[5] = {'*', '|', '(', ')', '.'};
 
 bool is_present(char symbol, char arr[]){
     int arr_length = sizeof(arr) / sizeof(arr[0]);
@@ -49,18 +50,21 @@ std::string shunting_yard(std::string& expression) {
     std::map<char, int> operators_precedence = {{'|', 1}, {'.', 2}, {'*', 3}};
 
     for (int i = 0; i < expression.length(); i++) {
-        if (!is_present(expression[i], operators) || expression[i] == '(') {
+        if (!is_present(expression[i], operators)) {
             out += expression[i];
-        } 
+        }
+        else if (expression[i] == '('){
+            holding.push(expression[i]);
+        }
         else if (expression[i] == ')') {
             while (!holding.empty() && holding.top() != '(') {
                 out += holding.top();
                 holding.pop();
             }
-            if (!holding.empty()) {
+            if (!holding.empty() && holding.top() == '(') {
                 holding.pop();
             }
-        } 
+        }
         else {
             while (!holding.empty() && operators_precedence[holding.top()] >= operators_precedence[expression[i]]) {
                 out += holding.top();
