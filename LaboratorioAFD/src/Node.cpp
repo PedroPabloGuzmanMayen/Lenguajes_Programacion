@@ -34,6 +34,7 @@ Node* Node::getSon(int pos){ return pos == 0 ? this->leftSon: this->rightSon; }
 void Node::display(){
     printf("Node value: %c\n", this->value);
     printf("Node id: %d\n", this->id);
+    printf("Nullable: %d\n", this->nullable);
 }
 
 void Node::setNullable(bool newVal){ this->nullable = newVal;}

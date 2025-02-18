@@ -50,3 +50,22 @@ Node* Tree::getRoot(){
     return this->root;
 }
 
+void Tree::calcNullable(Node* start){
+    if(!start) return;
+
+    calcNullable(start->getSon(0));
+    calcNullable(start->getSon(1));
+
+    if (start->getValue() == '.'){
+        start->setNullable(start->getSon(0)->getNullable() && start->getSon(1)->getNullable() );
+    }
+    else if (start->getValue() == '|'){
+        start->setNullable(start->getSon(0)->getNullable() || start->getSon(1)->getNullable() );
+    }
+    else if (start->getValue() == '*'){
+        start->setNullable(true);
+    }
+    else {
+        start->setNullable(false);
+    }
+}

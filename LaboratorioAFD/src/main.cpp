@@ -6,6 +6,7 @@
 #include "tree.h"
 #include "node.h"
 
+/*
 int main() {
 
     printf("Hello world!");
@@ -20,4 +21,4 @@ int main() {
     newTree->display(newTree->getRoot());
 
     return 0;
-}
+}*/

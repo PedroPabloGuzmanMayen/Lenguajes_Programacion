@@ -33,3 +33,9 @@ Repositorio para el curso lenguajes de programación.
   make
 ```
 desde la carpeta build
+
+### Si no tienes instalado Graphviz instalalo con 
+ ```bash
+sudo apt update
+sudo apt install graphviz -y
+```
