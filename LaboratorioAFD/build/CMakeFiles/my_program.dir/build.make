@@ -69,10 +69,24 @@ include CMakeFiles/my_program.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/my_program.dir/flags.make
 
+CMakeFiles/my_program.dir/src/Node.cpp.o: CMakeFiles/my_program.dir/flags.make
+CMakeFiles/my_program.dir/src/Node.cpp.o: ../src/Node.cpp
+CMakeFiles/my_program.dir/src/Node.cpp.o: CMakeFiles/my_program.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/my_program.dir/src/Node.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/my_program.dir/src/Node.cpp.o -MF CMakeFiles/my_program.dir/src/Node.cpp.o.d -o CMakeFiles/my_program.dir/src/Node.cpp.o -c /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/Node.cpp
+
+CMakeFiles/my_program.dir/src/Node.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/my_program.dir/src/Node.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/Node.cpp > CMakeFiles/my_program.dir/src/Node.cpp.i
+
+CMakeFiles/my_program.dir/src/Node.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/my_program.dir/src/Node.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/Node.cpp -o CMakeFiles/my_program.dir/src/Node.cpp.s
+
 CMakeFiles/my_program.dir/src/main.cpp.o: CMakeFiles/my_program.dir/flags.make
 CMakeFiles/my_program.dir/src/main.cpp.o: ../src/main.cpp
 CMakeFiles/my_program.dir/src/main.cpp.o: CMakeFiles/my_program.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/my_program.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/my_program.dir/src/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/my_program.dir/src/main.cpp.o -MF CMakeFiles/my_program.dir/src/main.cpp.o.d -o CMakeFiles/my_program.dir/src/main.cpp.o -c /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/main.cpp
 
 CMakeFiles/my_program.dir/src/main.cpp.i: cmake_force
@@ -86,7 +100,7 @@ CMakeFiles/my_program.dir/src/main.cpp.s: cmake_force
 CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: CMakeFiles/my_program.dir/flags.make
 CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: ../src/shunting_yard.cpp
 CMakeFiles/my_program.dir/src/shunting_yard.cpp.o: CMakeFiles/my_program.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/my_program.dir/src/shunting_yard.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/my_program.dir/src/shunting_yard.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/my_program.dir/src/shunting_yard.cpp.o -MF CMakeFiles/my_program.dir/src/shunting_yard.cpp.o.d -o CMakeFiles/my_program.dir/src/shunting_yard.cpp.o -c /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/shunting_yard.cpp
 
 CMakeFiles/my_program.dir/src/shunting_yard.cpp.i: cmake_force
@@ -97,19 +111,37 @@ CMakeFiles/my_program.dir/src/shunting_yard.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/my_program.dir/src/shunting_yard.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/shunting_yard.cpp -o CMakeFiles/my_program.dir/src/shunting_yard.cpp.s
 
+CMakeFiles/my_program.dir/src/tree.cpp.o: CMakeFiles/my_program.dir/flags.make
+CMakeFiles/my_program.dir/src/tree.cpp.o: ../src/tree.cpp
+CMakeFiles/my_program.dir/src/tree.cpp.o: CMakeFiles/my_program.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/my_program.dir/src/tree.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/my_program.dir/src/tree.cpp.o -MF CMakeFiles/my_program.dir/src/tree.cpp.o.d -o CMakeFiles/my_program.dir/src/tree.cpp.o -c /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/tree.cpp
+
+CMakeFiles/my_program.dir/src/tree.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/my_program.dir/src/tree.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/tree.cpp > CMakeFiles/my_program.dir/src/tree.cpp.i
+
+CMakeFiles/my_program.dir/src/tree.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/my_program.dir/src/tree.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/tree.cpp -o CMakeFiles/my_program.dir/src/tree.cpp.s
+
 # Object files for target my_program
 my_program_OBJECTS = \
+"CMakeFiles/my_program.dir/src/Node.cpp.o" \
 "CMakeFiles/my_program.dir/src/main.cpp.o" \
-"CMakeFiles/my_program.dir/src/shunting_yard.cpp.o"
+"CMakeFiles/my_program.dir/src/shunting_yard.cpp.o" \
+"CMakeFiles/my_program.dir/src/tree.cpp.o"
 
 # External object files for target my_program
 my_program_EXTERNAL_OBJECTS =
 
+my_program: CMakeFiles/my_program.dir/src/Node.cpp.o
 my_program: CMakeFiles/my_program.dir/src/main.cpp.o
 my_program: CMakeFiles/my_program.dir/src/shunting_yard.cpp.o
+my_program: CMakeFiles/my_program.dir/src/tree.cpp.o
 my_program: CMakeFiles/my_program.dir/build.make
 my_program: CMakeFiles/my_program.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable my_program"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable my_program"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/my_program.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

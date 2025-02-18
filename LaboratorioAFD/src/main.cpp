@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <string>
 #include <shunting_yard.h>
+#include "tree.h"
+#include "node.h"
 
 int main() {
 
@@ -14,7 +16,8 @@ int main() {
 
     std::string sht_y = shunting_yard(newStr);
 
-    std::cout << sht_y << std::endl;
+    Tree* newTree = new Tree(sht_y);
+    newTree->display(newTree->getRoot());
 
     return 0;
 }
