@@ -3,42 +3,9 @@
 #include <unordered_set>
 #include <iostream>
 
-class Transicion {
-public:
-    Transicion(const std::string& initialState, const std::string& finalState, char valor)
-        : q0(initialState), qf(finalState), valor(valor) {}
 
-    std::string getInitialState() const { return q0; }
-    std::string getFinalState() const { return qf; }
-    char getValor() const { return valor; }
 
-    void print() const {
-        std::cout << "Transicion: " << q0 << " --" << valor << "--> " << qf << std::endl;
-    }
 
-private:
-    std::string q0;
-    std::string qf;
-    char valor;
-};
-
-class Estado {
-public:
-    Estado(const std::string& numero, bool aceptacion = false)
-        : numero(numero), aceptacion(aceptacion) {}
-
-    void setToAcept() { aceptacion = true; }
-    bool isAceptacion() const { return aceptacion; }
-    std::string getNumero() const { return numero; }
-
-    void print() const {
-        std::cout << "Estado: " << numero << (aceptacion ? " (Aceptacion)" : "") << std::endl;
-    }
-
-private:
-    std::string numero;
-    bool aceptacion;
-};
 
 
 
@@ -65,15 +32,30 @@ private:
 
 
 
+#include <iostream>
+#include <unordered_map>
+#include <string>
+
 int main() {
-  Estado estado1("q0");
-  Estado estado2("q1", true);
-
-  Transicion transicion1("q0", "q1", 'a');
-
-  estado1.print();
-  estado2.print();
-  transicion1.print();
-
-  return 0;
+    
+    std::unordered_map<std::string, std::unordered_map<char, std::string>> transiciones;
+    
+   
+    transiciones["q0"]['a'] = "q1";
+    
+   
+    std::string estadoInicial = "q0";
+    char valor = 'a';
+    
+    
+    if (transiciones.find(estadoInicial) != transiciones.end() &&
+        transiciones[estadoInicial].find(valor) != transiciones[estadoInicial].end()) {
+        std::string estadoFinal = transiciones[estadoInicial][valor];
+        std::cout << "Desde el estado '" << estadoInicial << "', con el valor '" 
+                  << valor << "', se transita a '" << estadoFinal << "'.\n";
+    } else {
+        std::cout << "No existe transición definida para ese estado y valor.\n";
+    }
+    
+    return 0;
 }
