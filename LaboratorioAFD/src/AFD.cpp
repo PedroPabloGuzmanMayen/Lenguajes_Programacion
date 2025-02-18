@@ -57,38 +57,38 @@ public:
     }
 };
 
-int main() {
+// int main() {
    
-    std::unordered_map<std::string, Estado> estados = {
-        {"q0", Estado("q0", 0)},
-        {"q1", Estado("q1", 1)},
-        {"q2", Estado("q2", 2)},
-        {"q3", Estado("q3", 3)}
-    };
+//     std::unordered_map<std::string, Estado> estados = {
+//         {"q0", Estado("q0", 0)},
+//         {"q1", Estado("q1", 1)},
+//         {"q2", Estado("q2", 2)},
+//         {"q3", Estado("q3", 3)}
+//     };
 
    
-    AFD automata("q0", {2});
+//     AFD automata("q0", {2});
 
-    automata.agregarTransicion("q0", "a", "q1");
-    automata.agregarTransicion("q0", "b", "q3");
+//     automata.agregarTransicion("q0", "a", "q1");
+//     automata.agregarTransicion("q0", "b", "q3");
 
-    automata.agregarTransicion("q1", "a", "q2");
-    automata.agregarTransicion("q1", "b", "q1");
+//     automata.agregarTransicion("q1", "a", "q2");
+//     automata.agregarTransicion("q1", "b", "q1");
 
-    automata.agregarTransicion("q2", "b", "q2");
-    automata.agregarTransicion("q2", "a", "q3");
-
-
-    automata.agregarTransicion("q3", "a", "q3");
-    automata.agregarTransicion("q3", "b", "q3");
+//     automata.agregarTransicion("q2", "b", "q2");
+//     automata.agregarTransicion("q2", "a", "q3");
 
 
-    std::string cadena = "abab";
-    if (automata.acept_Chain(cadena, estados)) {
-        std::cout << "La cadena '" << cadena << "' es aceptada por el AFD.\n";
-    } else {
-        std::cout << "La cadena '" << cadena << "' no es aceptada por el AFD.\n";
-    }
+//     automata.agregarTransicion("q3", "a", "q3");
+//     automata.agregarTransicion("q3", "b", "q3");
 
-    return 0;
-}
+
+//     std::string cadena = "abab";
+//     if (automata.acept_Chain(cadena, estados)) {
+//         std::cout << "La cadena '" << cadena << "' es aceptada por el AFD.\n";
+//     } else {
+//         std::cout << "La cadena '" << cadena << "' no es aceptada por el AFD.\n";
+//     }
+
+//     return 0;
+// }
