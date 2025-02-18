@@ -11,7 +11,7 @@ class Tree{
         Tree(std::string expression);
         void display(Node* node);
         Node* getRoot();
-        bool calcNullable(Node* start);
+        void calcNullable(Node* start);
 };
 
 #endif
