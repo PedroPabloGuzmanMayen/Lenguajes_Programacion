@@ -87,6 +87,17 @@ public:
         std::cout << "Archivo " << nombreArchivo << ".dot generado correctamente.\n";
     }
 
+    void generarImagen(const std::string& nombreArchivo) {  
+        std::string comando = "dot -Tpng " + nombreArchivo + ".dot -o " + nombreArchivo + ".png";
+        int resultado = system(comando.c_str());
+
+        if (resultado == 0) {
+            std::cout << "Imagen " << nombreArchivo << ".png generada correctamente.\n";
+        } else {
+            std::cerr << "Error al generar la imagen.\n";
+        }
+    }
+
 };
 
 int main() {
@@ -119,6 +130,7 @@ int main() {
     if (automata.acept_Chain(cadena, estados)) {
         std::cout << "La cadena '" << cadena << "' es aceptada por el AFD.\n";
             automata.generarDot("afd_visual");
+            automata.generarImagen("afd_visual");
 
     } else {
         std::cout << "La cadena '" << cadena << "' no es aceptada por el AFD.\n";
