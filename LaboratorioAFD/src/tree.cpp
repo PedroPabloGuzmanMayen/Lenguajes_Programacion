@@ -57,10 +57,10 @@ void Tree::calcNullable(Node* start){
     calcNullable(start->getSon(1));
 
     if (start->getValue() == '.'){
-        start->setNullable(start->getSon(0)->getNullable() && start->getSon(0)->getNullable() );
+        start->setNullable(start->getSon(0)->getNullable() && start->getSon(1)->getNullable() );
     }
     else if (start->getValue() == '|'){
-        start->setNullable(start->getSon(0)->getNullable() || start->getSon(0)->getNullable() );
+        start->setNullable(start->getSon(0)->getNullable() || start->getSon(1)->getNullable() );
     }
     else if (start->getValue() == '*'){
         start->setNullable(true);
