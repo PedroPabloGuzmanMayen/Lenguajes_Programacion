@@ -10,19 +10,25 @@ Repositorio para el curso lenguajes de programación.
   mkdir build
   cd build
 ```
-3. En la carpeta build, ejecutar este comando:
+3. Si no tienes CMake instalado ejecuta: 
+ ```bash
+  sudo apt update
+  sudo apt install cmake -y
+```
+
+4. En la carpeta build, ejecutar este comando:
  ```bash
   cmake ..
 ```
-4. Finalmente, ejecutar el comando (en la carpeta build):
+5. Finalmente, ejecutar el comando (en la carpeta build):
  ```bash
   make
 ```
-5. Para ejecutar el programa, ejecutar:
+6. Para ejecutar el programa, ejecutar:
  ```bash
   ./my_program
 ```
-6. Para compliar nuevamente, simplemente ejecutar el comando:
+7. Para compliar nuevamente, simplemente ejecutar el comando:
  ```bash
   make
 ```
