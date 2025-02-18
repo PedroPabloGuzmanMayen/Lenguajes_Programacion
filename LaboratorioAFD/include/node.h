@@ -8,6 +8,7 @@ class Node {
         int lastPos;
         int id;
         char value;
+        bool nullable;
         Node* leftSon;
         Node* rightSon;
     public:
@@ -19,6 +20,9 @@ class Node {
         void setSon(Node* son, int position);
         Node* getSon(int pos);
         void display();
+        bool getNullable();
+        void setNullable(bool newVal);
+        char getValue();
 };
 
 #endif

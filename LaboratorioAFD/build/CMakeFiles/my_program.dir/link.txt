@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/my_program.dir/src/Node.cpp.o CMakeFiles/my_program.dir/src/main.cpp.o CMakeFiles/my_program.dir/src/shunting_yard.cpp.o CMakeFiles/my_program.dir/src/tree.cpp.o -o my_program 
+/usr/bin/c++ CMakeFiles/my_program.dir/src/AFD.cpp.o CMakeFiles/my_program.dir/src/Node.cpp.o CMakeFiles/my_program.dir/src/main.cpp.o CMakeFiles/my_program.dir/src/shunting_yard.cpp.o CMakeFiles/my_program.dir/src/tree.cpp.o -o my_program 

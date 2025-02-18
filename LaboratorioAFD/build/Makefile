@@ -129,6 +129,30 @@ my_program/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_program.dir/build.make CMakeFiles/my_program.dir/build
 .PHONY : my_program/fast
 
+src/AFD.o: src/AFD.cpp.o
+.PHONY : src/AFD.o
+
+# target to build an object file
+src/AFD.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_program.dir/build.make CMakeFiles/my_program.dir/src/AFD.cpp.o
+.PHONY : src/AFD.cpp.o
+
+src/AFD.i: src/AFD.cpp.i
+.PHONY : src/AFD.i
+
+# target to preprocess a source file
+src/AFD.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_program.dir/build.make CMakeFiles/my_program.dir/src/AFD.cpp.i
+.PHONY : src/AFD.cpp.i
+
+src/AFD.s: src/AFD.cpp.s
+.PHONY : src/AFD.s
+
+# target to generate assembly for a file
+src/AFD.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_program.dir/build.make CMakeFiles/my_program.dir/src/AFD.cpp.s
+.PHONY : src/AFD.cpp.s
+
 src/Node.o: src/Node.cpp.o
 .PHONY : src/Node.o
 
@@ -234,6 +258,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... my_program"
+	@echo "... src/AFD.o"
+	@echo "... src/AFD.i"
+	@echo "... src/AFD.s"
 	@echo "... src/Node.o"
 	@echo "... src/Node.i"
 	@echo "... src/Node.s"

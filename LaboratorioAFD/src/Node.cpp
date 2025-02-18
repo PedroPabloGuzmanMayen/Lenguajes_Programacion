@@ -8,6 +8,7 @@ Node::Node(char newValue){
     this->rightSon = nullptr;
     this->firstPos = -1;
     this->lastPos = -1;
+    this->nullable = false;
 }
 
 Node::Node(char newValue, int newID){
@@ -17,6 +18,7 @@ Node::Node(char newValue, int newID){
     this->rightSon = nullptr;
     this->firstPos = -1;
     this->lastPos = -1;
+    this->nullable = false;
 }
 
 void Node::setFirstPos(int pos){ this->firstPos = pos; }
@@ -33,4 +35,10 @@ void Node::display(){
     printf("Node value: %c\n", this->value);
     printf("Node id: %d\n", this->id);
 }
+
+void Node::setNullable(bool newVal){ this->nullable = newVal;}
+
+bool Node::getNullable(){ return this->nullable; }
+
+char Node::getValue(){return this->value;}
 

@@ -49,3 +49,4 @@ void Tree::display(Node* node){
 Node* Tree::getRoot(){
     return this->root;
 }
+

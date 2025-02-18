@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/my_program.dir/src/AFD.cpp.o"
+  "CMakeFiles/my_program.dir/src/AFD.cpp.o.d"
   "CMakeFiles/my_program.dir/src/Node.cpp.o"
   "CMakeFiles/my_program.dir/src/Node.cpp.o.d"
   "CMakeFiles/my_program.dir/src/main.cpp.o"
