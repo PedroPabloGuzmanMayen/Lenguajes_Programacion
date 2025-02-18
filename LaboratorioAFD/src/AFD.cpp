@@ -1,62 +1,84 @@
-#include <vector>
-#include <string>
-#include <unordered_set>
 #include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
 
-
-
-
-
-
-
-
-class AFD {
+class Estado {
 public:
-    AFD(const std::vector<char>& alfabeto, const std::string& estadoInicial, const std::vector<std::string>& estadosFinales) 
-        : Alfabeto_(alfabeto), q0(estadoInicial), F_(estadosFinales), state_count(0) {}
+    std::string nombre;
+    int numero;
 
-    void setQ0(const std::string& nuevoQ0) {
-        q0 = nuevoQ0;
-    }
-
-    void setQF(const std::vector<std::string>& nuevosQF) {
-        F_ = nuevosQF;
-    }
-
-private:
-    std::vector<char> Alfabeto_;
-    std::string q0;
-    std::vector<std::string> F_;
-    int state_count;
+    Estado(std::string nombre, int numero) : nombre(nombre), numero(numero) {}
 };
 
+class AFD {
+private:
+    std::unordered_map<std::string, std::unordered_map<std::string, std::string>> transiciones;
+    std::string q0; 
+    std::unordered_set<int> F_;
 
-/*
-#include <iostream>
-#include <unordered_map>
-#include <string>
+public:
+    AFD(std::string estadoInicial, const std::vector<int>& estadosFinales) : q0(estadoInicial), F_(estadosFinales.begin(), estadosFinales.end()) {}
+
+
+    void agregarTransicion(const std::string& estado, const std::string& simbolo, const std::string& nuevoEstado) {
+        transiciones[estado][simbolo] = nuevoEstado;
+    }
+
+    // Simular movimiento del AFD
+    std::vector<std::string> move_AFD(const std::vector<std::string>& states, const std::string& symbol) {
+        std::unordered_set<std::string> nuevosEstados;
+
+        for (const std::string& state : states) {
+            if (transiciones.find(state) != transiciones.end() && transiciones[state].find(symbol) != transiciones[state].end()) {
+                nuevosEstados.insert(transiciones[state][symbol]);
+            }
+        }
+
+        return std::vector<std::string>(nuevosEstados.begin(), nuevosEstados.end());
+    }
+
+    // Verificar si una cadena es aceptada por el AFD
+    bool acept_Chain(const std::string& w, const std::unordered_map<std::string, Estado>& estados) {
+        std::vector<std::string> current_states = {q0};
+
+        for (char symbol : w) {
+            current_states = move_AFD(current_states, std::string(1, symbol));
+        }
+
+        // Verificar si algún estado actual es de aceptación
+        for (const std::string& state : current_states) {
+            if (estados.find(state) != estados.end() && F_.count(estados.at(state).numero)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+};
 
 int main() {
-    
-    std::unordered_map<std::string, std::unordered_map<char, std::string>> transiciones;
-    
    
-    transiciones["q0"]['a'] = "q1";
-    
+    std::unordered_map<std::string, Estado> estados = {
+        {"q0", Estado("q0", 0)},
+        {"q1", Estado("q1", 1)},
+        {"q2", Estado("q2", 2)}
+    };
+
    
-    std::string estadoInicial = "q0";
-    char valor = 'a';
-    
-    
-    if (transiciones.find(estadoInicial) != transiciones.end() &&
-        transiciones[estadoInicial].find(valor) != transiciones[estadoInicial].end()) {
-        std::string estadoFinal = transiciones[estadoInicial][valor];
-        std::cout << "Desde el estado '" << estadoInicial << "', con el valor '" 
-                  << valor << "', se transita a '" << estadoFinal << "'.\n";
+    AFD automata("q0", {2});
+
+    automata.agregarTransicion("q0", "a", "q1");
+    automata.agregarTransicion("q1", "b", "q2");
+    automata.agregarTransicion("q2", "a", "q0");
+
+
+    std::string cadena = "aa";
+    if (automata.acept_Chain(cadena, estados)) {
+        std::cout << "La cadena '" << cadena << "' es aceptada por el AFD.\n";
     } else {
-        std::cout << "No existe transición definida para ese estado y valor.\n";
+        std::cout << "La cadena '" << cadena << "' no es aceptada por el AFD.\n";
     }
-    
+
     return 0;
 }
-*/
