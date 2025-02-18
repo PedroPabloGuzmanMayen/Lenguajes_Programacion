@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "string": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "new": "cpp"
     },
     "cmake.ignoreCMakeListsMissing": true
 }
