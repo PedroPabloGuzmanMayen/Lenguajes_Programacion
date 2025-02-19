@@ -3,7 +3,7 @@
 #include <string>
 
 class Node {
-    private:
+    public:
         int firstPos;
         int lastPos;
         int id;
