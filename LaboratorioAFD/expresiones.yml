@@ -1,0 +1,7 @@
+expresiones_regulares:
+  - "a(bb)*c"
+  - "ab*a"
+cadenas:
+  - "abbc"
+  - "abab"
+  - "aaa"
