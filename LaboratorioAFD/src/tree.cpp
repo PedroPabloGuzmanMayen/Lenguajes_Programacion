@@ -127,3 +127,38 @@ void Tree::calcLastPos(Node* start){
         start->setLastPos({start->getID()});
     }
 }
+
+void Tree::computeFollowPos(Node * start){
+    if (!start) return;
+
+    if(start->getSon(0) != nullptr) computeFollowPos(start->getSon(0));
+    if(start->getSon(1) != nullptr) computeFollowPos(start->getSon(1));
+
+    if (start->getValue() == '.'){
+        for (int num : start->getSon(0)->getLastPos()) {
+            for (int j: start->getSon(1)->getFirstPos()){
+                followPosTable[num].insert(j);
+            }
+        }
+
+    }
+    else if (start->getValue() == '*'){
+        for (int num : start->getLastPos()) {
+            for (int j: start->getFirstPos()){
+                followPosTable[num].insert(j);
+            }
+        }
+    }
+
+
+}
+
+void Tree::displayFollowPos(){
+    for (const auto& pair : followPosTable) {
+        printf("Posición %d: ", pair.first );
+        for (int value : pair.second){
+            printf("%d", value);
+        }
+        printf("\n");
+    }
+}

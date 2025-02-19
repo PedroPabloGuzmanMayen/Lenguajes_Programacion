@@ -22,6 +22,8 @@ int main() {
     newTree->calclFirstPos(newTree->getRoot());
     newTree->calcLastPos(newTree->getRoot());
     newTree->display(newTree->getRoot());
+    newTree->computeFollowPos(newTree->getRoot());
+    newTree->displayFollowPos();
 
     return 0;
 }
