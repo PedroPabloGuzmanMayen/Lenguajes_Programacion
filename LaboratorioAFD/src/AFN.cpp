@@ -128,15 +128,15 @@ AFN createTransitions(int& statecounter, Node* tree) {
       if (isalnum(tree->getValue())) {
           return normalTransition(statecounter, tree->getValue());
       } else if (tree->getValue() == '*') {
-          AFN Nt = createTransitions(statecounter, tree->leftSon);
+          AFN Nt = createTransitions(statecounter, tree->getSon(0));
           return CleanOperator(statecounter, Nt);
       } else if (tree->getValue() == '|') {
-          AFN Nt = createTransitions(statecounter, tree->leftSon);
-          AFN Nf = createTransitions(statecounter, tree->rightSon);
+          AFN Nt = createTransitions(statecounter, tree->getSon(0));
+          AFN Nf = createTransitions(statecounter, tree->getSon(1));
           return orOperator(statecounter, Nt, Nf);
       } else if (tree->getValue() == '.') {
-          AFN Nt = createTransitions(statecounter, tree->leftSon);
-          AFN Nf = createTransitions(statecounter, tree->rightSon);
+          AFN Nt = createTransitions(statecounter, tree->getSon(0));
+          AFN Nf = createTransitions(statecounter, tree->getSon(0));
           return Concatenate(Nt, Nf);
       }
   }

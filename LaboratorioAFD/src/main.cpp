@@ -10,7 +10,7 @@
 int main() {
 
     printf("Hello world!");
-    std::string my_str = "(a|b)*abb";
+    std::string my_str = "(a|b)*abb#";
     std::string newStr = add_concatenation(my_str);
     std::cout << "Expresión con concatenación explícita: " << newStr << std::endl;
 
