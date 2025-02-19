@@ -39,3 +39,8 @@ desde la carpeta build
 sudo apt update
 sudo apt install graphviz -y
 ```
+
+## Referencias
+
+- Proyecto 1 Teoría de la computación: https://github.com/PedroPabloGuzmanMayen/Proy1_TC.git
+- Proyecto hallado en internet: https://github.com/shakilaust/Project/blob/master/Compiler/Regular%20Expression%20to%20DFA.cpp
