@@ -7,7 +7,6 @@ Node::Node(char newValue){
     this->id = 0; //Se usará el 0 para identificar los nodos que no son nodo hoja
     this->leftSon = nullptr;
     this->rightSon = nullptr;
-    this->lastPos = -1;
     this->nullable = false;
 }
 
@@ -16,7 +15,6 @@ Node::Node(char newValue, int newID){
     this->id = newID;
     this->leftSon = nullptr;
     this->rightSon = nullptr;
-    this->lastPos = -1;
     this->nullable = false;
 }
 
@@ -24,7 +22,9 @@ void Node::setFirstPos(std::set<int> pos){ this->firstPos = pos; }
 
 std::set<int> Node::getFirstPos(){ return this->firstPos; }
 
-void Node::setLastPos(int pos){ this->lastPos = pos; }
+std::set<int> Node::getLastPos(){return this->lastPos; }
+
+void Node::setLastPos(std::set<int> pos){ this->lastPos = pos; }
 
 void Node::setSon(Node* son, int position){ position == 0 ? this->leftSon = son: this->rightSon = son; } //0 para hijo izquierdo, 1 para hijo derecho
 
@@ -36,7 +36,12 @@ void Node::display(){
     printf("Nullable: %d\n", this->nullable);
     printf("Elementos de first pos:\n");
     for (int num : this->firstPos) {
-        printf("%d ", num);  // Print each element
+        printf("%d ", num); 
+    }
+    printf("\n");
+    printf("Elementos de last pos:\n");
+    for (int num : this->lastPos) {
+        printf("%d ", num); 
     }
     printf("\n");
 }
@@ -49,7 +54,3 @@ char Node::getValue(){return this->value;}
 
 int Node::getID(){return this->id; }
 
-void Node::insert_to_firstPost(int value){
-    this->firstPos.insert(value);
-
-}

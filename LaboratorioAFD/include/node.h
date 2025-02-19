@@ -6,7 +6,7 @@
 class Node {
     private:
         std::set<int> firstPos;
-        int lastPos;
+        std::set<int> lastPos;
         int id;
         char value;
         bool nullable;
@@ -17,7 +17,8 @@ class Node {
         Node(char value, int id);
         void setFirstPos(std::set<int> pos);
         std::set<int> getFirstPos();
-        void setLastPos(int pos);
+        std::set<int> getLastPos();
+        void setLastPos(std::set<int> pos);
         void setSon(Node* son, int position);
         Node* getSon(int pos);
         void display();
@@ -25,7 +26,6 @@ class Node {
         void setNullable(bool newVal);
         char getValue();
         int getID();
-        void insert_to_firstPost(int value);
 };
 
 #endif

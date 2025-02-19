@@ -10,7 +10,7 @@
 int main() {
 
     printf("Hello world!");
-    std::string my_str = "(a|b)*aaaaabbbbbb(a|c)*";
+    std::string my_str = "(a|b)*abb";
     std::string newStr = add_concatenation(my_str);
     std::cout << "Expresión con concatenación explícita: " << newStr << std::endl;
 
@@ -20,6 +20,7 @@ int main() {
     Tree* newTree = new Tree(sht_y);
     newTree->calcNullable(newTree->getRoot());
     newTree->calclFirstPos(newTree->getRoot());
+    newTree->calcLastPos(newTree->getRoot());
     newTree->display(newTree->getRoot());
 
     return 0;
