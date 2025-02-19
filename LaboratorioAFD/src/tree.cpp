@@ -157,8 +157,26 @@ void Tree::displayFollowPos(){
     for (const auto& pair : followPosTable) {
         printf("Posición %d: ", pair.first );
         for (int value : pair.second){
-            printf("%d", value);
+            printf("%d ", value);
         }
         printf("\n");
+    }
+}
+
+void Tree::getIdValues(Node* start){
+    if (!start) return;
+    if(start->getSon(0) != nullptr) getIdValues(start->getSon(0));
+    if(start->getSon(1) != nullptr) getIdValues(start->getSon(1));
+    //Verificar que no sea un operador
+    if(start->getID() != 0 ){
+        this->idValue[start->getID()] = start->getValue();
+    }
+}
+
+void Tree::displayIDValues(){
+    printf("ID values:\n ");
+    for (const auto& pair : idValue) {
+        printf("ID %d \n: ", pair.first );
+        printf("Value %c \n", pair.second);
     }
 }

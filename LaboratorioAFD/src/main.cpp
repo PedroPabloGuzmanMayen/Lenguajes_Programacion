@@ -24,6 +24,9 @@ int main() {
     newTree->display(newTree->getRoot());
     newTree->computeFollowPos(newTree->getRoot());
     newTree->displayFollowPos();
+    newTree->getIdValues(newTree->getRoot());
+    newTree->displayIDValues();
+
 
     return 0;
 }

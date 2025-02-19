@@ -9,6 +9,7 @@ class Tree{
     private:
         Node* root;
         std::map<int, std::set<int>> followPosTable;
+        std::map<int, char> idValue;
 
 
     public:
@@ -20,6 +21,9 @@ class Tree{
         void calcLastPos(Node* start);
         void computeFollowPos(Node* start);
         void displayFollowPos();
+        void convertToAFD();
+        void getIdValues(Node* start);
+        void displayIDValues();
 };
 
 #endif
