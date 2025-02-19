@@ -4,13 +4,8 @@
 #include <set>
 
 class Node {
-<<<<<<< HEAD
     private:
         std::set<int> firstPos;
-=======
-    public:
-        int firstPos;
->>>>>>> refs/remotes/origin/main
         int lastPos;
         int id;
         char value;
