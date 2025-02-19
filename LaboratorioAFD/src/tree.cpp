@@ -1,7 +1,16 @@
 #include "tree.h"
 #include "node.h"
 #include <stack>
+#include <set>
+#include <algorithm>
 #include <string>
+
+std::set<int> setUnion(std::set<int >a,std::set<int >b){
+    std::set<int>c;
+    c.insert( a.begin() , a.end() );
+    c.insert( b.begin() , b.end() );
+    return c;
+}
 
 Tree::Tree(std::string expression){
 
@@ -51,6 +60,7 @@ Node* Tree::getRoot(){
 }
 
 void Tree::calcNullable(Node* start){
+    //printf("Computing nullable: ");
     if(!start) return;
 
     calcNullable(start->getSon(0));
@@ -67,5 +77,29 @@ void Tree::calcNullable(Node* start){
     }
     else {
         start->setNullable(false);
+    }
+}
+
+void Tree::calclFirstPos(Node* start){
+    if (!start) return;
+
+    if(start->getSon(0) != nullptr) calclFirstPos(start->getSon(0));
+    if(start->getSon(1) != nullptr) calclFirstPos(start->getSon(1));
+
+    if (start->getValue() == '.') {
+        if (start->getSon(0)->getNullable()) {
+            start->setFirstPos(setUnion(start->getSon(0)->getFirstPos(), start->getSon(1)->getFirstPos()));
+        } else {
+            start->setFirstPos(start->getSon(0)->getFirstPos()); 
+        }
+    }
+    else if (start->getValue() == '|') {
+        start->setFirstPos(setUnion(start->getSon(0)->getFirstPos(), start->getSon(1)->getFirstPos()));
+    }
+    else if (start->getValue() == '*') {
+        start->setFirstPos(start->getSon(0)->getFirstPos()); 
+    }
+    else {
+        start->setFirstPos({start->getID()});
     }
 }

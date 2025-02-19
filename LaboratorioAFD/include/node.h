@@ -1,10 +1,11 @@
 #ifndef NODE_H
 #define NODE_H
 #include <string>
+#include <set>
 
 class Node {
     private:
-        int firstPos;
+        std::set<int> firstPos;
         int lastPos;
         int id;
         char value;
@@ -14,8 +15,8 @@ class Node {
     public:
         Node(char value);
         Node(char value, int id);
-        void setFirstPos(int pos);
-        int getFirstPos();
+        void setFirstPos(std::set<int> pos);
+        std::set<int> getFirstPos();
         void setLastPos(int pos);
         void setSon(Node* son, int position);
         Node* getSon(int pos);
@@ -23,6 +24,8 @@ class Node {
         bool getNullable();
         void setNullable(bool newVal);
         char getValue();
+        int getID();
+        void insert_to_firstPost(int value);
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "node.h"
+#include <set>
 #include <string>
 
 Node::Node(char newValue){
@@ -6,7 +7,6 @@ Node::Node(char newValue){
     this->id = 0; //Se usará el 0 para identificar los nodos que no son nodo hoja
     this->leftSon = nullptr;
     this->rightSon = nullptr;
-    this->firstPos = -1;
     this->lastPos = -1;
     this->nullable = false;
 }
@@ -16,14 +16,13 @@ Node::Node(char newValue, int newID){
     this->id = newID;
     this->leftSon = nullptr;
     this->rightSon = nullptr;
-    this->firstPos = -1;
     this->lastPos = -1;
     this->nullable = false;
 }
 
-void Node::setFirstPos(int pos){ this->firstPos = pos; }
+void Node::setFirstPos(std::set<int> pos){ this->firstPos = pos; }
 
-int Node::getFirstPos(){ return this->firstPos; }
+std::set<int> Node::getFirstPos(){ return this->firstPos; }
 
 void Node::setLastPos(int pos){ this->lastPos = pos; }
 
@@ -35,6 +34,11 @@ void Node::display(){
     printf("Node value: %c\n", this->value);
     printf("Node id: %d\n", this->id);
     printf("Nullable: %d\n", this->nullable);
+    printf("Elementos de first pos:\n");
+    for (int num : this->firstPos) {
+        printf("%d ", num);  // Print each element
+    }
+    printf("\n");
 }
 
 void Node::setNullable(bool newVal){ this->nullable = newVal;}
@@ -43,3 +47,9 @@ bool Node::getNullable(){ return this->nullable; }
 
 char Node::getValue(){return this->value;}
 
+int Node::getID(){return this->id; }
+
+void Node::insert_to_firstPost(int value){
+    this->firstPos.insert(value);
+
+}

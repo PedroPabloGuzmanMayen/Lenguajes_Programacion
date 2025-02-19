@@ -20,6 +20,7 @@ bool is_present(char symbol, char arr[]){
 }
 
 std::string add_concatenation(std::string& expression){
+    //printf("Adding concatenation...\n");
     std::string formated_string;
     //Caso 1: la expresión solo tiene un caracter
     if (expression.length() == 1) {
