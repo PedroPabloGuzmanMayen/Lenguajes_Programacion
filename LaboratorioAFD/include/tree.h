@@ -13,6 +13,7 @@ class Tree{
         Node* getRoot();
         void calcNullable(Node* start);
         void calclFirstPos(Node* start);
+        void calcLastPos(Node* start);
 };
 
 #endif
