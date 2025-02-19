@@ -149,7 +149,7 @@ AFN buildAFN(Node* syntaxTree) {
   return createTransitions(statecounter, syntaxTree);
 }
 
-
+/*
 int main() {
     std::string expression = "a(bb)*c";
     std::string newStr = add_concatenation(expression);
@@ -166,4 +166,4 @@ int main() {
     }
     
     return 0;
-}
+} */
