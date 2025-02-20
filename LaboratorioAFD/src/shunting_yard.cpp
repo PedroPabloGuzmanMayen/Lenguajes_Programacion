@@ -2,7 +2,10 @@
 #include <unistd.h>
 #include <iostream>
 #include <string>
+#include <set>
+#include <algorithm>
 #include <map>
+#include <vector>
 #include <stack>
 #include "shunting_yard.h"
 
@@ -81,6 +84,17 @@ std::string shunting_yard(std::string& expression) {
     }
 
     return out;
+}
+
+std::vector<std::string> getAlphabet(std::string& expression){
+    std::vector<std::string> newSet;
+    for (int i = 0; i< expression.length(); i++){
+        if (!is_present(expression[i], operators) && expression[i] != '#' && std::find(newSet.begin(), newSet.end(), std::string(1, expression[i])) == newSet.end() ){
+            newSet.push_back(std::string(1, expression[i]));
+        }
+    }
+
+    return newSet;
 }
 
 

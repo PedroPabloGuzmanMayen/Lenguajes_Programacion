@@ -3,6 +3,7 @@
 #include "node.h"
 #include <string>
 #include <map>
+#include <stack>
 #include <set>
 
 class Tree{
@@ -10,6 +11,8 @@ class Tree{
         Node* root;
         std::map<int, std::set<int>> followPosTable;
         std::map<int, char> idValue;
+        std::string treeExpr;
+        int acceptedPos;
 
 
     public:
@@ -24,6 +27,7 @@ class Tree{
         void convertToAFD();
         void getIdValues(Node* start);
         void displayIDValues();
+        std::stack<int> findPositions(char letter);
 };
 
 #endif

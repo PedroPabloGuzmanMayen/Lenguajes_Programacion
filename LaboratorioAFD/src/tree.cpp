@@ -1,9 +1,14 @@
 #include "tree.h"
 #include "node.h"
+#include "shunting_yard.h"
 #include <stack>
+#include <iostream>
 #include <set>
+#include <vector>
 #include <algorithm>
 #include <string>
+#include <unordered_map>
+#include "AFD.cpp"
 
 std::set<int> setUnion(std::set<int >a,std::set<int >b){
     std::set<int>c;
@@ -12,8 +17,20 @@ std::set<int> setUnion(std::set<int >a,std::set<int >b){
     return c;
 }
 
-Tree::Tree(std::string expression){
+std::stack<int> Tree::findPositions(char letter){
+    std::stack<int> out;
+    for (const auto& pair : this->idValue){
+        if(pair.second == letter){
+            out.push(pair.first);
+        }
+    }
+    return out;
+}
 
+
+
+Tree::Tree(std::string expression){
+    this->treeExpr = expression;
     int counter = 1; //Nos ayudará a asignarle una posición/id a cada nodo
     std::stack<Node*> nodeStack; //Stack de nodos: nos ayudará a tener registro de los nodos que se van creando
 
@@ -170,6 +187,9 @@ void Tree::getIdValues(Node* start){
     //Verificar que no sea un operador
     if(start->getID() != 0 ){
         this->idValue[start->getID()] = start->getValue();
+        if (start->getValue() == '#'){ //Indicar si es la posición de aceptación
+            this->acceptedPos = start->getID();
+        }
     }
 }
 
@@ -180,3 +200,58 @@ void Tree::displayIDValues(){
         printf("Value %c \n", pair.second);
     }
 }
+
+void Tree::convertToAFD(){
+
+    std::vector<std::set<int>> findedStates; //Aquí almacenamos los estados que vamos encontrando
+    std::vector<std::set<int>> accepted_states; //Aquí almacenamos los valores de aceptación
+    std::vector<std::set<int>> DSTATES; //Aquí almacenamos los estads sin marcar 
+    std::map<std::set<int>, std::map<char, std::vector<std::set<int>>>> transitions; //Aquí guardamos las tranciones
+    std::vector<std::string> alphabet = getAlphabet(this->treeExpr); //Obtenemos el alfabeto
+    /*
+    Las transiciones tienen el formato: 
+    La primera llave es un conjunto
+    El valor dela primera llave es otro Map!
+    El Map que es la llave guarda un char, representando el símbolo y un vector de conjuntos
+    Ejemplo:
+    <1,2,3> : <"a": [<1,2>, <1,3,4>], "b":[<1,3,5>, <4,6,8>]>
+    */
+    findedStates.push_back(this->root->getFirstPos()); //Añadir firstpos de nodo raíz
+    DSTATES.push_back(this->root->getFirstPos()); //Añadimos a la lista de estados sin marcar
+    while (DSTATES.size() >0){
+        std::set<int> current = DSTATES.back(); //Guardar el estado actual
+        if (current.count(this->acceptedPos) >0){
+            accepted_states.push_back(current); //Verificar si el estado actual es de aceptación
+        }
+        DSTATES.pop_back();
+        for(const std::string& word : alphabet){
+            std::stack<int> positions = findPositions(word[0]);
+            std::set<int> newState;
+            while (!positions.empty()) { 
+                int pos = positions.top();
+                positions.pop();
+                newState = setUnion(newState, followPosTable[pos]); //Hacer la unión de follow pos
+            }
+            if (!newState.empty() && std::find(findedStates.begin(), findedStates.end(), newState) == findedStates.end()){ //Verificar si el nuevo estado existe
+                findedStates.push_back(newState); //Si no existe, lo agregamos
+                DSTATES.push_back(newState);
+            }
+            transitions[current][word[0]].push_back(newState); //Agregar la transición
+        }
+    }
+
+    for (const auto& mySet : findedStates) {
+        std::cout << "{ ";
+        for (const int& val : mySet) {
+            std::cout << val << " ";
+        }
+        std::cout << "} ";  
+    }
+
+    std::cout << std::endl;
+
+
+}
+
+
+    

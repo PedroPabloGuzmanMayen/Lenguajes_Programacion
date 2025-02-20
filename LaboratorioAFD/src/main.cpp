@@ -2,6 +2,8 @@
 #include <iostream>
 #include <unistd.h>
 #include <string>
+#include <set>
+#include <vector>
 #include <shunting_yard.h>
 #include "tree.h"
 #include "node.h"
@@ -10,9 +12,13 @@
 int main() {
 
     printf("Hello world!");
-    std::string my_str = "(a|b)*abb#";
+    std::string my_str = "aa(bb)*c#";
     std::string newStr = add_concatenation(my_str);
     std::cout << "Expresión con concatenación explícita: " << newStr << std::endl;
+    std::vector<std::string> v = getAlphabet(my_str);
+    for (const std::string& str : v) {
+        std::cout << str << std::endl;
+    }
 
     std::string sht_y = shunting_yard(newStr);
     std::cout << "Expresión en notación postfix: " << sht_y << std::endl;
@@ -26,6 +32,7 @@ int main() {
     newTree->displayFollowPos();
     newTree->getIdValues(newTree->getRoot());
     newTree->displayIDValues();
+    newTree->convertToAFD();
 
 
     return 0;
