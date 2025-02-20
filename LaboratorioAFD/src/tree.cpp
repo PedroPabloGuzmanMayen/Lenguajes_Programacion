@@ -201,57 +201,66 @@ void Tree::displayIDValues(){
     }
 }
 
-void Tree::convertToAFD(){
+void Tree::convertToAFD() {
+    std::vector<std::set<int>> findedStates;
+    std::vector<std::set<int>> accepted_states;
+    std::vector<std::set<int>> DSTATES;
+    std::map<std::set<int>, std::map<char, std::set<int>>> transitions;
+    std::vector<std::string> alphabet = getAlphabet(this->treeExpr);
 
-    std::vector<std::set<int>> findedStates; //Aquí almacenamos los estados que vamos encontrando
-    std::vector<std::set<int>> accepted_states; //Aquí almacenamos los valores de aceptación
-    std::vector<std::set<int>> DSTATES; //Aquí almacenamos los estads sin marcar 
-    std::map<std::set<int>, std::map<char, std::vector<std::set<int>>>> transitions; //Aquí guardamos las tranciones
-    std::vector<std::string> alphabet = getAlphabet(this->treeExpr); //Obtenemos el alfabeto
-    /*
-    Las transiciones tienen el formato: 
-    La primera llave es un conjunto
-    El valor dela primera llave es otro Map!
-    El Map que es la llave guarda un char, representando el símbolo y un vector de conjuntos
-    Ejemplo:
-    <1,2,3> : <"a": [<1,2>, <1,3,4>], "b":[<1,3,5>, <4,6,8>]>
-    */
-    findedStates.push_back(this->root->getFirstPos()); //Añadir firstpos de nodo raíz
-    DSTATES.push_back(this->root->getFirstPos()); //Añadimos a la lista de estados sin marcar
-    while (DSTATES.size() >0){
-        std::set<int> current = DSTATES.back(); //Guardar el estado actual
-        if (current.count(this->acceptedPos) >0){
-            accepted_states.push_back(current); //Verificar si el estado actual es de aceptación
+    findedStates.push_back(this->root->getFirstPos());
+    DSTATES.push_back(this->root->getFirstPos());
+
+    while (!DSTATES.empty()) {
+        std::set<int> current = DSTATES.back();
+        if (current.count(this->acceptedPos) > 0) {
+            accepted_states.push_back(current);
         }
         DSTATES.pop_back();
-        for(const std::string& word : alphabet){
-            std::stack<int> positions = findPositions(word[0]);
+
+        for (const std::string& symbol : alphabet) {
             std::set<int> newState;
-            while (!positions.empty()) { 
-                int pos = positions.top();
-                positions.pop();
-                newState = setUnion(newState, followPosTable[pos]); //Hacer la unión de follow pos
+            for (int pos : current) {
+                if (idValue[pos] == symbol[0]) {
+                    newState = setUnion(newState, followPosTable[pos]);
+                }
             }
-            if (!newState.empty() && std::find(findedStates.begin(), findedStates.end(), newState) == findedStates.end()){ //Verificar si el nuevo estado existe
-                findedStates.push_back(newState); //Si no existe, lo agregamos
-                DSTATES.push_back(newState);
+
+            if (!newState.empty()) {
+                // Add new state if it hasn't been found before
+                if (std::find(findedStates.begin(), findedStates.end(), newState) == findedStates.end()) {
+                    findedStates.push_back(newState);
+                    DSTATES.push_back(newState);
+                }
+                transitions[current][symbol[0]] = newState;
             }
-            transitions[current][word[0]].push_back(newState); //Agregar la transición
         }
     }
 
-    for (const auto& mySet : findedStates) {
-        std::cout << "{ ";
-        for (const int& val : mySet) {
+    int stateNum = 0;
+    for (const auto& state : findedStates) {
+        std::cout << "State " << stateNum++ << ": { ";
+        for (const int& val : state) {
             std::cout << val << " ";
         }
-        std::cout << "} ";  
+        std::cout << "}\n";
     }
 
-    std::cout << std::endl;
-
-
+    for (const auto& [state, symbolMap] : transitions) {
+        std::cout << "From state { ";
+        for (int val : state) std::cout << val << " ";
+        std::cout << "}\n";
+        
+        for (const auto& [symbol, nextState] : symbolMap) {
+            std::cout << "  On '" << symbol << "' -> { ";
+            for (int val : nextState) std::cout << val << " ";
+            std::cout << "}\n";
+        }
+    }
 }
+
+
+    
 
 
     
