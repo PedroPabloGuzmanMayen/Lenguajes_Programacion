@@ -64,6 +64,8 @@ int main() {
         for (const std::string& cadena : config.cadenas) {
             if (automata.acept_Chain(cadena)) {
                 std::cout << "La cadena '" << cadena << "' es aceptada por el AFD.\n";
+                automata.generarDot("afd_visual");
+                automata.generarImagen("afd_visual");
             } else {
                 std::cout << "La cadena '" << cadena << "' no es aceptada por el AFD.\n";
             }
