@@ -5,6 +5,8 @@
 #include <map>
 #include <stack>
 #include <set>
+#include <vector>
+#include <unordered_map>
 
 class Tree{
     private:
@@ -24,7 +26,14 @@ class Tree{
         void calcLastPos(Node* start);
         void computeFollowPos(Node* start);
         void displayFollowPos();
-        void convertToAFD();
+
+        std::tuple<
+        std::vector<std::set<int>>, 
+        std::vector<std::set<int>>, 
+        std::vector<std::set<int>>, 
+        std::vector<std::string>, 
+        std::map<std::set<int>, std::map<char, std::set<int>>>>
+        convertToAFD();
         void getIdValues(Node* start);
         void displayIDValues();
         std::stack<int> findPositions(char letter);

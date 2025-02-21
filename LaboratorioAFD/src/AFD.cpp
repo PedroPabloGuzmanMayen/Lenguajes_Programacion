@@ -15,7 +15,7 @@ public:
 };
 
 class AFD {
-private:
+public:
     std::unordered_map<std::string, std::unordered_map<std::string, std::string>> S_;
     std::string q0; 
     std::unordered_set<int> F_;
@@ -57,12 +57,29 @@ public:
         for (char symbol : w) {
             current_states = move_AFD(current_states, std::string(1, symbol));
         }
+    
+        // Depuración antes del 'if'
         for (const std::string& state : current_states) {
+           
             if (Q_.find(state) != Q_.end() && F_.count(Q_.at(state).numero)) {
                 return true;
             }
         }
+    
         return false;
+    }
+    
+
+    void depurarAFD() {
+        std::cout << "Estado inicial: " << q0 << std::endl;
+        std::cout << "Estados finales:\n";
+        for (int f : F_) std::cout << "  q" << f << "\n";
+        std::cout << "Transiciones:\n";
+        for (const auto& [estado, transiciones] : S_) {
+            for (const auto& [simbolo, destino] : transiciones) {
+                std::cout << "  " << estado << " --(" << simbolo << ")--> " << destino << "\n";
+            }
+        }
     }
 
     void generarDot(const std::string& nombreArchivo) {
@@ -117,37 +134,67 @@ public:
 
     void reconstruirAFD(const std::vector<std::unordered_set<std::string>>& P) {
         std::unordered_map<std::string, std::string> representante;
+    
+        // Asignar representantes a cada conjunto de estados equivalentes
         for (const auto& grupo : P) {
-            std::string rep = *grupo.begin();
-            for (const std::string& q : grupo) {
-                representante[q] = rep;
-            }
-        }
-        std::unordered_map<std::string, std::unordered_map<std::string, std::string>> newS_;
-        std::unordered_set<int> newF_;
-        std::string newQ0 = representante[q0];
-        
-        for (const auto& [q, trans] : S_) {
-            std::string repQ = representante[q];
-            for (const auto& [sym, dest] : trans) {
-                newS_[repQ][sym] = representante[dest];
-            }
-        }
-        for (const auto& f : F_) {
-            for (const auto& [q, estado] : Q_) {
-                if (estado.numero == f) {
-                    newF_.insert(Q_[representante[q]].numero);
+            if (!grupo.empty()) {
+                std::string rep = *grupo.begin();
+                for (const std::string& q : grupo) {
+                    representante[q] = rep;
                 }
             }
         }
-        S_ = newS_;
-        F_ = newF_;
-        q0 = newQ0;
-        Q_.clear();
-        for (const auto& p : newS_) {
-            Q_[p.first] = Estado(p.first, std::stoi(p.first.substr(1))); 
+    
+        // Verificar si el estado inicial tiene un representante válido
+        if (representante.find(q0) == representante.end()) {
+            std::cerr << "Error: No se encontró representante para el estado inicial.\n";
+            return;
         }
+        std::string newQ0 = representante[q0];
+    
+        std::unordered_map<std::string, std::unordered_map<std::string, std::string>> newS_;
+        std::unordered_set<int> newF_;
+    
+        // Construir nuevos estados
+        Q_.clear();
+        for (const auto& p : representante) {
+            Q_[p.first] = Estado(p.first, std::stoi(p.first.substr(1)));  // Asignación segura del número
+        }
+    
+        // Construir nuevas transiciones
+        for (const auto& [q, trans] : S_) {
+            if (representante.find(q) != representante.end()) {
+                std::string repQ = representante[q];
+                for (const auto& [sym, dest] : trans) {
+                    if (representante.find(dest) != representante.end()) {
+                        newS_[repQ][sym] = representante[dest];
+                        
+                    }
+                }
+            }
+        }
+    
+        // Construir nuevos estados finales
+        for (const auto& f : F_) {
+            for (const auto& [q, estado] : Q_) {
+                if (estado.numero == f && representante.find(q) != representante.end()) {
+                    auto it = Q_.find(representante[q]);
+                    if (it != Q_.end()) {
+                        newF_.insert(it->second.numero);
+                        
+                    }
+                }
+            }
+        }
+    
+        // Actualizar el AFD con la nueva estructura minimizada
+        q0 = newQ0;
+        F_ = newF_;
+        S_ = newS_;
+    
+       
     }
+    
 
     std::vector<std::unordered_set<std::string>> separarEstados() {
         std::unordered_set<std::string> aceptacion, noAceptacion;

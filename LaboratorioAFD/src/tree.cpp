@@ -9,6 +9,7 @@
 #include <string>
 #include <unordered_map>
 #include "AFD.cpp"
+#include <tuple>
 
 std::set<int> setUnion(std::set<int >a,std::set<int >b){
     std::set<int>c;
@@ -201,7 +202,14 @@ void Tree::displayIDValues(){
     }
 }
 
-void Tree::convertToAFD() {
+std::tuple<
+        std::vector<std::set<int>>, 
+        std::vector<std::set<int>>, 
+        std::vector<std::set<int>>, 
+        std::vector<std::string>, 
+        std::map<std::set<int>, std::map<char, std::set<int>>>>
+Tree::convertToAFD() {
+    
     std::vector<std::set<int>> findedStates;
     std::vector<std::set<int>> accepted_states;
     std::vector<std::set<int>> DSTATES;
@@ -257,6 +265,7 @@ void Tree::convertToAFD() {
             std::cout << "}\n";
         }
     }
+    return std::make_tuple(findedStates, accepted_states, DSTATES, alphabet, transitions);
 }
 
 

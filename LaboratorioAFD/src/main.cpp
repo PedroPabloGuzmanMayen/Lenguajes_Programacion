@@ -7,6 +7,8 @@
 #include "node.h"
 #include "AFD.cpp"
 #include "lector.h"
+#include <unordered_set>
+
 
 int main() {
     // Leer expresiones y cadenas desde YAML
@@ -30,46 +32,122 @@ int main() {
         newTree->displayFollowPos();
         newTree->getIdValues(newTree->getRoot());
         newTree->displayIDValues();
-        newTree->convertToAFD();
+        auto [findedStates, accepted_states, DSTATES, alphabet, transitions] = newTree->convertToAFD();
 
-        // Definir AFD 
-        std::unordered_map<std::string, Estado> estados = {
-            {"q0", Estado("q0", 0)}, {"q1", Estado("q1", 1)},
-            {"q2", Estado("q2", 2)}, {"q3", Estado("q3", 3)},
-            {"q4", Estado("q4", 4)}, {"q5", Estado("q5", 5)}
-        };
-        std::vector<std::string> Alfabeto = {"a", "b"};
-        AFD automata("q0", {4,5}, Alfabeto, estados);
+        //mapeamos los estados
+        int stateNum = 0;
+        std::map<int, std::set<int>> stateMap;
+        std::unordered_map<std::string, Estado> estados;
+        for (const auto& state : findedStates) {
+            std::string q = "q";
+            q+= std::to_string(stateNum);  
+            estados[q] = Estado(q, stateNum);
+            stateMap[stateNum++] = state;
+            
+        }
+        // Obtenemos estados de aceptacion
+        std::unordered_set<int> mySet; 
+        
+        
+        for (size_t i = 0; i < accepted_states.size(); ++i) {
+            std::set<int> target = accepted_states[i];
+            int key = -1;
+            for (const auto& entry : stateMap) {
+                if (entry.second == target) { 
+                    key = entry.first;
+                    break;
+                }
+            }
+            mySet.insert(key);
+        }
 
+
+        std::vector<int> myVector(mySet.begin(), mySet.end());  // Convertir a vector
+
+        AFD automata("q0",myVector, alphabet, estados);
+ 
+ 
         // Definir transiciones
-        automata.agregarTransicion("q0", "a", "q2");
-        automata.agregarTransicion("q0", "b", "q1");
-        automata.agregarTransicion("q1", "a", "q1");
-        automata.agregarTransicion("q1", "b", "q1");
-        automata.agregarTransicion("q2", "a", "q4");
-        automata.agregarTransicion("q2", "b", "q3");
-        automata.agregarTransicion("q3", "a", "q4");
-        automata.agregarTransicion("q3", "b", "q3");
-        automata.agregarTransicion("q4", "a", "q1");
-        automata.agregarTransicion("q4", "b", "q5");
-        automata.agregarTransicion("q5", "a", "q1");
-        automata.agregarTransicion("q5", "b", "q5");
 
-        std::cout << "\nTransiciones antes de la minimización:" << std::endl;
-        automata.mostrarTransiciones();
+        for (const auto& [state, symbolMap] : transitions) {
+            
+            std::set<int> target = state;
+            int key = -1;
+            for (const auto& entry : stateMap) {
+                if (entry.second == target) { 
+                    key = entry.first;
+                    break;
+                }
+            }
+
+            std::string q_from = "q";
+            q_from+= std::to_string(key);
+
+            for (const auto& [symbol, nextState] : symbolMap) {
+                
+
+                std::set<int> target = nextState;
+                int key = -1;
+                for (const auto& entry : stateMap) {
+                    if (entry.second == target) { 
+                        key = entry.first;
+                        break;
+                    }
+                }
+                std::string q_to = "q";
+                q_to+= std::to_string(key);
+
+                std::string str_q_from(q_from);
+                std::string str_symbol(1,symbol);
+                std::string str_q_to(q_to);   
+                automata.agregarTransicion(str_q_from, str_symbol, str_q_to);
+
+
+            }
+        }
+        
+        
+
+        
+        
+        
+        automata.depurarAFD();
+        automata.generarDot("afd_visual");
+        automata.generarImagen("afd_visual");
+        for (const std::string& cadena : config.cadenas) {
+            if (automata.acept_Chain(cadena)) {
+                std::cout << "La cadena '" << cadena << "' es aceptada por el AFD.\n";
+                
+            } else {
+                
+                std::cout << "La cadena '" << cadena << "' no es aceptada por el AFD.\n";
+            }
+        }
+
+
+        //minimizamos
+
+        std::cout<<"============MINIMIZADO===========\n";
         automata.minimizarAFD();
-        std::cout << "\nTransiciones después de la minimización:" << std::endl;
-        automata.mostrarTransiciones();
+        
+        automata.depurarAFD();
+        
+        //automata.depurarAFD();
+
+        automata.generarDot("afd_visual_min");
+        automata.generarImagen("afd_visual_min");
+        
 
         for (const std::string& cadena : config.cadenas) {
             if (automata.acept_Chain(cadena)) {
                 std::cout << "La cadena '" << cadena << "' es aceptada por el AFD.\n";
-                automata.generarDot("afd_visual");
-                automata.generarImagen("afd_visual");
+                
             } else {
+                
                 std::cout << "La cadena '" << cadena << "' no es aceptada por el AFD.\n";
             }
         }
+        
     }
 
     return 0;
