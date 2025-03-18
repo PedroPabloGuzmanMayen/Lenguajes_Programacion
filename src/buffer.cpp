@@ -52,30 +52,30 @@ void procesar_buffer(const vector<char> &buffer) {
     }
 }
 
-int main() {
-    const int tamano_buffer = 10;
-    string entrada = "";
+// int main() {
+//     const int tamano_buffer = 10;
+//     string entrada = "";
 
-    // 📂 Abrir archivo y leer contenido
-    ifstream archivo("entrada.txt");
-    if (!archivo) {
-        cerr << "Error al abrir el archivo 'entrada.txt'" << endl;
-        return 1;
-    }
+//     // 📂 Abrir archivo y leer contenido
+//     ifstream archivo("entrada.txt");
+//     if (!archivo) {
+//         cerr << "Error al abrir el archivo 'entrada.txt'" << endl;
+//         return 1;
+//     }
 
-    // Leer archivo completo en un string
-    string linea;
-    while (getline(archivo, linea)) {
-        entrada += linea + " "; // Añadir espacio entre líneas para separar lexemas
-    }
-    archivo.close();
+//     // Leer archivo completo en un string
+//     string linea;
+//     while (getline(archivo, linea)) {
+//         entrada += linea + " "; // Añadir espacio entre líneas para separar lexemas
+//     }
+//     archivo.close();
 
-    // 🔄 Procesar la entrada en buffers de tamaño fijo
-    while (FLAG_SALIDA) {
-        vector<char> BUFFER = cargar_buffer(entrada, LECTOR, tamano_buffer);
-        procesar_buffer(BUFFER);
-        LECTOR += BUFFER.size();
-    }
+//     // 🔄 Procesar la entrada en buffers de tamaño fijo
+//     while (FLAG_SALIDA) {
+//         vector<char> BUFFER = cargar_buffer(entrada, LECTOR, tamano_buffer);
+//         procesar_buffer(BUFFER);
+//         LECTOR += BUFFER.size();
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
