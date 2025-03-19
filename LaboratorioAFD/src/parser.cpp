@@ -5,16 +5,28 @@
 
 //Esta función sirve para hallar las regex
 std::vector<std::string> extractBrackets(const std::string& input) {
+    bool flag = false;
+    std::string formated_string;
     std::vector<std::string> result;
-    std::regex pattern(R"(\[([^\]]+)\])"); //Con esto encontramos todo lo que esté dentro de corchetes
-    std::smatch match;
     std::string str = input;
-    
-    while (std::regex_search(str, match, pattern)) {
-        result.push_back(match[1]); // Agregamos lo que está dentro de los corchetes
-        str = match.suffix().str(); // Seguimos buscando en el resto de la cadena
+
+    for (int i = 0; i < str.size(); i++) {
+        if (str[i] == '[') {
+            flag = true;
+        }
+        else if (str[i] == ']') {
+            flag = false;
+            result.push_back(formated_string);
+            formated_string = "";
+        }
+        else if (str[i] == '|' && flag == false) {
+            continue;
+        }
+        else {
+            formated_string += str[i]; 
+        }
     }
-    
+
     return result;
 }
 
