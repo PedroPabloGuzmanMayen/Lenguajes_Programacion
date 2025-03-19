@@ -1,0 +1,42 @@
+[
+{
+  "directory": "/home/ppguz/Lenguajes_Programacion/build",
+  "command": "/usr/bin/g++  -I/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/include -g -o CMakeFiles/my_program.dir/src/AFD.cpp.o -c /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/AFD.cpp",
+  "file": "/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/AFD.cpp"
+},
+{
+  "directory": "/home/ppguz/Lenguajes_Programacion/build",
+  "command": "/usr/bin/g++  -I/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/include -g -o CMakeFiles/my_program.dir/src/AFN.cpp.o -c /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/AFN.cpp",
+  "file": "/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/AFN.cpp"
+},
+{
+  "directory": "/home/ppguz/Lenguajes_Programacion/build",
+  "command": "/usr/bin/g++  -I/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/include -g -o CMakeFiles/my_program.dir/src/Node.cpp.o -c /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/Node.cpp",
+  "file": "/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/Node.cpp"
+},
+{
+  "directory": "/home/ppguz/Lenguajes_Programacion/build",
+  "command": "/usr/bin/g++  -I/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/include -g -o CMakeFiles/my_program.dir/src/lector.cpp.o -c /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/lector.cpp",
+  "file": "/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/lector.cpp"
+},
+{
+  "directory": "/home/ppguz/Lenguajes_Programacion/build",
+  "command": "/usr/bin/g++  -I/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/include -g -o CMakeFiles/my_program.dir/src/main.cpp.o -c /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/main.cpp",
+  "file": "/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/main.cpp"
+},
+{
+  "directory": "/home/ppguz/Lenguajes_Programacion/build",
+  "command": "/usr/bin/g++  -I/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/include -g -o CMakeFiles/my_program.dir/src/parser.cpp.o -c /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/parser.cpp",
+  "file": "/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/parser.cpp"
+},
+{
+  "directory": "/home/ppguz/Lenguajes_Programacion/build",
+  "command": "/usr/bin/g++  -I/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/include -g -o CMakeFiles/my_program.dir/src/shunting_yard.cpp.o -c /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/shunting_yard.cpp",
+  "file": "/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/shunting_yard.cpp"
+},
+{
+  "directory": "/home/ppguz/Lenguajes_Programacion/build",
+  "command": "/usr/bin/g++  -I/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/include -g -o CMakeFiles/my_program.dir/src/tree.cpp.o -c /home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/tree.cpp",
+  "file": "/home/ppguz/Lenguajes_Programacion/LaboratorioAFD/src/tree.cpp"
+}
+]

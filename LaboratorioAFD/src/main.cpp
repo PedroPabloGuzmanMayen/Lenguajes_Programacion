@@ -8,6 +8,7 @@
 #include "AFD.cpp"
 #include "lector.h"
 #include <unordered_set>
+#include "parser.cpp"
 
 
 int main() {
@@ -152,3 +153,4 @@ int main() {
 
     return 0;
 }
+

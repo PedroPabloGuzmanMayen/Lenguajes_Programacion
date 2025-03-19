@@ -1,8 +1,8 @@
 expresiones_regulares:
-  - "aa(bb)*c#"
+  - "(a|b)#"
 cadenas:
   - "abbc"
   - "abab"
   - "aaa"
-  - "aba"
-  - "aabbc"
+  - "b"
+  - "a"
