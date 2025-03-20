@@ -8,7 +8,7 @@
 #include "AFD.cpp"
 #include "lector.h"
 #include <unordered_set>
-
+#include <parser.cpp>
 
 int main() {
     // Leer expresiones y cadenas desde YAML
