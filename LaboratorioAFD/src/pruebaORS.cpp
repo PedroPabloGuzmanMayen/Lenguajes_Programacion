@@ -98,6 +98,39 @@ void expand_range(const char* input, char* output) {
     }
 }
 
+void expand_embedded_ranges(const char* input, char* output) {
+    int i = 0, out_i = 0;
+    int len = strlen(input);
+
+    while (i < len) {
+        if (input[i] == '[') {
+            // Encontramos un posible rango embebido
+            int start = i;
+            while (i < len && input[i] != ']') i++;
+            if (i >= len) break;
+
+            int end = i;
+            char temp[128];
+            strncpy(temp, input + start, end - start + 1);
+            temp[end - start + 1] = '\0';
+
+            char expanded[256];
+            expand_range(temp, expanded);
+
+            output[out_i++] = '(';
+            for (int j = 0; expanded[j]; j++) {
+                output[out_i++] = expanded[j];
+            }
+            output[out_i++] = ')';
+
+            i++; // avanzar más allá de ']'
+        } else {
+            output[out_i++] = input[i++];
+        }
+    }
+
+    output[out_i] = '\0';
+}
 
 
 void procesar_linea(const char* linea) {
@@ -108,14 +141,13 @@ void procesar_linea(const char* linea) {
         Variable nueva;
         strcpy(nueva.name, nombre);
 
+        char expandida[MAX_EXPR];
         if (expr[0] == '[') {
-            char expandida[MAX_EXPR];
             expand_range(expr, expandida);
-            strcpy(nueva.expression, expandida);
         } else {
-            strcpy(nueva.expression, expr);
+            expand_embedded_ranges(expr, expandida);
         }
-
+        strcpy(nueva.expression, expandida);
 
 
         variables[var_count++] = nueva;
@@ -144,6 +176,7 @@ void imprimir_variables() {
     }
 }
 
+/* 
 int main() {
     const char* contenido_yal =
         "let delim = [' ''\\t''\\n']\n"
@@ -159,4 +192,4 @@ int main() {
     imprimir_variables();
 
     return 0;
-}
+}*/
