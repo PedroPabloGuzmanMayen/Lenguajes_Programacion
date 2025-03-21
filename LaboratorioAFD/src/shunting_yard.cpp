@@ -97,4 +97,37 @@ std::vector<std::string> getAlphabet(std::string& expression){
     return newSet;
 }
 
+std::string parse_expression(std::string expression){
+    bool flag = false; //Esta flag nos ayuda a saber si estamos en la expresión y no en el terminador
+    std::string not_terminator = ""; //Aquí iremos guardando los valores de los caracteres que no sean terminadores
+   
+    for (int i = 0; i < expression.length(); i++){
+        if (expression[i] == '['){
+            flag = true; //Los corchetes indican que estamos en una expresión y no en un terminador
+        }
+        else if (flag == true && expression[i] != ']'){ //Si estamos en una expresión y no en un terminador, agregamos el caracter a la expresion
+            not_terminator += expression[i];
+        }
+        else if (flag == true && expression[i] == ']'){
+            flag = false; //Indicamos que  ya no estamos analizando una expresión y que empezaremos a agregar el terminador
+            not_terminator = add_concatenation(not_terminator); //Agregamos la concatenación implícita
+            not_terminator = shunting_yard(not_terminator); //La convertimos a postfix
+            not_terminator += '.'; //Agregamos la concatenación para el terminador
+        }
+
+        else if (flag == false && expression[i] != ']' && expression[i] != '[' && expression[i] != '|'){ //Con esto agreamos el terminador a la expresión
+            not_terminator += expression[i];
+        }
+        else if (flag == false && expression[i] == '|'){ //Con esto nos aseguramos de que es un or entre expresiones
+            not_terminator += "."; //Argegamos la concatenación del terminador
+            not_terminator += expression[i];
+        }
+
+    }
+
+    return not_terminator; //Retornamos la regex parseada
+
+}
+
+
 
