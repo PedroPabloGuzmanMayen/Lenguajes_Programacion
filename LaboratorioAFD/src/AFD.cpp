@@ -37,6 +37,16 @@ public:
     void agregarTransicion(const std::string& estado, const std::string& simbolo, const std::string& nuevoEstado) {
         S_[estado][simbolo] = nuevoEstado;
     }
+    /*
+    std::map<std::string, std::string> findTokens(std::string cadena){
+        std::string current = q0;
+        std::string lexeme = "";
+        for (int i = 0; i < cadena.length(); i++){
+            current = S_[current][std::string() + cadena[i]];
+        }
+    }
+    */
+    
 
     
     std::vector<std::string> move_AFD(const std::vector<std::string>& states, const std::string& symbol) {

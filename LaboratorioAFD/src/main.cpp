@@ -10,6 +10,10 @@
 #include <unordered_set>
 
 
+bool isInFinalStates(const std::map<std::set<int>, char>& terminators, const std::set<int>& state) {
+    return terminators.find(state) != terminators.end();
+}
+
 
 int main() {
     // Leer expresiones y cadenas desde YAML
@@ -51,17 +55,21 @@ int main() {
         //mapeamos los estados
         int stateNum = 0;
         std::map<int, std::set<int>> stateMap;
+        std::map<std::string, char> estado_terminador; //Se usa para guardar el mapeo del estado y su símbolo terminador correspondiente
         std::unordered_map<std::string, Estado> estados;
         for (const auto& state : findedStates) {
             std::string q = "q";
             q+= std::to_string(stateNum);  
+            if (isInFinalStates(terminators, state)){
+                estado_terminador[q] = terminators[state];
+            }
             estados[q] = Estado(q, stateNum);
             stateMap[stateNum++] = state;
             
         }
         // Obtenemos estados de aceptacion
         std::unordered_set<int> mySet; 
-        
+        //std::map<std::set<int>, char> terminators;
         
         for (size_t i = 0; i < accepted_states.size(); ++i) {
             std::set<int> target = accepted_states[i];
@@ -123,7 +131,9 @@ int main() {
         
 
         
-        
+        for (const auto& pair : estado_terminador) {
+            std::cout << "Estado: " << pair.first << " -> Terminador: " << pair.second << std::endl;
+        }
         
         automata.depurarAFD();
         automata.generarDot("afd_visual");
