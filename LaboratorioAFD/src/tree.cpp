@@ -18,6 +18,15 @@ std::set<int> setUnion(std::set<int >a,std::set<int >b){
     return c;
 }
 
+std::pair<bool, int> findCommonElement(const std::set<int>& current, const std::vector<int>& acceptedPos) {
+    for (int c : current) {
+        if (std::find(acceptedPos.begin(), acceptedPos.end(), c) != acceptedPos.end()) {
+            return {true, c};  
+        }
+    }
+    return {false, -1};  
+}
+
 std::stack<int> Tree::findPositions(char letter){
     std::stack<int> out;
     for (const auto& pair : this->idValue){
@@ -29,12 +38,10 @@ std::stack<int> Tree::findPositions(char letter){
 }
 
 
-
 Tree::Tree(std::string expression){
     this->treeExpr = expression;
     int counter = 1; //Nos ayudará a asignarle una posición/id a cada nodo
     std::stack<Node*> nodeStack; //Stack de nodos: nos ayudará a tener registro de los nodos que se van creando
-
     for (int i = 0; i<expression.length(); i++){
         if ((expression[i] == '|' || expression[i] == '.') && !nodeStack.empty()){
             //Los 2 últimos en el elementos en el stack de nodos serán los hijos del nuevo nodo
@@ -52,7 +59,7 @@ Tree::Tree(std::string expression){
             nodeStack.pop();
             nodeStack.push(newNode);
         }
-        else {
+        else  {
             //Si no es un operador, simplemente lo agregamos al stack de nodos, este nodo si tendrá un id asociado. 
             nodeStack.push(new Node(expression[i], counter));
             counter +=1;
@@ -182,14 +189,15 @@ void Tree::displayFollowPos(){
 }
 
 void Tree::getIdValues(Node* start){
+    std::string alfabetoGriego = "αβγδζηθικλμνξπρστυφψω#$+"; //Nos ayuda a determinar si hay un terminador o no
     if (!start) return;
     if(start->getSon(0) != nullptr) getIdValues(start->getSon(0));
     if(start->getSon(1) != nullptr) getIdValues(start->getSon(1));
     //Verificar que no sea un operador
     if(start->getID() != 0 ){
         this->idValue[start->getID()] = start->getValue();
-        if (start->getValue() == '#'){ //Indicar si es la posición de aceptación
-            this->acceptedPos = start->getID();
+        if (alfabetoGriego.find(start->getValue()) != std::string::npos){ //Indicar si es la posición de aceptación
+            this->acceptedPos.push_back(start->getID());
         }
     }
 }
@@ -202,12 +210,19 @@ void Tree::displayIDValues(){
     }
 }
 
+void Tree::displayAcceptedPos(){
+    for (int i = 0; i< this->acceptedPos.size(); i++){
+        printf("Accepted Pos: %d\n", acceptedPos[i]);
+    }
+}
+
 std::tuple<
         std::vector<std::set<int>>, 
         std::vector<std::set<int>>, 
         std::vector<std::set<int>>, 
         std::vector<std::string>, 
-        std::map<std::set<int>, std::map<char, std::set<int>>>>
+        std::map<std::set<int>, std::map<char, std::set<int>>> ,
+        std::map<std::set<int>,char> >
 Tree::convertToAFD() {
     
     std::vector<std::set<int>> findedStates;
@@ -215,14 +230,19 @@ Tree::convertToAFD() {
     std::vector<std::set<int>> DSTATES;
     std::map<std::set<int>, std::map<char, std::set<int>>> transitions;
     std::vector<std::string> alphabet = getAlphabet(this->treeExpr);
+    std::map<std::set<int>, char> terminators; //Sirve para indiar a que estaddo de aceptación pertenece cada
 
     findedStates.push_back(this->root->getFirstPos());
     DSTATES.push_back(this->root->getFirstPos());
 
     while (!DSTATES.empty()) {
         std::set<int> current = DSTATES.back();
-        if (current.count(this->acceptedPos) > 0) {
+        auto result = findCommonElement(current, this->acceptedPos);
+        if (result.first) {
             accepted_states.push_back(current);
+            printf("Common pos: %d\n", result.second);
+            printf("Common pos char: %c\n", idValue[result.second]);
+            terminators[current] = idValue[result.second]; //Linkear cada estado de aceptación con su terminador
         }
         DSTATES.pop_back();
 
@@ -265,7 +285,7 @@ Tree::convertToAFD() {
             std::cout << "}\n";
         }
     }
-    return std::make_tuple(findedStates, accepted_states, DSTATES, alphabet, transitions);
+    return std::make_tuple(findedStates, accepted_states, DSTATES, alphabet, transitions, terminators);
 }
 
 

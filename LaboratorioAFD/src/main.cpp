@@ -8,7 +8,7 @@
 #include "AFD.cpp"
 #include "lector.h"
 #include <unordered_set>
-#include "parser.cpp"
+
 
 
 int main() {
@@ -33,7 +33,20 @@ int main() {
         newTree->displayFollowPos();
         newTree->getIdValues(newTree->getRoot());
         newTree->displayIDValues();
-        auto [findedStates, accepted_states, DSTATES, alphabet, transitions] = newTree->convertToAFD();
+        newTree->displayAcceptedPos();
+        auto [findedStates, accepted_states, DSTATES, alphabet, transitions, terminators] = newTree->convertToAFD();
+
+        for (const auto& pair : terminators) {
+            
+            std::cout << "Set: {";
+            for (auto it = pair.first.begin(); it != pair.first.end(); ++it) {
+                if (it != pair.first.begin()) {
+                    std::cout << ", ";  
+                }
+                std::cout << *it;
+            }
+            std::cout << "} : " << pair.second << std::endl;
+        }
 
         //mapeamos los estados
         int stateNum = 0;
