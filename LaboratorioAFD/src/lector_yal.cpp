@@ -274,12 +274,12 @@ ReglasTokens reglas_tokens() {
 
 
 
-int main () {
-    ReglasTokens reglasTokens;
+// int main () {
+//     ReglasTokens reglasTokens;
 
-    reglasTokens = reglas_tokens();
-    reglasTokens.imprimir();
+//     reglasTokens = reglas_tokens();
+//     reglasTokens.imprimir();
 
 
-}
+// }
 
