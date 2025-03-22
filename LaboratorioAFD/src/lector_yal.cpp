@@ -3,6 +3,12 @@
 #include <unordered_map>
 #include "AFD.cpp"
 #include "buffer.cpp"
+#include "Regla_Tokens.cpp"
+
+std::vector<std::string> alfabetoGriego = {
+    "α", "β", "γ", "δ", "ζ", "η", "θ", "ι", "κ", "λ", "μ", "ν", "ξ", "π", "ρ", "σ", "τ", "υ", "φ", "ψ", "ω"
+};
+
 
 std::vector<std::string> generarAlfabeto() {
     std::vector<std::string> alfabeto;
@@ -35,12 +41,13 @@ std::vector<std::string> generarAlfabeto() {
     alfabeto.push_back(">");
     alfabeto.push_back("/");
     alfabeto.push_back("\\");
+    alfabeto.push_back("\"");
 
     return alfabeto;
 }
 
-std::pair<std::unordered_map<std::string, std::string>, std::unordered_map<std::string, std::string>> 
-    reglas_tokens() {
+ReglasTokens reglas_tokens() {
+    ReglasTokens reglasTokens;
     Buffer buffer("slr.yal", 10);
     buffer.ejecutar();
 
@@ -66,7 +73,7 @@ std::pair<std::unordered_map<std::string, std::string>, std::unordered_map<std::
     automata.agregarTransicion("q1", "e", "q2");
     automata.agregarTransicion("q2", "t", "q3"); 
 
-    std::string alfabetoCompleto = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_*?.;-|[]+():/<>'=ε\\";
+    std::string alfabetoCompleto = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_*?.;-|[]+():/<>'=ε\\\"";
 
     // Transiciones para todo el alfabeto
     for (char c : alfabetoCompleto) {
@@ -185,7 +192,11 @@ std::pair<std::unordered_map<std::string, std::string>, std::unordered_map<std::
 
             if (tokens[0] == "|"  &&
                 tokens[2] == "return" ){
+                    
+                
 
+                    std::string identificador = alfabetoGriego.back();
+                    alfabetoGriego.pop_back();
 
 
                     std::string valor = tokens[1];
@@ -195,16 +206,53 @@ std::pair<std::unordered_map<std::string, std::string>, std::unordered_map<std::
                     }
                     reglas[valor] = tokens[3];
 
+                    std::string expresion_regular = variables[valor];
+                    reglasTokens.insertar({identificador, valor, tokens[3], expresion_regular});
+
                     tokens.erase(tokens.begin());
                     tokens.erase(tokens.begin());
                     tokens.erase(tokens.begin());
                     tokens.erase(tokens.begin());
                     
 
-            }else if (tokens[0] != "|"){
+            }else if (tokens[0] != "|" && tokens[1] == "return"){
+                std::string identificador = alfabetoGriego.back();
+                alfabetoGriego.pop_back();
                 reglas[tokens[0]] = "NONE";
+
+
+                std::string expresion_regular = variables[tokens[0]];
+                std::string token_return = "";
+                if (tokens[2] == "WHITESPACE"){
+                    token_return = "";
+
+                }else{
+                    token_return = tokens[2];
+                }
+
+                reglasTokens.insertar({identificador, tokens[0],token_return,expresion_regular});
                 
                 tokens.erase(tokens.begin());
+                tokens.erase(tokens.begin());
+                tokens.erase(tokens.begin());
+            }
+            else if(tokens[0] != "|"){
+
+                std::string identificador = alfabetoGriego.back();
+                alfabetoGriego.pop_back();
+                reglas[tokens[0]] = "NONE";
+
+
+                std::string expresion_regular = variables[tokens[0]];
+                std::string token_return = "";
+                
+
+                reglasTokens.insertar({identificador, tokens[0],token_return,expresion_regular});
+                
+                tokens.erase(tokens.begin());
+                
+
+
             }
 
         }
@@ -218,9 +266,20 @@ std::pair<std::unordered_map<std::string, std::string>, std::unordered_map<std::
 
 
    }
+   
 
-   return {variables, reglas}; 
+   return reglasTokens; 
 }
 
 
+
+
+int main () {
+    ReglasTokens reglasTokens;
+
+    reglasTokens = reglas_tokens();
+    reglasTokens.imprimir();
+
+
+}
 

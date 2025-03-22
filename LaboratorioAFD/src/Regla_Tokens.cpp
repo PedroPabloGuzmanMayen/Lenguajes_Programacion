@@ -1,6 +1,8 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <iostream>
+
 
 struct ReglaToken {
     std::string identificador;
@@ -51,5 +53,16 @@ struct ReglasTokens {
                    (atributo == "token" && regla.token == valor) ||
                    (atributo == "expresion_regular" && regla.expresion_regular == valor);
         }), reglas.end());
+    }
+
+
+    void imprimir() const {
+        for (const auto& regla : reglas) {
+            std::cout << "Identificador: " << regla.identificador << "\n"
+                      << "Nombre: " << regla.nombre << "\n"
+                      << "Token: " << regla.token << "\n"
+                      << "Expresión Regular: " << regla.expresion_regular << "\n"
+                      << "-----------------------------\n";
+        }
     }
 };
