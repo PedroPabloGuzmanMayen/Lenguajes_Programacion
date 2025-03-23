@@ -14,7 +14,8 @@ class Tree{
         std::map<int, std::set<int>> followPosTable;
         std::map<int, char> idValue;
         std::string treeExpr;
-        int acceptedPos;
+        std::vector<int> acceptedPos;
+        std::map<int, char> pos_term; //Indica en que posición se halla cada terminador
 
 
     public:
@@ -32,10 +33,12 @@ class Tree{
         std::vector<std::set<int>>, 
         std::vector<std::set<int>>, 
         std::vector<std::string>, 
-        std::map<std::set<int>, std::map<char, std::set<int>>>>
+        std::map<std::set<int>, std::map<char, std::set<int>>> ,
+        std::map<std::set<int>, char>>
         convertToAFD();
         void getIdValues(Node* start);
         void displayIDValues();
+        void displayAcceptedPos();
         std::stack<int> findPositions(char letter);
 };
 
