@@ -113,6 +113,7 @@ void expand_embedded_ranges(const char* input, char* output) {
 
     while (i < len) {
         if (input[i] == '[') {
+            // Procesar rangos [ ... ]
             int start = i;
             while (i < len && input[i] != ']') i++;
             if (i >= len) break;
@@ -130,9 +131,26 @@ void expand_embedded_ranges(const char* input, char* output) {
                 output[out_i++] = expanded[j];
             }
             output[out_i++] = ')';
-
             i++;
+        } else if (input[i] == '\'') {  // caso para comillas simples
+            // Procesar caracteres entre comillas simples, ej: 'E'
+            i++; // Saltar la primera comilla
+            if (i >= len) break;
+
+            char c = input[i++]; // Leer el carácter dentro de las comillas
+
+            // Manejar escapes simples, ej: '\n'
+            if (c == '\\') {
+                if (i >= len) break;
+                c = interpret_escape(input[i++]);
+            }
+
+            // Saltar la comilla de cierre si existe
+            if (i < len && input[i] == '\'') i++;
+
+            output[out_i++] = c; // Escribir el carácter sin comillas
         } else {
+            // Copiar otros caracteres directamente
             output[out_i++] = input[i++];
         }
     }
@@ -280,7 +298,7 @@ void reemplazar_manual(std::string& expresion, const std::string& buscar, const 
     expresion = resultado;
 }
 
-/*
+
 int main() {
     // Expresiones a expandir
     const char* expresiones[] = {
@@ -303,4 +321,3 @@ int main() {
 
     return 0;
 }
-*/
