@@ -35,9 +35,6 @@ void expand_expression(const char* input, char* output) {
         
     }
 
-    
-
-
     i = 1;
     len -= 1;
 
@@ -150,7 +147,11 @@ void expand_single_expression(const char* expr, char* output) {
     } else {
         expand_embedded_ranges(expr, expanded);
     }
-    strcpy(output, expanded);
+    if (strchr(expanded, '|')) {
+        sprintf(output, "(%s)", expanded);
+    } else {
+        strcpy(output, expanded);
+    }
 }
 
 
@@ -183,25 +184,25 @@ void reemplazar_manual(std::string& expresion, const std::string& buscar, const 
 
 
 
-// int main() {
-//     // Expresiones a expandir
-//     const char* expresiones[] = {
-//         "['\x17''\x15']",
-//         "delim+",
-//         "['A'-'Z''a'-'z']",
-//         "(_)*",
-//         "['0'-'9']",
-//         "digit+",
-//         "letter(letter|str|digit)*",
-//         "digits(.digits)?('E'['+''-']?digits)?"
-//     };
+int main() {
+    // Expresiones a expandir
+    const char* expresiones[] = {
+        "['\x17''\x15']",
+        "delim+",
+        "['A'-'Z''a'-'z']",
+        "(_)*",
+        "['0'-'9']",
+        "digit+",
+        "letter(letter|str|digit)*",
+        "digits(.digits)?('E'['+''-']?digits)?"
+    };
 
-//     for (int i = 0; i < sizeof(expresiones) / sizeof(expresiones[0]); i++) {
-//         char resultado[MAX_EXPR];
-//         expand_single_expression(expresiones[i], resultado);
-//         printf("Expresión original: %s\n", expresiones[i]);
-//         printf("Expresión expandida: %s\n\n", resultado);
-//     }
+    for (int i = 0; i < sizeof(expresiones) / sizeof(expresiones[0]); i++) {
+        char resultado[MAX_EXPR];
+        expand_single_expression(expresiones[i], resultado);
+        printf("Expresión original: %s\n", expresiones[i]);
+        printf("Expresión expandida: %s\n\n", resultado);
+    }
 
-//     return 0;
-// }
+    return 0;
+}
