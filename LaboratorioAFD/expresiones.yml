@@ -1,8 +1,6 @@
 expresiones_regulares:
-  - "(a|b)#"
+  - "(0|1)(0|1)*\x02|-\x01"
 cadenas:
-  - "abbc"
-  - "abab"
-  - "aaa"
-  - "b"
-  - "a"
+  - "-"
+  - "adsfsdf"
+  - "01100"

@@ -188,19 +188,39 @@ void Tree::displayFollowPos(){
     }
 }
 
-void Tree::getIdValues(Node* start){
-    std::string alfabetoGriego = "αβγδζηθικλμνξπρστυφψω#$+"; //Nos ayuda a determinar si hay un terminador o no
+
+
+void Tree::getIdValues(Node* start) {
+
+    std::vector<std::string> alfabetoGriego = {
+        "\x00", "\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09", 
+        "\x0A", "\x0B", "\x0C",
+    };
+
     if (!start) return;
-    if(start->getSon(0) != nullptr) getIdValues(start->getSon(0));
-    if(start->getSon(1) != nullptr) getIdValues(start->getSon(1));
-    //Verificar que no sea un operador
-    if(start->getID() != 0 ){
+    if (start->getSon(0) != nullptr) getIdValues(start->getSon(0));
+    if (start->getSon(1) != nullptr) getIdValues(start->getSon(1));
+
+    // Verificar que no sea un operador
+    if (start->getID() != 0) {
         this->idValue[start->getID()] = start->getValue();
-        if (alfabetoGriego.find(start->getValue()) != std::string::npos){ //Indicar si es la posición de aceptación
+
+        // Asegurarse de que getValue() sea un tipo compatible
+        std::string value;
+        if (sizeof(start->getValue()) == sizeof(char)) {
+            value = std::string(1, start->getValue()); // Si es char, convertirlo a std::string
+        } else {
+            value = start->getValue(); // Si ya es un string o tipo adecuado, usarlo directamente
+        }
+
+        // Verificar si el valor está en el alfabeto griego
+        if (std::find(alfabetoGriego.begin(), alfabetoGriego.end(), value) != alfabetoGriego.end()) {
             this->acceptedPos.push_back(start->getID());
         }
     }
 }
+
+
 
 void Tree::displayIDValues(){
     printf("ID values:\n ");
