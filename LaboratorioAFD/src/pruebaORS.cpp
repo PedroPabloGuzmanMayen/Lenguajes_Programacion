@@ -143,14 +143,13 @@ void expand_embedded_ranges(const char* input, char* output) {
 void expand_internal_patterns(char* expr) {
     char buffer[MAX_EXPR] = "";
     int i = 0, j = 0;
+    int len = strlen(expr);
 
-    while (expr[i]) {
-        // Detectar identificadores alfanuméricos
+    while (i < len) {
         if (isalnum(expr[i]) || expr[i] == '_') {
+            // Manejar identificadores seguidos de + o ?
             char token[MAX_NAME] = "";
             int k = 0;
-            int start = i;
-
             while (isalnum(expr[i]) || expr[i] == '_') {
                 token[k++] = expr[i++];
             }
@@ -164,6 +163,37 @@ void expand_internal_patterns(char* expr) {
                 i++;
             } else {
                 j += sprintf(buffer + j, "%s", token);
+            }
+        } else if (expr[i] == ')') {
+            buffer[j++] = expr[i++];
+            // Verificar si después de ')' hay un operador
+            if (i < len && (expr[i] == '+' || expr[i] == '?')) {
+                char op = expr[i++];
+                // Buscar el '(' correspondiente en el buffer
+                int balance = 1;
+                int k = j - 2; // posición antes de ')'
+                while (k >= 0 && balance > 0) {
+                    if (buffer[k] == ')') balance++;
+                    else if (buffer[k] == '(') balance--;
+                    k--;
+                }
+                if (balance == 0) {
+                    k++; // k es el índice del '('
+                    int group_len = (j - 1) - k;
+                    char group[MAX_EXPR];
+                    strncpy(group, buffer + k, group_len);
+                    group[group_len] = '\0';
+
+                    j = k; // Sobrescribir desde '('
+                    if (op == '?') {
+                        j += sprintf(buffer + j, "(%s| )", group);
+                    } else if (op == '+') {
+                        j += sprintf(buffer + j, "%s(%s)*", group, group);
+                    }
+                } else {
+                    // Paréntesis no balanceados, dejar como está
+                    buffer[j++] = op;
+                }
             }
         } else {
             buffer[j++] = expr[i++];
@@ -223,8 +253,6 @@ void expand_single_expression(const char* expr, char* output) {
 }
 
 
-
-
 void reemplazar_manual(std::string& expresion, const std::string& buscar, const std::string& reemplazo) {
     std::string resultado;
     size_t len_buscar = buscar.length();
@@ -251,7 +279,6 @@ void reemplazar_manual(std::string& expresion, const std::string& buscar, const 
 
     expresion = resultado;
 }
-
 
 /*
 int main() {
