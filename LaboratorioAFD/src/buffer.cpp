@@ -53,9 +53,10 @@ public:
 
             // Si encontramos un espacio y el último caracter fue una comilla, lo reemplazamos por "ε"
             if (caracter == ' ' && ultimoCaracter == '\'' &&buffer[avance +1 ] == '\'' ) {
-                caracterSalida = "ε";  // Reemplazo por épsilon
+                caracterSalida = "\x7F";  // Reemplazo por épsilon
             }
-            if (caracter == '\n') {
+            
+            if (caracter == '\n' ) {
                 caracterSalida = " ";  // Reemplazo por épsilon
             }
 

@@ -56,7 +56,7 @@ struct ReglasTokens {
     }
 
 
-    void imprimir() const {
+     void imprimir() const {
         for (const auto& regla : reglas) {
             std::cout << "Identificador: " << regla.identificador << "\n"
                       << "Nombre: " << regla.nombre << "\n"

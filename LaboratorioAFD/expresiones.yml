@@ -1,5 +1,5 @@
 expresiones_regulares:
-  - "(0|1)(0|1)*\x02|-\x01"
+  - "(0|1)(0|1)*\x01|-\x02"
 cadenas:
   - "-"
   - "adsfsdf"

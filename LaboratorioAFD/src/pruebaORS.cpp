@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-
+#include <string>
 #define MAX_VAR 100
 #define MAX_LINE 512
 #define MAX_NAME 64
@@ -32,7 +32,11 @@ void expand_expression(const char* input, char* output) {
     if (!(input[0] == '[' && input[len - 1] == ']')) {
         strcpy(output, input);
         return;
+        
     }
+
+    
+
 
     i = 1;
     len -= 1;
@@ -139,63 +143,65 @@ void expand_embedded_ranges(const char* input, char* output) {
     output[out_i] = '\0';
 }
 
-void procesar_linea(const char* linea) {
-    if (strncmp(linea, "let", 3) != 0) return;
+void expand_single_expression(const char* expr, char* output) {
+    char expanded[MAX_EXPR];
+    if (expr[0] == '[') {
+        expand_expression(expr, expanded);
+    } else {
+        expand_embedded_ranges(expr, expanded);
+    }
+    strcpy(output, expanded);
+}
 
-    char nombre[MAX_NAME], expr[MAX_EXPR];
-    if (sscanf(linea, "let %s = %[^\n]", nombre, expr) == 2) {
-        Variable nueva;
-        strcpy(nueva.name, nombre);
 
-        char expandida[MAX_EXPR];
-        if (expr[0] == '[') {
-            expand_expression(expr, expandida);
+void reemplazar_manual(std::string& expresion, const std::string& buscar, const std::string& reemplazo) {
+    std::string resultado;
+    size_t len_buscar = buscar.length();
+    
+    for (size_t i = 0; i < expresion.length(); ++i) {
+        bool coincide = true;
+
+        // Comparar manualmente carácter por carácter
+        for (size_t j = 0; j < len_buscar; ++j) {
+            if (i + j >= expresion.length() || expresion[i + j] != buscar[j]) {
+                coincide = false;
+                break;
+            }
+        }
+
+        // Si coincide, agregar el reemplazo y saltar la longitud de `buscar`
+        if (coincide) {
+            resultado += reemplazo;
+            i += len_buscar - 1; // Saltar los caracteres reemplazados
         } else {
-            expand_embedded_ranges(expr, expandida);
+            resultado += expresion[i];
         }
-
-        strcpy(nueva.expression, expandida);
-        variables[var_count++] = nueva;
-        printf("%s = %s\n", nueva.name, nueva.expression);
     }
+
+    expresion = resultado;
 }
 
-void cargar_yal(const char* yal) {
-    char linea[MAX_LINE];
-    const char* ptr = yal;
-    while (*ptr) {
-        int i = 0;
-        while (*ptr && *ptr != '\n' && i < MAX_LINE - 1) {
-            linea[i++] = *ptr++;
-        }
-        if (*ptr == '\n') ptr++;
-        linea[i] = '\0';
-        procesar_linea(linea);
-    }
-}
 
-void imprimir_variables() {
-    printf("\nVariables almacenadas:\n");
-    for (int i = 0; i < var_count; i++) {
-        printf("%s = %s\n", variables[i].name, variables[i].expression);
-    }
-}
 
-/*
-int main() {
-    const char* contenido_yal =
-        "let delim = [\"\\s\\t\\n\"]\n"
-        "let ws = delim+\n"
-        "let letter = ['A'-'Z''a'-'z']\n"
-        "let str = (_)*\n"
-        "let digit = [\"0123456789\"]\n"
-        "let digits = digit+\n"
-        "let id = letter(letter|str|digit)*\n"
-        "let number = digits(.digits)?('E'['+''-']?digits)?\n";
+// int main() {
+//     // Expresiones a expandir
+//     const char* expresiones[] = {
+//         "['\x17''\x15']",
+//         "delim+",
+//         "['A'-'Z''a'-'z']",
+//         "(_)*",
+//         "['0'-'9']",
+//         "digit+",
+//         "letter(letter|str|digit)*",
+//         "digits(.digits)?('E'['+''-']?digits)?"
+//     };
 
-    cargar_yal(contenido_yal);
-    imprimir_variables();
+//     for (int i = 0; i < sizeof(expresiones) / sizeof(expresiones[0]); i++) {
+//         char resultado[MAX_EXPR];
+//         expand_single_expression(expresiones[i], resultado);
+//         printf("Expresión original: %s\n", expresiones[i]);
+//         printf("Expresión expandida: %s\n\n", resultado);
+//     }
 
-    return 0;
-}
-*/
+//     return 0;
+// }

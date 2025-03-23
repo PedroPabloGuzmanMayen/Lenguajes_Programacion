@@ -4,12 +4,17 @@
 #include "AFD.cpp"
 #include "buffer.cpp"
 #include "Regla_Tokens.cpp"
+#include <set>
+#include "pruebasORS.h"
+#include <string>
 
 std::vector<std::string> alfabetoGriego = {
-    "α", "β", "γ", "δ", "ζ", "η", "θ", "ι", "κ", "λ", "μ", "ν", "ξ", "π", "ρ", "σ", "τ", "υ", "φ", "ψ", "ω"
+     "\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09", 
+    "\x0A", "\x0B", "\x0C",
 };
 
 
+std::unordered_map<std::string, std::string> var;
 std::vector<std::string> generarAlfabeto() {
     std::vector<std::string> alfabeto;
     for (char c = 'a'; c <= 'z'; ++c) alfabeto.push_back(std::string(1, c));
@@ -30,6 +35,7 @@ std::vector<std::string> generarAlfabeto() {
     alfabeto.push_back("(");
     alfabeto.push_back(")");
     alfabeto.push_back("_");
+    alfabeto.push_back("\x7F");
     
     alfabeto.push_back("-");
     alfabeto.push_back("|");
@@ -73,7 +79,7 @@ ReglasTokens reglas_tokens() {
     automata.agregarTransicion("q1", "e", "q2");
     automata.agregarTransicion("q2", "t", "q3"); 
 
-    std::string alfabetoCompleto = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_*?.;-|[]+():/<>'=ε\\\"";
+    std::string alfabetoCompleto = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_*?.;-|[]+():/<>'=ε\\\"\x7F";
 
     // Transiciones para todo el alfabeto
     for (char c : alfabetoCompleto) {
@@ -155,7 +161,7 @@ ReglasTokens reglas_tokens() {
         
 
 
-    std::unordered_map<std::string, std::string> variables;
+    
     std::unordered_map<std::string, std::string> reglas;
 
     bool modo_reglas = false;
@@ -171,11 +177,33 @@ ReglasTokens reglas_tokens() {
                 ) 
             {
                 // Guardar en el mapa
-                variables[tokens[1]] = tokens[3];
+
+                std::string expresion = "";
+                expresion = tokens[3];
+
+                char resultado[MAX_EXPR];
+                std::sprintf(resultado, "%s", expresion.c_str()); 
+        
+                expand_single_expression(expresion.c_str(), resultado);
+                expresion = resultado;
+
+                for (const auto& pair : var) {
+                    reemplazar_manual(expresion, pair.first, pair.second);
+                }
+
+
+
+                var[tokens[1]] = expresion;
                 tokens.erase(tokens.begin());
                 tokens.erase(tokens.begin());
                 tokens.erase(tokens.begin());
                 tokens.erase(tokens.begin());
+
+
+
+                //vamos a hacer un reemplazo si lo encontramos
+
+                
             } 
     
             else if (tokens[0] =="rule"  && 
@@ -206,7 +234,7 @@ ReglasTokens reglas_tokens() {
                     }
                     reglas[valor] = tokens[3];
 
-                    std::string expresion_regular = variables[valor];
+                    std::string expresion_regular = var[valor];
                     reglasTokens.insertar({identificador, valor, tokens[3], expresion_regular});
 
                     tokens.erase(tokens.begin());
@@ -221,14 +249,11 @@ ReglasTokens reglas_tokens() {
                 reglas[tokens[0]] = "NONE";
 
 
-                std::string expresion_regular = variables[tokens[0]];
+                std::string expresion_regular = var[tokens[0]];
                 std::string token_return = "";
-                if (tokens[2] == "WHITESPACE"){
-                    token_return = "";
-
-                }else{
-                    token_return = tokens[2];
-                }
+                
+                token_return = tokens[2];
+                
 
                 reglasTokens.insertar({identificador, tokens[0],token_return,expresion_regular});
                 
@@ -243,7 +268,7 @@ ReglasTokens reglas_tokens() {
                 reglas[tokens[0]] = "NONE";
 
 
-                std::string expresion_regular = variables[tokens[0]];
+                std::string expresion_regular = var[tokens[0]];
                 std::string token_return = "";
                 
 
@@ -260,12 +285,14 @@ ReglasTokens reglas_tokens() {
         
 
 
-        
+      
 
 
 
 
    }
+
+   
    
 
    return reglasTokens; 
@@ -280,6 +307,72 @@ ReglasTokens reglas_tokens() {
 //     reglasTokens = reglas_tokens();
 //     reglasTokens.imprimir();
 
+//     std::set<std::string> processed;
+
+//     // std::vector<ReglaToken> reglasExtraidas = reglasTokens.extraer("identificador", "\x01");
+
+//     // Imprimir las reglas extraídas
+//     // std::cout << "\nReglas extraídas (por nombre 'Regla2'):\n";
+//     // for (const auto& regla : reglasExtraidas) {
+//     //     std::cout << "Identificador: " << regla.identificador << "\n"
+//     //               << "Nombre: " << regla.nombre << "\n"
+//     //               << "Token: " << regla.token << "\n"
+//     //               << "Expresión Regular: " << regla.expresion_regular << "\n"
+//     //               << "-----------------------------\n";
+//     // }
+    
+
+//     // for (auto& pair : var) {
+//     //     char resultado[MAX_EXPR];
+        
+       
+//     //     std::sprintf(resultado, "%s", pair.second.c_str()); 
+        
+//     //     expand_single_expression(pair.second.c_str(), resultado);
+//     //     pair.second = resultado;
+        
+//     // }
+    
+    
+
+//     for (const auto& pair : var) {
+//         if (processed.find(pair.first) != processed.end()) {
+//             std::cout << "Variable: " << pair.first << ", Valor: " << pair.second 
+//                       <<  std::endl;
+//         } else {
+//             std::cout << "Variable: " << pair.first << ", Valor: " << pair.second 
+//                       << std::endl;
+//             processed.insert(pair.first);  // Marca la variable como procesada
+//         }
+//     }
+
+
+
+   
+
+//     // std::string key = "number";  // Variable que queremos buscar
+
+//     // auto it = var.find(key);
+
+//     // if (it != var.end()) {
+//     //     // Si la clave fue encontrada
+//     //     std::cout << "La variable '" << key << "' tiene el valor: " << it->second << std::endl;
+//     // } else {
+//     //     // Si la clave no fue encontrada
+//     //     std::cout << "La variable '" << key << "' no existe en el mapa." << std::endl;
+//     // }
+
+    
+    
+
+
+    
+    
+
 
 // }
+
+
+
+
 
