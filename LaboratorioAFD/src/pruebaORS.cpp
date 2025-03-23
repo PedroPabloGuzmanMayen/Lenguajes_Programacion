@@ -140,6 +140,41 @@ void expand_embedded_ranges(const char* input, char* output) {
     output[out_i] = '\0';
 }
 
+void expand_internal_patterns(char* expr) {
+    char buffer[MAX_EXPR] = "";
+    int i = 0, j = 0;
+
+    while (expr[i]) {
+        // Detectar identificadores alfanuméricos
+        if (isalnum(expr[i]) || expr[i] == '_') {
+            char token[MAX_NAME] = "";
+            int k = 0;
+            int start = i;
+
+            while (isalnum(expr[i]) || expr[i] == '_') {
+                token[k++] = expr[i++];
+            }
+            token[k] = '\0';
+
+            if (expr[i] == '+') {
+                j += sprintf(buffer + j, "%s(%s)*", token, token);
+                i++;
+            } else if (expr[i] == '?') {
+                j += sprintf(buffer + j, "(%s| )", token);
+                i++;
+            } else {
+                j += sprintf(buffer + j, "%s", token);
+            }
+        } else {
+            buffer[j++] = expr[i++];
+        }
+    }
+
+    buffer[j] = '\0';
+    strcpy(expr, buffer);
+}
+
+
 void expand_single_expression(const char* expr, char* output) {
     char expanded[MAX_EXPR];
 
@@ -168,7 +203,7 @@ void expand_single_expression(const char* expr, char* output) {
         char base[MAX_NAME];
         strncpy(base, expanded, len - 1);
         base[len - 1] = '\0';
-        sprintf(transformada, "(%s|ε)", base); // aca lo estamos dejando vacio porque luego los espacios vacios nos encargamos de reemplazarlos por epsilon
+        sprintf(transformada, "(%s| )", base); // aca lo estamos dejando vacio porque luego los espacios vacios nos encargamos de reemplazarlos por epsilon
 
     } else {
         strcpy(transformada, expanded);
@@ -180,6 +215,11 @@ void expand_single_expression(const char* expr, char* output) {
     } else {
         strcpy(output, transformada);
     }
+
+
+    // Expandir X+ y X? dentro de la expresión
+    expand_internal_patterns(output);
+
 }
 
 
@@ -213,30 +253,19 @@ void reemplazar_manual(std::string& expresion, const std::string& buscar, const 
 }
 
 
-
+/*
 int main() {
     // Expresiones a expandir
     const char* expresiones[] = {
-        "['A'-'C']",
-        "['a'-'f']",
-        "['0'-'9']",
-        "digit?",
-        "letter?",
-        "(digit|letter)?",
-        "digit*",
-        "(digit|letter)+",
+        "['\x17''\x15']",
+        "delim+",
+        "['A'-'Z''a'-'z']",
+        "(_)*",
         "digit+(letter|digit)*",
-        "((digit|letter)+)?",
-        "['\\n''\\t'' ']",
-        "['+''-''*''/']",
-        "digits(.digits)?('E'['+''-']?digits)?", // Compleja y realista
-        "id = letter(letter|digit)*",
-        "(letter|digit)?",
-        "(a|b|c)+",
-        "(x)?(y)?",
-        "(x|y)?",
+        "digit+",
+        "letter(letter|str|digit)*",
+        "digits(.digits)?('E'['+''-']?digits)?"
     };
-
 
     for (int i = 0; i < sizeof(expresiones) / sizeof(expresiones[0]); i++) {
         char resultado[MAX_EXPR];
@@ -247,3 +276,4 @@ int main() {
 
     return 0;
 }
+*/
