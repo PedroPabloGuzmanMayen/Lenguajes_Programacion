@@ -142,17 +142,36 @@ void expand_embedded_ranges(const char* input, char* output) {
 
 void expand_single_expression(const char* expr, char* output) {
     char expanded[MAX_EXPR];
+
+    // Primero expandimos
     if (expr[0] == '[') {
         expand_expression(expr, expanded);
     } else {
         expand_embedded_ranges(expr, expanded);
     }
-    if (strchr(expanded, '|')) {
-        sprintf(output, "(%s)", expanded);
+
+    // Copia base para aplicar posibles transformaciones
+    char transformada[MAX_EXPR];
+
+    // Caso: si termina con '+', aplicamos regla X+ → X(X)*
+    int len = strlen(expanded);
+    if (len > 1 && expanded[len - 1] == '+') {
+        char base[MAX_NAME];
+        strncpy(base, expanded, len - 1);
+        base[len - 1] = '\0';
+        sprintf(transformada, "%s(%s)*", base, base);
     } else {
-        strcpy(output, expanded);
+        strcpy(transformada, expanded);
+    }
+
+    // Si contiene '|', lo envolvemos en paréntesis (una sola vez)
+    if (strchr(transformada, '|') && transformada[0] != '(') {
+        sprintf(output, "(%s)", transformada);
+    } else {
+        strcpy(output, transformada);
     }
 }
+
 
 
 void reemplazar_manual(std::string& expresion, const std::string& buscar, const std::string& reemplazo) {
