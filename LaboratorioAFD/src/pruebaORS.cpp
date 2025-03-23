@@ -143,34 +143,45 @@ void expand_embedded_ranges(const char* input, char* output) {
 void expand_single_expression(const char* expr, char* output) {
     char expanded[MAX_EXPR];
 
-    // Primero expandimos
+    // Expandimos primero (rangos, comillas, etc.)
     if (expr[0] == '[') {
         expand_expression(expr, expanded);
     } else {
         expand_embedded_ranges(expr, expanded);
     }
 
-    // Copia base para aplicar posibles transformaciones
+    // Regla: X+ → X(X)*
+    // Regla: X? → (X|ε) dejaremos vacio aca. 
+    int len = strlen(expanded);
+
     char transformada[MAX_EXPR];
 
-    // Caso: si termina con '+', aplicamos regla X+ → X(X)*
-    int len = strlen(expanded);
     if (len > 1 && expanded[len - 1] == '+') {
+        // Regla para +
         char base[MAX_NAME];
         strncpy(base, expanded, len - 1);
         base[len - 1] = '\0';
         sprintf(transformada, "%s(%s)*", base, base);
+
+    } else if (len > 1 && expanded[len - 1] == '?') {
+        // Regla para ?
+        char base[MAX_NAME];
+        strncpy(base, expanded, len - 1);
+        base[len - 1] = '\0';
+        sprintf(transformada, "(%s|ε)", base); // aca lo estamos dejando vacio porque luego los espacios vacios nos encargamos de reemplazarlos por epsilon
+
     } else {
         strcpy(transformada, expanded);
     }
 
-    // Si contiene '|', lo envolvemos en paréntesis (una sola vez)
+    // Envolver en paréntesis si contiene '|', y no lo está ya
     if (strchr(transformada, '|') && transformada[0] != '(') {
         sprintf(output, "(%s)", transformada);
     } else {
         strcpy(output, transformada);
     }
 }
+
 
 
 
@@ -206,15 +217,26 @@ void reemplazar_manual(std::string& expresion, const std::string& buscar, const 
 int main() {
     // Expresiones a expandir
     const char* expresiones[] = {
-        "['\x17''\x15']",
-        "delim+",
-        "['A'-'Z''a'-'z']",
-        "(_)*",
+        "['A'-'C']",
+        "['a'-'f']",
         "['0'-'9']",
-        "digit+",
-        "letter(letter|str|digit)*",
-        "digits(.digits)?('E'['+''-']?digits)?"
+        "digit?",
+        "letter?",
+        "(digit|letter)?",
+        "digit*",
+        "(digit|letter)+",
+        "digit+(letter|digit)*",
+        "((digit|letter)+)?",
+        "['\\n''\\t'' ']",
+        "['+''-''*''/']",
+        "digits(.digits)?('E'['+''-']?digits)?", // Compleja y realista
+        "id = letter(letter|digit)*",
+        "(letter|digit)?",
+        "(a|b|c)+",
+        "(x)?(y)?",
+        "(x|y)?",
     };
+
 
     for (int i = 0; i < sizeof(expresiones) / sizeof(expresiones[0]); i++) {
         char resultado[MAX_EXPR];
