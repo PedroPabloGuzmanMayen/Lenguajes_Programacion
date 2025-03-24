@@ -110,7 +110,8 @@ void expand_expression(const char* input, char* output) {
 void expand_embedded_ranges(const char* input, char* output) {
     int i = 0, out_i = 0;
     int len = strlen(input);
-
+    int profundidad_parentesis = 0;
+    
     while (i < len) {
         if (input[i] == '[') {
             // Procesar rangos [ ... ]
@@ -127,10 +128,12 @@ void expand_embedded_ranges(const char* input, char* output) {
             expand_expression(temp, expanded);
 
             output[out_i++] = '(';
+            profundidad_parentesis++;
             for (int j = 0; expanded[j]; j++) {
                 output[out_i++] = expanded[j];
             }
             output[out_i++] = ')';
+            profundidad_parentesis--;
             i++;
         } else if (input[i] == '\'') {  // caso para comillas simples
             // Procesar caracteres entre comillas simples, ej: 'E'
@@ -149,12 +152,47 @@ void expand_embedded_ranges(const char* input, char* output) {
             if (i < len && input[i] == '\'') i++;
 
             output[out_i++] = c; // Escribir el carácter sin comillas
-        } else {
+        }   else if (input[i] == '?') {
+            // Manejar correctamente el operador ?
+            // Necesitamos envolver el token o grupo anterior en paréntesis
+            int k = out_i - 1;
+            int balance = 0;
+            
+            // Encontrar el inicio del token o grupo anterior
+            while (k >= 0) {
+                if (output[k] == ')') balance++;
+                else if (output[k] == '(') {
+                    balance--;
+                    if (balance < 0) break;
+                }
+                k--;
+            }
+            
+            // Insertar paréntesis de apertura
+            char temp[MAX_EXPR];
+            strcpy(temp, output + k + 1);
+            output[k + 1] = '(';
+            strcpy(output + k + 2, temp);
+            out_i++;
+            
+            // Agregar la parte |ε y el paréntesis de cierre
+            output[out_i++] = '|';
+            output[out_i++] = ' ';
+            output[out_i++] = ')';
+            
+            i++;
+        }
+        
+         else {
             // Copiar otros caracteres directamente
             output[out_i++] = input[i++];
         }
     }
 
+    while (profundidad_parentesis > 0) {
+        output[out_i++] = ')';
+        profundidad_parentesis--;
+    }
     output[out_i] = '\0';
 }
 
@@ -267,7 +305,18 @@ void expand_single_expression(const char* expr, char* output) {
 
     // Expandir X+ y X? dentro de la expresión
     expand_internal_patterns(output);
-
+    // para verificar que no haya parentesis sin cerrar
+    int balance = 0;
+    for (int i = 0; output[i]; i++) {
+        if (output[i] == '(') balance++;
+        else if (output[i] == ')') balance--;
+    }
+    
+    // agrega cualquier parentis que falte
+    while (balance > 0) {
+        strcat(output, ")");
+        balance--;
+    }
 }
 
 
@@ -298,7 +347,7 @@ void reemplazar_manual(std::string& expresion, const std::string& buscar, const 
     expresion = resultado;
 }
 
-
+/*
 int main() {
     // Expresiones a expandir
     const char* expresiones[] = {
@@ -321,3 +370,4 @@ int main() {
 
     return 0;
 }
+*/
