@@ -5,7 +5,7 @@
 #include "buffer.cpp"
 #include "Regla_Tokens.cpp"
 #include <set>
-#include "pruebasORS.h"
+#include "pruebaORS.h"
 #include <string>
 
 std::vector<std::string> alfabetoGriego = {

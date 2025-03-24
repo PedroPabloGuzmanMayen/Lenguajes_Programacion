@@ -1,7 +1,8 @@
 #ifndef EXPANSION_H
 #define EXPANSION_H
 
-#include <string.h>
+#include <string>
+#include <cstring>
 
 // Definir los máximos valores para las variables
 #define MAX_VAR 100
