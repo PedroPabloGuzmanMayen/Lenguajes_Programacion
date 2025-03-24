@@ -35,6 +35,12 @@ public:
         archivo.close();
     }
 
+
+    // Constructor desde cadena directa
+    Buffer(int tamano, const string &cadenaEntrada)
+        : inicioLexema(0), avance(0), FLAG_SALIDA(true), tamano_buffer(tamano), 
+          ultimoCaracter('\0'), entrada(cadenaEntrada) {}
+          
     void cargar_buffer() {
         buffer.clear();
         for (int i = inicioLexema; i < inicioLexema + tamano_buffer && i < entrada.size(); i++) {
@@ -88,5 +94,31 @@ public:
             procesar_buffer();
         }
     }
+
+    string cadenaString() {
+        string resultado;
+        for (const auto& c : caracteres) {
+            resultado += c;
+        }
+        return resultado;
+    }
+
+
 };
 
+
+/*
+int main() {
+    string input;
+    cout << "Escribe la cadena: ";
+    getline(cin, input); 
+
+    Buffer buffer(10, input); // aca el parametro primero va el tamano del bufer y luego el input a diferencia del otro constructor con filename. 
+    buffer.ejecutar();
+
+    string resultado = buffer.cadenaString();
+    cout << "Resultado string: " << resultado << endl;
+
+    return 0;
+}
+*/
