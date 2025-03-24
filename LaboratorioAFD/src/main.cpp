@@ -55,13 +55,13 @@ int main() {
         //mapeamos los estados
         int stateNum = 0;
         std::map<int, std::set<int>> stateMap;
-        std::map<std::string, char> estado_terminador; //Se usa para guardar el mapeo del estado y su símbolo terminador correspondiente
+        std::map<int, char> estado_terminador; //Se usa para guardar el mapeo del estado y su símbolo terminador correspondiente
         std::unordered_map<std::string, Estado> estados;
         for (const auto& state : findedStates) {
             std::string q = "q";
             q+= std::to_string(stateNum);  
             if (isInFinalStates(terminators, state)){
-                estado_terminador[q] = terminators[state];
+                estado_terminador[stateNum] = terminators[state];
             }
             estados[q] = Estado(q, stateNum);
             stateMap[stateNum++] = state;

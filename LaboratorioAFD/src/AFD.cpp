@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <map>
 #include <unordered_set>
 #include <fstream>
 #include <cstdlib>
@@ -37,15 +38,33 @@ public:
     void agregarTransicion(const std::string& estado, const std::string& simbolo, const std::string& nuevoEstado) {
         S_[estado][simbolo] = nuevoEstado;
     }
-    /*
-    std::map<std::string, std::string> findTokens(std::string cadena){
-        std::string current = q0;
-        std::string lexeme = "";
-        for (int i = 0; i < cadena.length(); i++){
-            current = S_[current][std::string() + cadena[i]];
-        }
-    }
+    
+    /* --- Parámetros ---
+        - Cadena: un string que es la cadena que se debe recorrer
+        - TokenList: un map con todos token y sus respectivos terminadores
+        - Terminator_State: un map con el string del estado y su respectivo terminador
     */
+   
+    std::vector<std::map<std::string, std::string>> findTokens(std::string cadena, std::map<int, char> Terminator_State, 
+    std::map<char, std::string> tokens ){
+        std::string current = q0; //Iniciar en el estado inicial
+        std::string lexeme = "";
+        std::vector<std::map<std::string, std::string>> result;
+        for (int i = 0; i < cadena.length(); i++){
+            current = S_[current][std::string() + cadena[i]]; //Hallar el siguiente estado con el símbolo dado
+            //Verificamos el int correspondiente del nuevo estado
+            auto it = Q_.find(current);
+            int numeroDeEstado = it->second.numero; // Guardamos el número de estado
+            if (F_.find(numeroDeEstado) != F_.end()) { //Verifiamos si el nuevo estado es un estado final
+                //Si el nuevo estado es un estado final
+                result.push_back({{tokens[Terminator_State[numeroDeEstado]], lexeme}});
+                lexeme = ""; //Limpiar el lexema 
+            } 
+        }
+        return result;
+    }
+    
+    
     
 
     
