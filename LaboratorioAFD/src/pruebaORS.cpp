@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-
+#include <string>
 #define MAX_VAR 100
 #define MAX_LINE 512
 #define MAX_NAME 64
@@ -32,6 +32,7 @@ void expand_expression(const char* input, char* output) {
     if (!(input[0] == '[' && input[len - 1] == ']')) {
         strcpy(output, input);
         return;
+        
     }
 
     i = 1;
@@ -112,6 +113,7 @@ void expand_embedded_ranges(const char* input, char* output) {
 
     while (i < len) {
         if (input[i] == '[') {
+            // Procesar rangos [ ... ]
             int start = i;
             while (i < len && input[i] != ']') i++;
             if (i >= len) break;
@@ -129,9 +131,26 @@ void expand_embedded_ranges(const char* input, char* output) {
                 output[out_i++] = expanded[j];
             }
             output[out_i++] = ')';
-
             i++;
+        } else if (input[i] == '\'') {  // caso para comillas simples
+            // Procesar caracteres entre comillas simples, ej: 'E'
+            i++; // Saltar la primera comilla
+            if (i >= len) break;
+
+            char c = input[i++]; // Leer el carácter dentro de las comillas
+
+            // Manejar escapes simples, ej: '\n'
+            if (c == '\\') {
+                if (i >= len) break;
+                c = interpret_escape(input[i++]);
+            }
+
+            // Saltar la comilla de cierre si existe
+            if (i < len && input[i] == '\'') i++;
+
+            output[out_i++] = c; // Escribir el carácter sin comillas
         } else {
+            // Copiar otros caracteres directamente
             output[out_i++] = input[i++];
         }
     }
@@ -139,63 +158,166 @@ void expand_embedded_ranges(const char* input, char* output) {
     output[out_i] = '\0';
 }
 
-void procesar_linea(const char* linea) {
-    if (strncmp(linea, "let", 3) != 0) return;
+void expand_internal_patterns(char* expr) {
+    char buffer[MAX_EXPR] = "";
+    int i = 0, j = 0;
+    int len = strlen(expr);
 
-    char nombre[MAX_NAME], expr[MAX_EXPR];
-    if (sscanf(linea, "let %s = %[^\n]", nombre, expr) == 2) {
-        Variable nueva;
-        strcpy(nueva.name, nombre);
+    while (i < len) {
+        if (isalnum(expr[i]) || expr[i] == '_') {
+            // Manejar identificadores seguidos de + o ?
+            char token[MAX_NAME] = "";
+            int k = 0;
+            while (isalnum(expr[i]) || expr[i] == '_') {
+                token[k++] = expr[i++];
+            }
+            token[k] = '\0';
 
-        char expandida[MAX_EXPR];
-        if (expr[0] == '[') {
-            expand_expression(expr, expandida);
+            if (expr[i] == '+') {
+                j += sprintf(buffer + j, "%s(%s)*", token, token);
+                i++;
+            } else if (expr[i] == '?') {
+                j += sprintf(buffer + j, "(%s| )", token);
+                i++;
+            } else {
+                j += sprintf(buffer + j, "%s", token);
+            }
+        } else if (expr[i] == ')') {
+            buffer[j++] = expr[i++];
+            // Verificar si después de ')' hay un operador
+            if (i < len && (expr[i] == '+' || expr[i] == '?')) {
+                char op = expr[i++];
+                // Buscar el '(' correspondiente en el buffer
+                int balance = 1;
+                int k = j - 2; // posición antes de ')'
+                while (k >= 0 && balance > 0) {
+                    if (buffer[k] == ')') balance++;
+                    else if (buffer[k] == '(') balance--;
+                    k--;
+                }
+                if (balance == 0) {
+                    k++; // k es el índice del '('
+                    int group_len = (j - 1) - k;
+                    char group[MAX_EXPR];
+                    strncpy(group, buffer + k, group_len);
+                    group[group_len] = '\0';
+
+                    j = k; // Sobrescribir desde '('
+                    if (op == '?') {
+                        j += sprintf(buffer + j, "(%s| )", group);
+                    } else if (op == '+') {
+                        j += sprintf(buffer + j, "%s(%s)*", group, group);
+                    }
+                } else {
+                    // Paréntesis no balanceados, dejar como está
+                    buffer[j++] = op;
+                }
+            }
         } else {
-            expand_embedded_ranges(expr, expandida);
+            buffer[j++] = expr[i++];
+        }
+    }
+
+    buffer[j] = '\0';
+    strcpy(expr, buffer);
+}
+
+
+void expand_single_expression(const char* expr, char* output) {
+    char expanded[MAX_EXPR];
+
+    // Expandimos primero (rangos, comillas, etc.)
+    if (expr[0] == '[') {
+        expand_expression(expr, expanded);
+    } else {
+        expand_embedded_ranges(expr, expanded);
+    }
+
+    // Regla: X+ → X(X)*
+    // Regla: X? → (X|ε) dejaremos vacio aca. 
+    int len = strlen(expanded);
+
+    char transformada[MAX_EXPR];
+
+    if (len > 1 && expanded[len - 1] == '+') {
+        // Regla para +
+        char base[MAX_NAME];
+        strncpy(base, expanded, len - 1);
+        base[len - 1] = '\0';
+        sprintf(transformada, "%s(%s)*", base, base);
+
+    } else if (len > 1 && expanded[len - 1] == '?') {
+        // Regla para ?
+        char base[MAX_NAME];
+        strncpy(base, expanded, len - 1);
+        base[len - 1] = '\0';
+        sprintf(transformada, "(%s| )", base); // aca lo estamos dejando vacio porque luego los espacios vacios nos encargamos de reemplazarlos por epsilon
+
+    } else {
+        strcpy(transformada, expanded);
+    }
+
+    // Envolver en paréntesis si contiene '|', y no lo está ya
+    if (strchr(transformada, '|') && transformada[0] != '(') {
+        sprintf(output, "(%s)", transformada);
+    } else {
+        strcpy(output, transformada);
+    }
+
+
+    // Expandir X+ y X? dentro de la expresión
+    expand_internal_patterns(output);
+
+}
+
+
+void reemplazar_manual(std::string& expresion, const std::string& buscar, const std::string& reemplazo) {
+    std::string resultado;
+    size_t len_buscar = buscar.length();
+    
+    for (size_t i = 0; i < expresion.length(); ++i) {
+        bool coincide = true;
+
+        // Comparar manualmente carácter por carácter
+        for (size_t j = 0; j < len_buscar; ++j) {
+            if (i + j >= expresion.length() || expresion[i + j] != buscar[j]) {
+                coincide = false;
+                break;
+            }
         }
 
-        strcpy(nueva.expression, expandida);
-        variables[var_count++] = nueva;
-        printf("%s = %s\n", nueva.name, nueva.expression);
-    }
-}
-
-void cargar_yal(const char* yal) {
-    char linea[MAX_LINE];
-    const char* ptr = yal;
-    while (*ptr) {
-        int i = 0;
-        while (*ptr && *ptr != '\n' && i < MAX_LINE - 1) {
-            linea[i++] = *ptr++;
+        // Si coincide, agregar el reemplazo y saltar la longitud de `buscar`
+        if (coincide) {
+            resultado += reemplazo;
+            i += len_buscar - 1; // Saltar los caracteres reemplazados
+        } else {
+            resultado += expresion[i];
         }
-        if (*ptr == '\n') ptr++;
-        linea[i] = '\0';
-        procesar_linea(linea);
     }
+
+    expresion = resultado;
 }
 
-void imprimir_variables() {
-    printf("\nVariables almacenadas:\n");
-    for (int i = 0; i < var_count; i++) {
-        printf("%s = %s\n", variables[i].name, variables[i].expression);
-    }
-}
 
-/*
 int main() {
-    const char* contenido_yal =
-        "let delim = [\"\\s\\t\\n\"]\n"
-        "let ws = delim+\n"
-        "let letter = ['A'-'Z''a'-'z']\n"
-        "let str = (_)*\n"
-        "let digit = [\"0123456789\"]\n"
-        "let digits = digit+\n"
-        "let id = letter(letter|str|digit)*\n"
-        "let number = digits(.digits)?('E'['+''-']?digits)?\n";
+    // Expresiones a expandir
+    const char* expresiones[] = {
+        "['\x17''\x15']",
+        "delim+",
+        "['A'-'Z''a'-'z']",
+        "(_)*",
+        "digit+(letter|digit)*",
+        "digit+",
+        "letter(letter|str|digit)*",
+        "digits(.digits)?('E'['+''-']?digits)?"
+    };
 
-    cargar_yal(contenido_yal);
-    imprimir_variables();
+    for (int i = 0; i < sizeof(expresiones) / sizeof(expresiones[0]); i++) {
+        char resultado[MAX_EXPR];
+        expand_single_expression(expresiones[i], resultado);
+        printf("Expresión original: %s\n", expresiones[i]);
+        printf("Expresión expandida: %s\n\n", resultado);
+    }
 
     return 0;
 }
-*/
