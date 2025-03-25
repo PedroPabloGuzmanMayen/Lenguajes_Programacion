@@ -152,44 +152,14 @@ void expand_embedded_ranges(const char* input, char* output) {
             if (i < len && input[i] == '\'') i++;
 
             output[out_i++] = c; // Escribir el carácter sin comillas
-        }   else if (input[i] == '?') {
-            // Manejar correctamente el operador ?
-            // Necesitamos envolver el token o grupo anterior en paréntesis
-            int k = out_i - 1;
-            int balance = 0;
-            
-            // Encontrar el inicio del token o grupo anterior
-            while (k >= 0) {
-                if (output[k] == ')') balance++;
-                else if (output[k] == '(') {
-                    balance--;
-                    if (balance < 0) break;
-                }
-                k--;
-            }
-            
-            // Insertar paréntesis de apertura
-            char temp[MAX_EXPR];
-            strcpy(temp, output + k + 1);
-            output[k + 1] = '(';
-            strcpy(output + k + 2, temp);
-            out_i++;
-            
-            // Agregar la parte |ε y el paréntesis de cierre
-            output[out_i++] = '|';
-            output[out_i++] = ' ';
-            output[out_i++] = ')';
-            
-            i++;
-        }
-        
+        }   
          else {
             // Copiar otros caracteres directamente
             output[out_i++] = input[i++];
         }
     }
 
-    while (profundidad_parentesis > 0) {
+    while (profundidad_parentesis > 0) {    
         output[out_i++] = ')';
         profundidad_parentesis--;
     }
@@ -215,7 +185,7 @@ void expand_internal_patterns(char* expr) {
                 j += sprintf(buffer + j, "%s(%s)*", token, token);
                 i++;
             } else if (expr[i] == '?') {
-                j += sprintf(buffer + j, "(%s| )", token);
+                j += sprintf(buffer + j, "(%s|\x02)", token);
                 i++;
             } else {
                 j += sprintf(buffer + j, "%s", token);
@@ -242,7 +212,7 @@ void expand_internal_patterns(char* expr) {
 
                     j = k; // Sobrescribir desde '('
                     if (op == '?') {
-                        j += sprintf(buffer + j, "(%s| )", group);
+                        j += sprintf(buffer + j, "(%s|\x02)", group);
                     } else if (op == '+') {
                         j += sprintf(buffer + j, "%s(%s)*", group, group);
                     }
@@ -289,7 +259,7 @@ void expand_single_expression(const char* expr, char* output) {
         char base[MAX_NAME];
         strncpy(base, expanded, len - 1);
         base[len - 1] = '\0';
-        sprintf(transformada, "(%s| )", base); // aca lo estamos dejando vacio porque luego los espacios vacios nos encargamos de reemplazarlos por epsilon
+        sprintf(transformada, "(%s|\x02)", base); // aca lo estamos dejando vacio porque luego los espacios vacios nos encargamos de reemplazarlos por epsilon
 
     } else {
         strcpy(transformada, expanded);
@@ -347,7 +317,7 @@ void reemplazar_manual(std::string& expresion, const std::string& buscar, const 
     expresion = resultado;
 }
 
-/*
+
 int main() {
     // Expresiones a expandir
     const char* expresiones[] = {
@@ -364,10 +334,17 @@ int main() {
     for (int i = 0; i < sizeof(expresiones) / sizeof(expresiones[0]); i++) {
         char resultado[MAX_EXPR];
         expand_single_expression(expresiones[i], resultado);
+
+        // Convertir a std::string para reemplazo visual
+        //std::string corregida = resultado; //si quieres ver el caracter descomenta esto
+        //reemplazar_manual(corregida, "\x02", "ε"); //esto tambien descomentalo
+
+
         printf("Expresión original: %s\n", expresiones[i]);
-        printf("Expresión expandida: %s\n\n", resultado);
+        printf("Expresión expandida: %s\n\n", resultado); //esto comentalo
+
+        //printf("Expresión expandida: %s\n\n", corregida.c_str()); // y esto tambien descomentalo
     }
 
     return 0;
 }
-*/
