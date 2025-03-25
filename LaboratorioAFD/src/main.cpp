@@ -155,13 +155,14 @@ int main() {
         tokensYLexemas['\x04'] = "IGUAL";
         tokensYLexemas['\x03'] = "VARIABLE";
         tokensYLexemas['\x05'] = "MAS";
-        tokensYLexemas['\x03'] = "VARIABLE";
         tokensYLexemas['\x06'] = "MENOS";
         tokensYLexemas['\x07'] = "CORCHETE";
         tokensYLexemas['\x08'] = "BLANKSPACE";
+        tokensYLexemas['\x09'] = "LETRA";
 
 
-        std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "hola1234 = 2324 = 3273233732837 =     dskdjskdj22sdsd = 11212+wddsd-[]");
+
+        std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "x = 1 + b");
 
         for (const auto& [token, lexema] : resultadofinal) {
             std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;
