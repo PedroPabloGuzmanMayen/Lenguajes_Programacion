@@ -106,29 +106,57 @@ public:
         std::vector<std::pair<std::string, std::string>> tokens;
         std::vector<std::string> current_states = {q0};
         std::string lexema;
+        bool tokenFound = false;
     
-        for (char symbol : entrada) {
+        for (size_t i = 0; i < entrada.length(); ++i) {
+            char symbol = entrada[i];
+            
+            
+            if (std::isspace(symbol) && lexema.empty()) continue;
+    
             lexema += symbol;
             current_states = move_AFD(current_states, std::string(1, symbol));
             
-            bool foundToken = false; // Variable para indicar si encontramos un token
+            
             for (const std::string& state : current_states) {
                 if (estadosAceptacion.find(state) != estadosAceptacion.end()) {
                     char terminador = estadosAceptacion.at(state);
                     if (terminadorToken.find(terminador) != terminadorToken.end()) {
                         std::string token = terminadorToken.at(terminador);
+                        
+                       
+                        size_t lookAhead = i + 1;
+                        while (lookAhead < entrada.length()) {
+                            std::vector<std::string> nextStates = move_AFD(current_states, std::string(1, entrada[lookAhead]));
+                            bool stillValid = false;
+                            
+                            for (const std::string& nextState : nextStates) {
+                                if (estadosAceptacion.find(nextState) != estadosAceptacion.end()) {
+                                    lexema += entrada[lookAhead];
+                                    current_states = nextStates;
+                                    stillValid = true;
+                                    break;
+                                }
+                            }
+                            
+                            if (!stillValid) break;
+                            lookAhead++;
+                        }
+                        
+                        
                         tokens.emplace_back(token, lexema);
-                        foundToken = true;
-                        break; // Salir del ciclo de estados después de encontrar un token
+                        
+                        
+                        i = lookAhead - 1;
+                        lexema.clear();
+                        current_states = {q0};
+                        tokenFound = true;
+                        break;
                     }
                 }
             }
-    
-            if (foundToken) {
-                lexema.clear(); // Limpiar el lexema solo después de encontrar un token
-                current_states = {q0}; // Reiniciar a q0 después de procesar un token
-            }
         }
+    
         return tokens;
     }
     
