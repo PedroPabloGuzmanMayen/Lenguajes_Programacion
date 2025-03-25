@@ -37,7 +37,6 @@ std::stack<int> Tree::findPositions(char letter){
     return out;
 }
 
-
 Tree::Tree(std::string expression){
     this->treeExpr = expression;
     int counter = 1; //Nos ayudará a asignarle una posición/id a cada nodo
@@ -101,7 +100,12 @@ void Tree::calcNullable(Node* start){
         start->setNullable(true);
     }
     else {
-        start->setNullable(false);
+        if (start->getValue() == '\x02'){
+            start->setNullable(true); 
+        }
+        else {
+            start->setNullable(false);
+        }
     }
 }
 
@@ -125,7 +129,13 @@ void Tree::calclFirstPos(Node* start){
         start->setFirstPos(start->getSon(0)->getFirstPos()); 
     }
     else {
-        start->setFirstPos({start->getID()});
+        if (start->getValue() == '\x02'){
+            start->setFirstPos({});
+        }
+        else {
+            start->setFirstPos({start->getID()}); 
+        }
+        
     }
 }
 
@@ -149,7 +159,12 @@ void Tree::calcLastPos(Node* start){
         start->setLastPos(start->getSon(0)->getLastPos()); 
     }
     else {
-        start->setLastPos({start->getID()});
+        if (start->getValue() == '\x02'){ //Verficar si es la cadena vacia
+            start->setLastPos({});
+        }
+        else {
+            start->setLastPos({start->getID()}); 
+        }
     }
 }
 
@@ -193,7 +208,7 @@ void Tree::displayFollowPos(){
 void Tree::getIdValues(Node* start) {
 
     std::vector<std::string> alfabetoGriego = {
-        "\x00", "\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09", 
+        "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09", 
         "\x0A", "\x0B", "\x0C"
     };
 

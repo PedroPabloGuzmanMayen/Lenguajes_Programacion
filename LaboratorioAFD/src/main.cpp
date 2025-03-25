@@ -151,7 +151,7 @@ int main() {
         }
 
         std::map<char, std::string> tokensYLexemas;
-        tokensYLexemas['\x02'] = "NUMERO";
+        tokensYLexemas['\x0A'] = "NUMERO";
         tokensYLexemas['\x04'] = "IGUAL";
         tokensYLexemas['\x03'] = "VARIABLE";
         tokensYLexemas['\x05'] = "MAS";
@@ -162,7 +162,7 @@ int main() {
 
 
 
-        std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "x = 1 + b");
+        std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "x1 = 1 + b");
 
         for (const auto& [token, lexema] : resultadofinal) {
             std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;

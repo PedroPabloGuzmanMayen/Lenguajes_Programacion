@@ -110,20 +110,15 @@ public:
     
         for (size_t i = 0; i < entrada.length(); ++i) {
             char symbol = entrada[i];
-            
-            
-            if (std::isspace(symbol) && lexema.empty()) continue;
-    
+            //if (std::isspace(symbol) && lexema.empty()) continue;
             lexema += symbol;
             current_states = move_AFD(current_states, std::string(1, symbol));
-            
             
             for (const std::string& state : current_states) {
                 if (estadosAceptacion.find(state) != estadosAceptacion.end()) {
                     char terminador = estadosAceptacion.at(state);
                     if (terminadorToken.find(terminador) != terminadorToken.end()) {
                         std::string token = terminadorToken.at(terminador);
-                        
                        
                         size_t lookAhead = i + 1;
                         while (lookAhead < entrada.length()) {
@@ -142,11 +137,7 @@ public:
                             if (!stillValid) break;
                             lookAhead++;
                         }
-                        
-                        
                         tokens.emplace_back(token, lexema);
-                        
-                        
                         i = lookAhead - 1;
                         lexema.clear();
                         current_states = {q0};
