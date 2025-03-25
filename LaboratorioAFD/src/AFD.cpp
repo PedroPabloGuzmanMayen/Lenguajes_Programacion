@@ -47,7 +47,7 @@ public:
    
     std::vector<std::map<std::string, std::string>> findTokens(std::string cadena, std::map<int, char> Terminator_State, 
     std::map<char, std::string> tokens ){
-        std::string current = q0; //Iniciar en el estado inicial
+        std::string current = "q0"; //Iniciar en el estado inicial
         std::string lexeme = "";
         std::vector<std::map<std::string, std::string>> result;
         for (int i = 0; i < cadena.length(); i++){
@@ -97,6 +97,41 @@ public:
     
         return false;
     }
+
+    std::vector<std::pair<std::string, std::string>> analizarCadena(
+        const std::map<std::string, char>& estadosAceptacion,
+        const std::map<char, std::string>& terminadorToken,
+        const std::string& entrada) {
+        
+        std::vector<std::pair<std::string, std::string>> tokens;
+        std::vector<std::string> current_states = {q0};
+        std::string lexema;
+    
+        for (char symbol : entrada) {
+            lexema += symbol;
+            current_states = move_AFD(current_states, std::string(1, symbol));
+            
+            bool foundToken = false; // Variable para indicar si encontramos un token
+            for (const std::string& state : current_states) {
+                if (estadosAceptacion.find(state) != estadosAceptacion.end()) {
+                    char terminador = estadosAceptacion.at(state);
+                    if (terminadorToken.find(terminador) != terminadorToken.end()) {
+                        std::string token = terminadorToken.at(terminador);
+                        tokens.emplace_back(token, lexema);
+                        foundToken = true;
+                        break; // Salir del ciclo de estados después de encontrar un token
+                    }
+                }
+            }
+    
+            if (foundToken) {
+                lexema.clear(); // Limpiar el lexema solo después de encontrar un token
+                current_states = {q0}; // Reiniciar a q0 después de procesar un token
+            }
+        }
+        return tokens;
+    }
+    
     
 
     void depurarAFD() {

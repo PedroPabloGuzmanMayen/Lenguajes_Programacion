@@ -8,6 +8,8 @@
 #include "AFD.cpp"
 #include "lector.h"
 #include <unordered_set>
+#include <vector>
+#include <map>
 
 
 bool isInFinalStates(const std::map<std::set<int>, char>& terminators, const std::set<int>& state) {
@@ -55,13 +57,13 @@ int main() {
         //mapeamos los estados
         int stateNum = 0;
         std::map<int, std::set<int>> stateMap;
-        std::map<int, char> estado_terminador; //Se usa para guardar el mapeo del estado y su símbolo terminador correspondiente
+        std::map<std::string, char> estado_terminador; //Se usa para guardar el mapeo del estado y su símbolo terminador correspondiente
         std::unordered_map<std::string, Estado> estados;
         for (const auto& state : findedStates) {
             std::string q = "q";
             q+= std::to_string(stateNum);  
             if (isInFinalStates(terminators, state)){
-                estado_terminador[stateNum] = terminators[state];
+                estado_terminador[q] = terminators[state];
             }
             estados[q] = Estado(q, stateNum);
             stateMap[stateNum++] = state;
@@ -148,7 +150,22 @@ int main() {
             }
         }
 
+        std::map<char, std::string> tokensYLexemas;
+        tokensYLexemas['\x02'] = "NUMERO";
+        tokensYLexemas['\x04'] = "IGUAL";
+        tokensYLexemas['\x03'] = "VARIABLE";
+        tokensYLexemas['\x05'] = "MAS";
+        tokensYLexemas['\x03'] = "VARIABLE";
+        tokensYLexemas['\x06'] = "MENOS";
+        tokensYLexemas['\x07'] = "CORCHETE";
+        tokensYLexemas['\x08'] = "BLANKSPACE";
 
+
+        std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "hola1234 = 2324 = 3273233732837 =     dskdjskdj22sdsd = 11212+wddsd-[]");
+
+        for (const auto& [token, lexema] : resultadofinal) {
+            std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;
+        }
         //minimizamos
 
         std::cout<<"============MINIMIZADO===========\n";
