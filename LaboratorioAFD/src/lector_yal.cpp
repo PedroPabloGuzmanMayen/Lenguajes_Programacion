@@ -3,11 +3,12 @@
 #include <unordered_map>
 #include "AFD.h"
 #include "buffer.h"
-#include "Regla_Tokens.cpp"
+#include "Regla_Tokens.h"
 #include <set>
 #include "pruebaORS.h"
 #include <string>
 #include "constantes.h"
+#include "lector_yal.h"
 
 std::vector<std::string> alfabetoGriego = {
      "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09", 
@@ -16,6 +17,8 @@ std::vector<std::string> alfabetoGriego = {
 
 
 std::unordered_map<std::string, std::string> var;
+
+std::set<std::string> processed;
 std::vector<std::string> generarAlfabeto() {
     std::vector<std::string> alfabeto;
     for (char c = 'a'; c <= 'z'; ++c) alfabeto.push_back(std::string(1, c));
@@ -111,7 +114,7 @@ ReglasTokens reglas_tokens() {
     //Primero aqui vamos a quitar los comentarios
     Buffer* buffer = nullptr;
 
-    buffer = new Buffer("slr.yal", 10);
+    buffer = new Buffer("../slr.yal", 10);
 
     string caracter;
     while (buffer->FLAG_SALIDA) {

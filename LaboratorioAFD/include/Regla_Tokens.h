@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <iostream>
 
+// Definición de la estructura ReglaToken
 struct ReglaToken {
     std::string identificador;
     std::string nombre;

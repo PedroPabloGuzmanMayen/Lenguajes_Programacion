@@ -20,6 +20,24 @@ bool isInFinalStates(const std::map<std::set<int>, char>& terminators, const std
 
 
 int main() {
+
+
+    //vamos a leer el slr.yal
+
+    
+   
+    
+    for (const auto& pair : var) {
+            if (processed.find(pair.first) != processed.end()) {
+                std::cout << "Variable: " << pair.first << ", Valor: " << pair.second 
+                          <<  std::endl;
+            } else {
+                std::cout << "Variable: " << pair.first << ", Valor: " << pair.second 
+                          << std::endl;
+                processed.insert(pair.first);  // Marca la variable como procesada
+            }
+    }
+
     // Leer expresiones y cadenas desde YAML
     Config config = leerConfig("../expresiones.yml");
 
@@ -193,6 +211,11 @@ int main() {
         }
         
     }
+    ReglasTokens reglasTokens;
+    reglasTokens = reglas_tokens();
+
+    reglasTokens.imprimir();
+
 
     return 0;
 }
