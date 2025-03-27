@@ -1,23 +1,21 @@
 
-(* Lexer para Gramática No. 4 *)
+(* Lexer para Gramática No. 1 - Expresiones aritméticas simples para variables *)
 
 (* Introducir cualquier header aqui *)
 
 let delim = [' ''\t''\n']
 let ws = delim+
 let letter = ['A'-'Z''a'-'z']
-let str = (_)*
 let digit = ['0'-'9']
-let digits = digit+
-let id = letter(letter|str|digit)*
-let number = digits(.digits)?('E'['+''-']?digits)?
- 
+let id = letter(letter|digit)*
+
 rule tokens = 
     ws
   | id        { return ID }               (* Cambie por una acción válida, que devuelva el token *)
-  | number    { return NUMBER }
-  | ';'       { return SEMICOLON }
-  | ':='      { return ASSIGNOP }
-  | '<'       { return LT }
-  | ')'       { return RPAREN }
+  | '+'       { return PLUS }
+  | '-'       { return MINUS }
+  | '*'       { return TIMES }
   | '('       { return LPAREN }
+  | ')'       { return RPAREN }
+
+(* Introducir cualquier trailer aqui *)

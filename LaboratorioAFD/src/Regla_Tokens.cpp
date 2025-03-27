@@ -62,6 +62,17 @@ void ReglasTokens::imprimir() const {
 }
 
 
+std::string ReglasTokens::obtener_token_(const std::string& nombre) const {
+    for (const auto& regla : reglas) {
+        if (regla.nombre == nombre) {
+            return regla.token;
+        }
+    }
+    return ""; 
+}
+
+
+
 std::string ReglasTokens::generarExpresion() const {
     std::string resultado = "";
     
@@ -90,12 +101,12 @@ std::string ReglasTokens::generarExpresion() const {
             resultado += "";
         }
     
-        // Si no es el último elemento, agrega el '|'
+       
         if (i != reglas.size() - 1) {
             concatenado += "|";
         }
     
-        // Agregar la expresión concatenada al resultado
+       
         resultado += concatenado;
     }
 

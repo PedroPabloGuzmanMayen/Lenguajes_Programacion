@@ -232,20 +232,31 @@ int main() {
             if (!linea.empty()) {
                 std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, linea);
                 string to_write = "";
+                string the_token = "";
         
                 // Recorrer en orden inverso el vector resultadofinal
                 for (auto it = resultadofinal.rbegin(); it != resultadofinal.rend(); ++it) {
                     const auto& [token, lexema] = *it;  // Desempaquetar el par
-
+                    the_token = token;
                     string lexema_d;
                     lexema_d = lexema;
+                    
                     reemplazar_manual(lexema_d, PUNTO_s, ".");
                     reemplazar_manual(lexema_d, LPARENTESIS_s, ")");
                     reemplazar_manual(lexema_d, RPARENTESIS_s, "(");
                     reemplazar_manual(lexema_d, TIMES_s, "*");
-                   
+                    
+                    the_token = reglasTokens.obtener_token_(lexema);
 
-                    to_write = "("+token+","+lexema_d+")" + to_write;
+                    if (the_token == ""){
+
+                        the_token = token;
+
+                    }
+                    
+
+
+                    to_write = "["+the_token+","+lexema_d+"]" + to_write;
                     //std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;
                 }
         
