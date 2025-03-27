@@ -3,10 +3,15 @@
 #include <algorithm>
 #include <iostream>
 #include "Regla_Tokens.h"
+#include "constantes.h"
 
 // Insertar una nueva regla
 void ReglasTokens::insertar(const ReglaToken& regla) {
     reglas.push_back(regla);
+}
+
+const std::vector<ReglaToken>& ReglasTokens::obtenerReglas() const {
+    return reglas;
 }
 
 // Extraer una regla dado un atributo
@@ -55,3 +60,48 @@ void ReglasTokens::imprimir() const {
                   << "-----------------------------\n";
     }
 }
+
+
+std::string ReglasTokens::generarExpresion() const {
+    std::string resultado = "";
+    
+    for (size_t i = 0; i < reglas.size(); ++i) {
+        const auto& regla = reglas[i];
+        // Si la expresión regular está vacía, usar el nombre
+        std::string expresion = (regla.expresion_regular.empty()) ? regla.nombre : regla.expresion_regular;
+    
+        
+    
+        if (expresion == "*") {
+            expresion = TIMES;
+        }
+        else if (expresion == "(") {
+            expresion = RPARENTESIS;
+        }
+        else if (expresion == ")") {
+            expresion = LPARENTESIS;
+        }
+    
+        // Concatenar la expresión y el identificador
+        std::string concatenado = expresion + regla.identificador;
+    
+        // Si no es el primer elemento, agrega un espacio
+        if (!resultado.empty()) {
+            resultado += "";
+        }
+    
+        // Si no es el último elemento, agrega el '|'
+        if (i != reglas.size() - 1) {
+            concatenado += "|";
+        }
+    
+        // Agregar la expresión concatenada al resultado
+        resultado += concatenado;
+    }
+
+    std::cout<<resultado<<"\n";
+
+    return resultado;
+}
+
+

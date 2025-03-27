@@ -12,7 +12,10 @@
 #include <map>
 #include "lector_yal.h"
 #include "Regla_Tokens.h"
-
+#include "outuput_file.cpp"
+#include "buffer.h"
+#include "constantes.h"
+#include "pruebaORS.h"
 
 bool isInFinalStates(const std::map<std::set<int>, char>& terminators, const std::set<int>& state) {
     return terminators.find(state) != terminators.end();
@@ -21,6 +24,9 @@ bool isInFinalStates(const std::map<std::set<int>, char>& terminators, const std
 
 int main() {
 
+    string contenido, nombreArchivo;
+
+    nombreArchivo = "Tokens.txt";
 
     //vamos a leer el slr.yal
 
@@ -39,17 +45,28 @@ int main() {
     }
 
     // Leer expresiones y cadenas desde YAML
-    Config config = leerConfig("../expresiones.yml");
+     
+    ReglasTokens reglasTokens;
+    reglasTokens = reglas_tokens();
 
-    for (const std::string& my_str : config.expresiones_regulares) {
-        std::cout << "\nProcesando expresión regular: " << my_str << std::endl;
-        std::string my_str_copy = my_str;
+    
+
+    reglasTokens.imprimir();
+
+    std::string valor_expresion = reglasTokens.generarExpresion();
+
+    
+        //std::cout << "\nProcesando expresión regular: " << valor_expresion << std::endl;
+
+        //std::cout<<valor_expresion<<"\n";
+        std::string my_str_copy = valor_expresion;
+        //std::string my_str_copy = "(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|_)(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|0|1|2|3|4|5|6|7|8|9)*\x03|(=)\x04|+\x05|-\x06|([|])\x07|(0|1|2|3|4|5|6|7|8|9)*\x02|( )( )*\x08|(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z)\x09";
         std::string newStr = add_concatenation(my_str_copy);
         std::cout << "Expresión con concatenación explícita: " << newStr << std::endl;
 
         std::string sht_y = shunting_yard(newStr);
-        std::cout << "Expresión en notación postfix: " << sht_y << std::endl;
-
+        //std::cout << "Expresión en notación postfix: " << sht_y << std::endl;
+        std::cout<<"Salio del shutyng yard"<<sht_y<<"\n";
         Tree* newTree = new Tree(sht_y);
         newTree->calcNullable(newTree->getRoot());
         newTree->calclFirstPos(newTree->getRoot());
@@ -60,6 +77,9 @@ int main() {
         newTree->getIdValues(newTree->getRoot());
         newTree->displayIDValues();
         newTree->displayAcceptedPos();
+
+
+        std::cout<<"Salio del tree"<<"\n";
         auto [findedStates, accepted_states, DSTATES, alphabet, transitions, terminators] = newTree->convertToAFD();
 
         for (const auto& pair : terminators) {
@@ -160,62 +180,88 @@ int main() {
         automata.depurarAFD();
         automata.generarDot("afd_visual");
         automata.generarImagen("afd_visual");
-        for (const std::string& cadena : config.cadenas) {
-            if (automata.acept_Chain(cadena)) {
-                std::cout << "La cadena '" << cadena << "' es aceptada por el AFD.\n";
+        // for (const std::string& cadena : config.cadenas) {
+        //     if (automata.acept_Chain(cadena)) {
+        //         std::cout << "La cadena '" << cadena << "' es aceptada por el AFD.\n";
                 
-            } else {
+        //     } else {
                 
-                std::cout << "La cadena '" << cadena << "' no es aceptada por el AFD.\n";
-            }
-        }
+        //         std::cout << "La cadena '" << cadena << "' no es aceptada por el AFD.\n";
+        //     }
+        // }
 
         std::map<char, std::string> tokensYLexemas;
-        tokensYLexemas['\x0A'] = "NUMERO";
-        tokensYLexemas['\x04'] = "IGUAL";
-        tokensYLexemas['\x03'] = "VARIABLE";
-        tokensYLexemas['\x05'] = "MAS";
-        tokensYLexemas['\x06'] = "MENOS";
-        tokensYLexemas['\x07'] = "CORCHETE";
-        tokensYLexemas['\x08'] = "BLANKSPACE";
-        tokensYLexemas['\x09'] = "LETRA";
+        
 
+        for (const auto& regla : reglasTokens.obtenerReglas()) {
+            char identificador = regla.identificador[0];  // Obtiene el primer carácter
+            std::cout << "Identificador en decimal: " << static_cast<int>(identificador) << std::endl;
+            std::cout << "Identificador en hexadecimal: " << std::hex << static_cast<int>(identificador) << std::endl;
 
-
-        std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "x1 = 1 + b abad");
-
-        for (const auto& [token, lexema] : resultadofinal) {
-            std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;
+            std::string token = regla.token;  // El token de la regla
+    
+            std::cout << "Token: " <<  token << std::endl;
+            // Insertar en el std::map
+            tokensYLexemas[identificador] = token;
         }
+
+        
+
+
+
         //minimizamos
+        
 
         std::cout<<"============MINIMIZADO===========\n";
         automata.minimizarAFD();
         
-        automata.depurarAFD();
+        //automata.depurarAFD();
         
         //automata.depurarAFD();
 
         automata.generarDot("afd_visual_min");
         automata.generarImagen("afd_visual_min");
-        
 
-        for (const std::string& cadena : config.cadenas) {
-            if (automata.acept_Chain(cadena)) {
-                std::cout << "La cadena '" << cadena << "' es aceptada por el AFD.\n";
-                
-            } else {
-                
-                std::cout << "La cadena '" << cadena << "' no es aceptada por el AFD.\n";
+
+        reglasTokens.imprimir();
+
+        Buffer* buffer = new Buffer("../lectura_prueba.txt", 10);
+        string resultado;
+        while (buffer->FLAG_SALIDA) {
+            string linea = buffer->obtenerSiguienteLinea();
+            if (!linea.empty()) {
+                std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, linea);
+                string to_write = "";
+        
+                // Recorrer en orden inverso el vector resultadofinal
+                for (auto it = resultadofinal.rbegin(); it != resultadofinal.rend(); ++it) {
+                    const auto& [token, lexema] = *it;  // Desempaquetar el par
+
+                    string lexema_d;
+                    lexema_d = lexema;
+                    reemplazar_manual(lexema_d, PUNTO_s, ".");
+                    reemplazar_manual(lexema_d, LPARENTESIS_s, ")");
+                    reemplazar_manual(lexema_d, RPARENTESIS_s, "(");
+                    reemplazar_manual(lexema_d, TIMES_s, "*");
+                   
+
+                    to_write = "("+token+","+lexema_d+")" + to_write;
+                    //std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;
+                }
+        
+                escribirArchivo(to_write, nombreArchivo);  // Escribe los tokens en el archivo
             }
         }
         
-    }
-    ReglasTokens reglasTokens;
-    reglasTokens = reglas_tokens();
+        
 
-    reglasTokens.imprimir();
+       
 
+        std::cout<<"Antes de parsear: "<<valor_expresion<<"\n";
+
+        
+
+        
 
     return 0;
 }

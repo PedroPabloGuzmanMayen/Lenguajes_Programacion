@@ -2,11 +2,15 @@
 #define CONSTANTES_H
 
 // Definición de letras griegas usando códigos Unicode
-#define PUNTO   '\x1A'  // .
+#define PUNTO   '\\'  // .
+#define PUNTO_s  "\\"  // .
 #define EPSILON  '\x02'  // e
-#define LPARENTESIS  '\x6B'  // (
-#define RPARENTESIS  '\x7B'  // )
-#define TIMES '\x7C' // *
+#define LPARENTESIS  '\x0A'  // (
+#define RPARENTESIS  '\x0B'  // )
+#define LPARENTESIS_s  "\x0A"  // (
+#define RPARENTESIS_s  "\x0B"  // )
+#define TIMES '\x0C' // *
+#define TIMES_s "\x0C" // *
 #define WHITESPACE '\x1D' // *
 #define WHITESPACE2 "\x1D" // *
 #endif // CONSTANTES_H

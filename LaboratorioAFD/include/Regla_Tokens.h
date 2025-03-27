@@ -33,6 +33,10 @@ public:
 
     // Imprimir las reglas
     void imprimir() const;
+
+    std::string generarExpresion() const;
+
+    const std::vector<ReglaToken>& obtenerReglas() const;
 };
 
 #endif // REGLAS_TOKENS_H

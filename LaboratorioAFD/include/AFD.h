@@ -41,10 +41,8 @@ public:
     std::vector<std::string> move_AFD(const std::vector<std::string>& states, const std::string& symbol);
     void reconstruirAFD(const std::vector<std::unordered_set<std::string>>& P);
     std::vector<std::unordered_set<std::string>> separarEstados();
-    std::vector<std::map<std::string, std::string>> findTokens(std::string cadena, 
-        std::map<int, char> Terminator_State, std::map<char, std::string> tokens);
-    
-
+    std::vector<std::map<std::string, std::string>>  findTokens(std::string cadena, std::map<int, char> Terminator_State, 
+        std::map<char, std::string> tokens );
 
         
 };

@@ -82,6 +82,79 @@ using namespace std;
 
         return "";
     }
+    string Buffer::obtenerSiguienteCaracter2() {
+        if (avance >= buffer.size()) {
+            inicioLexema += buffer.size();
+            cargar_buffer();
+        }
+
+        if (avance < buffer.size()) {
+            char caracter = buffer[avance];
+            string caracterSalida(1, caracter);
+
+            
+
+            if (caracter == '.') {
+                caracterSalida = PUNTO;
+
+            }
+            if (caracter == ')'){
+                caracterSalida = RPARENTESIS;  // Reemplazo por épsilon
+
+            }
+
+            if (caracter == '('){
+                caracterSalida = LPARENTESIS;  // Reemplazo por épsilon
+
+            }
+            if (caracter == '*'){
+                caracterSalida = TIMES;  // Reemplazo por épsilon
+
+            }
+
+            
+            
+            if (caracter == '\n') {
+                caracterSalida = " ";  // Reemplazo por espacio
+            }
+
+            if (caracter == '\0') {
+                FLAG_SALIDA = false;
+                return "";
+            }
+
+            ultimoCaracter = caracter;
+            avance++;
+
+            return caracterSalida;
+        }
+
+        return "";
+    }
+
+    string Buffer::obtenerSiguienteLinea() {
+        string linea;
+        string caracter;
+    
+        while (FLAG_SALIDA) {
+            caracter = obtenerSiguienteCaracter2();
+            
+            if (caracter.empty()) {
+                break;
+            }
+    
+            if (caracter == " ") {
+                linea += " ";
+            }
+    
+            if (caracter == "\n" || caracter == "") { // Si encontramos un salto de línea o EOF
+                return linea; // Devolvemos la línea completa
+            }
+    
+            linea += caracter; // Agregamos el caracter al final de la línea
+        }
+        return linea;
+    }
 
 // int main() {
 //     int opcion;

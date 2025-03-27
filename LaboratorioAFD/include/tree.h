@@ -39,6 +39,7 @@ class Tree{
         void getIdValues(Node* start);
         void displayIDValues();
         void displayAcceptedPos();
+        void printStack(std::stack<Node*> nodeStack);
         std::stack<int> findPositions(char letter);
 };
 

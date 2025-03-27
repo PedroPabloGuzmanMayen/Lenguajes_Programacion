@@ -29,6 +29,9 @@ public:
 
     // Obtener el siguiente carácter procesado
     string obtenerSiguienteCaracter();
+
+    string obtenerSiguienteCaracter2();
+    string obtenerSiguienteLinea();
 };
 
 #endif // BUFFER_H

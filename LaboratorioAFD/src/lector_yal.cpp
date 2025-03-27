@@ -11,10 +11,15 @@
 #include "lector_yal.h"
 
 std::vector<std::string> alfabetoGriego = {
-     "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09", 
-    "\x0A", "\x0B", "\x0C",
+     "\x03", "\x04", "\x05", "\x06", "\x07", "\x0A", "\x08", "\x09"
 };
 
+
+// std::vector<std::string> alfabetoGriego = {
+//     "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ",
+//     "λ", "μ", "ν", "ξ", "ο", "π", "ρ", "σ", "τ", "υ", 
+//     "φ", "χ", "ψ", "ω"
+// };
 
 std::unordered_map<std::string, std::string> var;
 
@@ -151,14 +156,14 @@ ReglasTokens reglas_tokens() {
         }
     }
 
-    cout << "Resultado limpio: [";
-    for (size_t i = 0; i < caracteres.size(); ++i) {
-        cout << caracteres[i];
-        if (i < caracteres.size() - 1) {
-            cout << " , ";  // Agrega coma entre los caracteres
-        }
-    }
-    cout << "]" << endl;
+    // cout << "Resultado limpio: [";
+    // for (size_t i = 0; i < caracteres.size(); ++i) {
+    //     cout << caracteres[i];
+    //     if (i < caracteres.size() - 1) {
+    //         cout << " , ";  // Agrega coma entre los caracteres
+    //     }
+    // }
+    // cout << "]" << endl;
     
 
     delete buffer;
@@ -203,11 +208,7 @@ ReglasTokens reglas_tokens() {
 
     
  
-        std::cout << "\n{  ";
-        for (const auto& token : tokens) {
-            std::cout << token << " ,  ";
-        }
-        std::cout << "      }\n"<<std::endl;
+        
     while (!tokens.empty()) {
 
         // std::cout<<"Siguiente: "<<tokens[0]<<"\n";
