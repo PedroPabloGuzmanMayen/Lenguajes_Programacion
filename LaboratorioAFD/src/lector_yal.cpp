@@ -1,15 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include "AFD.cpp"
-#include "buffer.cpp"
+#include "AFD.h"
+#include "buffer.h"
 #include "Regla_Tokens.cpp"
 #include <set>
 #include "pruebaORS.h"
 #include <string>
+#include "constantes.h"
 
 std::vector<std::string> alfabetoGriego = {
-     "\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09", 
+     "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09", 
     "\x0A", "\x0B", "\x0C",
 };
 
@@ -24,7 +25,6 @@ std::vector<std::string> generarAlfabeto() {
     alfabeto.push_back("[");
     alfabeto.push_back("]");
     alfabeto.push_back("'");
-    alfabeto.push_back("\\");
     alfabeto.push_back("=");
     alfabeto.push_back("+");
     alfabeto.push_back("+");
@@ -36,7 +36,7 @@ std::vector<std::string> generarAlfabeto() {
     alfabeto.push_back(")");
     alfabeto.push_back("_");
     alfabeto.push_back("\x7F");
-    
+    alfabeto.push_back("\\");
     alfabeto.push_back("-");
     alfabeto.push_back("|");
     alfabeto.push_back("ε");
@@ -46,16 +46,18 @@ std::vector<std::string> generarAlfabeto() {
     alfabeto.push_back("<");
     alfabeto.push_back(">");
     alfabeto.push_back("/");
-    alfabeto.push_back("\\");
     alfabeto.push_back("\"");
+    alfabeto.push_back("\x1A");
+    alfabeto.push_back("\x1D");
 
     return alfabeto;
 }
 
 ReglasTokens reglas_tokens() {
+    
     ReglasTokens reglasTokens;
-    Buffer buffer("slr.yal", 10);
-    buffer.ejecutar();
+    
+    
 
     std::string estadoInicial = "q0";
     std::vector<int> estadosFinales = {3, 4, 5, 6, 7, 8};  
@@ -79,7 +81,7 @@ ReglasTokens reglas_tokens() {
     automata.agregarTransicion("q1", "e", "q2");
     automata.agregarTransicion("q2", "t", "q3"); 
 
-    std::string alfabetoCompleto = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_*?.;-|[]+():/<>'=ε\\\"\x7F";
+    std::string alfabetoCompleto = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_*?.;-|[]+():/<>'=ε\"\x7F\\\x1A\x1D";
 
     // Transiciones para todo el alfabeto
     for (char c : alfabetoCompleto) {
@@ -93,7 +95,7 @@ ReglasTokens reglas_tokens() {
     std::vector<std::string> caracteres ;
     std::vector<std::string> caracteres_no_limpio ;
 
-    caracteres_no_limpio = buffer.caracteres;
+    //caracteres_no_limpio = buffer.caracteres;
 
     
     
@@ -103,34 +105,60 @@ ReglasTokens reglas_tokens() {
     std::string cadenaActual = "";
     std::vector<std::string> tokens;
     bool dentroCorchetes = false;
+    bool dentroComentario = false;
 
 
     //Primero aqui vamos a quitar los comentarios
+    Buffer* buffer = nullptr;
+
+    buffer = new Buffer("slr.yal", 10);
+
+    string caracter;
+    while (buffer->FLAG_SALIDA) {
+        buffer->cargar_buffer();
+        while (buffer->FLAG_SALIDA) {
+            caracter = buffer->obtenerSiguienteCaracter();
+            if (caracter.empty()) break;
+
+            
+
+            // Detectar inicio de comentario (* ... *)
+            if (caracter == "(") {
+                string siguiente = buffer->obtenerSiguienteCaracter();
+                if (siguiente == "*") {
+                    dentroComentario = true;  
+                    continue; 
+                } else {
+                    caracteres.push_back(caracter);
+                    caracteres.push_back(siguiente);
+                    continue;
+                }
+            }
+
+            // Si estamos dentro del comentario, ignoramos los caracteres hasta encontrar "*)"
+            if (dentroComentario) {
+                if (caracter == "*" && buffer->obtenerSiguienteCaracter() == ")") {
+                    dentroComentario = false;  
+                    buffer->obtenerSiguienteCaracter();  
+                    continue;
+                }
+            } else {
+                caracteres.push_back(caracter);
+            }
+        }
+    }
+
+    cout << "Resultado limpio: [";
+    for (size_t i = 0; i < caracteres.size(); ++i) {
+        cout << caracteres[i];
+        if (i < caracteres.size() - 1) {
+            cout << " , ";  // Agrega coma entre los caracteres
+        }
+    }
+    cout << "]" << endl;
     
 
-    while(!caracteres_no_limpio.empty()){
-        std::string caracter = caracteres_no_limpio.front();
-        caracteres_no_limpio.erase(caracteres_no_limpio.begin());
-
-        if (caracter == "(" && caracteres_no_limpio[0] == "*"){
-            caracteres_no_limpio.erase(caracteres_no_limpio.begin()); // quitamos (*
-
-            while (caracteres_no_limpio[0] != "*" && caracteres_no_limpio[1] != ")") {
-                
-                caracteres_no_limpio.erase(caracteres_no_limpio.begin());
-            }
-            if (caracteres_no_limpio[0] == "*" && caracteres_no_limpio[1] == ")") {
-                caracteres_no_limpio.erase(caracteres_no_limpio.begin()); // Eliminar "*)"
-                caracteres_no_limpio.erase(caracteres_no_limpio.begin()); // Eliminar "*)"
-            }
-
-
-        }else{
-            
-            caracteres.push_back(caracter);
-        }
-
-    }
+    delete buffer;
 
     
     //ahora ya hacemos nuestros tokens
@@ -154,9 +182,13 @@ ReglasTokens reglas_tokens() {
         
     }
 
+    std::cout<<"Siguiente\n";
+
     if (!cadenaActual.empty()) {
         tokens.push_back(cadenaActual);
     }
+
+    std::cout<<"Siguiente3\n";
 
         
 
@@ -166,10 +198,23 @@ ReglasTokens reglas_tokens() {
 
     bool modo_reglas = false;
 
+    
+ 
+        std::cout << "\n{  ";
+        for (const auto& token : tokens) {
+            std::cout << token << " ,  ";
+        }
+        std::cout << "      }\n"<<std::endl;
     while (!tokens.empty()) {
 
-
+        // std::cout<<"Siguiente: "<<tokens[0]<<"\n";
+        // std::cout << "\n{  ";
+        // for (const auto& token : tokens) {
+        //     std::cout << token << ",";
+        // }
+        // std::cout << "      }\n"<<std::endl;
         if (modo_reglas == false){
+            
             if ( 
                 tokens[0] == "let" &&
                 isalpha(tokens[1][0]) &&  // La variable debe iniciar con una letra
@@ -183,13 +228,21 @@ ReglasTokens reglas_tokens() {
 
                 char resultado[MAX_EXPR];
                 std::sprintf(resultado, "%s", expresion.c_str()); 
-        
+                reemplazar_manual(expresion, "\\t", "\t");
+                reemplazar_manual(expresion, "\\n", "\n");
                 expand_single_expression(expresion.c_str(), resultado);
                 expresion = resultado;
 
                 for (const auto& pair : var) {
                     reemplazar_manual(expresion, pair.first, pair.second);
                 }
+
+                
+                //reemplazar_manual(expresion, "|t", "|\t");
+                //reemplazar_manual(expresion, "|n", "|\n");
+                
+                reemplazar_manual(expresion, "\' \'", " ");
+                reemplazar_manual(expresion, WHITESPACE2, " ");
 
 
 
@@ -204,7 +257,8 @@ ReglasTokens reglas_tokens() {
                 //vamos a hacer un reemplazo si lo encontramos
 
                 
-            } 
+            }
+
     
             else if (tokens[0] =="rule"  && 
                 tokens[1] == "tokens" && tokens[2] == "="){
@@ -281,15 +335,6 @@ ReglasTokens reglas_tokens() {
             }
 
         }
-        
-        
-
-
-      
-
-
-
-
    }
 
    
@@ -305,7 +350,7 @@ ReglasTokens reglas_tokens() {
 //     ReglasTokens reglasTokens;
 
 //     reglasTokens = reglas_tokens();
-//     reglasTokens.imprimir();
+//     //reglasTokens.imprimir();
 
 //     std::set<std::string> processed;
 
@@ -361,14 +406,6 @@ ReglasTokens reglas_tokens() {
 //     //     // Si la clave no fue encontrada
 //     //     std::cout << "La variable '" << key << "' no existe en el mapa." << std::endl;
 //     // }
-
-    
-    
-
-
-    
-    
-
 
 // }
 

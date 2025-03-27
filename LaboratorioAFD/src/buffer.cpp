@@ -1,26 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include "constantes.h"
+#include "buffer.h"
 using namespace std;
 
 
 
 
 
-class Buffer {
-public:
-    vector<char> buffer;
-    int inicioLexema;
-    int avance;
-    bool FLAG_SALIDA;
-    string entrada;
-    const int tamano_buffer;
-    char ultimoCaracter;  // Guarda el último carácter leído
-    std::vector<std::string> caracteres;
-
-
-public:
-    Buffer(const string &filename, int tamano) 
+    
+    Buffer::Buffer(const string &filename, int tamano) 
         : inicioLexema(0), avance(0), FLAG_SALIDA(true), tamano_buffer(tamano), ultimoCaracter('\0') {
         
         ifstream archivo(filename);
@@ -35,13 +25,13 @@ public:
         archivo.close();
     }
 
-
-    // Constructor desde cadena directa
-    Buffer(int tamano, const string &cadenaEntrada)
+    // Constructor desde entrada por teclado
+    Buffer::Buffer(int tamano, const string &cadenaEntrada)
         : inicioLexema(0), avance(0), FLAG_SALIDA(true), tamano_buffer(tamano), 
           ultimoCaracter('\0'), entrada(cadenaEntrada) {}
-          
-    void cargar_buffer() {
+
+    // Cargar el buffer con la siguiente parte de la entrada
+    void Buffer::cargar_buffer() {
         buffer.clear();
         for (int i = inicioLexema; i < inicioLexema + tamano_buffer && i < entrada.size(); i++) {
             buffer.push_back(entrada[i]);
@@ -52,73 +42,89 @@ public:
         avance = 0;
     }
 
-    void procesar_buffer() {
-        while (avance < buffer.size()) {
+    // Obtener el siguiente carácter procesado
+    string Buffer::obtenerSiguienteCaracter() {
+        if (avance >= buffer.size()) {
+            inicioLexema += buffer.size();
+            cargar_buffer();
+        }
+
+        if (avance < buffer.size()) {
             char caracter = buffer[avance];
-            string caracterSalida(1, caracter);  // Convertimos el caracter a string
+            string caracterSalida(1, caracter);
 
-            // Si encontramos un espacio y el último caracter fue una comilla, lo reemplazamos por "ε"
-            if (caracter == ' ' && ultimoCaracter == '\'' &&buffer[avance +1 ] == '\'' ) {
-                caracterSalida = "\x7F";  // Reemplazo por épsilon
+            if (caracter == ' ' && ultimoCaracter == '\'' && buffer[avance + 1] == '\'') {
+                caracterSalida = WHITESPACE;  // Reemplazo por épsilon
+                std::cout<<"Imprimir \n";
             }
+
+            if (caracter == '.'){
+                caracterSalida = PUNTO;  // Reemplazo por épsilon
+
+            }
+
             
-            if (caracter == '\n' ) {
-                caracterSalida = " ";  // Reemplazo por épsilon
+            
+            if (caracter == '\n') {
+                caracterSalida = " ";  // Reemplazo por espacio
             }
-
 
             if (caracter == '\0') {
                 FLAG_SALIDA = false;
-                break;
+                return "";
             }
 
-            caracteres.push_back(caracterSalida);
-
-            // cout << "InicioLexema: " << inicioLexema << ", Avance: " << avance 
-            //      << ", Caracter: " << caracterSalida << endl;
-
-            // Guardamos el último caracter leído para la próxima iteración
             ultimoCaracter = caracter;
-
             avance++;
-            if (avance >= buffer.size()) {
-                inicioLexema += buffer.size();
-                cargar_buffer();
-            }
+
+            return caracterSalida;
         }
+
+        return "";
     }
 
-    void ejecutar() {
-        while (FLAG_SALIDA) {
-            cargar_buffer();
-            procesar_buffer();
-        }
-    }
+// int main() {
+//     int opcion;
+//     string input, filename;
 
-    string cadenaString() {
-        string resultado;
-        for (const auto& c : caracteres) {
-            resultado += c;
-        }
-        return resultado;
-    }
+//     cout << "Selecciona la opción de entrada:\n";
+//     cout << "1. Ingresar texto manualmente\n";
+//     cout << "2. Leer desde un archivo\n";
+//     cout << "Opción: ";
+//     cin >> opcion;
+//     cin.ignore();  // Para limpiar el buffer de entrada
 
+//     Buffer* buffer = nullptr;  // Puntero a Buffer
 
-};
+//     if (opcion == 1) {
+//         cout << "Escribe la cadena: ";
+//         getline(cin, input);
+//         buffer = new Buffer(10, input);
+//     } else if (opcion == 2) {
+//         cout << "Ingresa el nombre del archivo: ";
+//         getline(cin, filename);
+//         buffer = new Buffer(filename, 10);
+//     } else {
+//         cout << "Opción no válida.\n";
+//         return 1;
+//     }
 
+//     string resultado;
 
-/*
-int main() {
-    string input;
-    cout << "Escribe la cadena: ";
-    getline(cin, input); 
+//     // Procesar el buffer en main()
+//     while (buffer->FLAG_SALIDA) {
+//         buffer->cargar_buffer();
+//         while (buffer->FLAG_SALIDA) {
+//             string caracter = buffer->obtenerSiguienteCaracter();
+//             std::cout<<"Procesado: "<<caracter<<"\n";
+//             if (!caracter.empty()) {
+//                 resultado += caracter;
+//             }
+//         }
+//     }
 
-    Buffer buffer(10, input); // aca el parametro primero va el tamano del bufer y luego el input a diferencia del otro constructor con filename. 
-    buffer.ejecutar();
+//     cout << "Resultado final: " << resultado << endl;
 
-    string resultado = buffer.cadenaString();
-    cout << "Resultado string: " << resultado << endl;
-
-    return 0;
-}
-*/
+//     delete buffer;  // Liberar memoria
+//     return 0;
+// }

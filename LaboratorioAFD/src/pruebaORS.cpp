@@ -18,8 +18,8 @@ int var_count = 0;
 
 char interpret_escape(char c) {
     switch (c) {
-        case 'n': return '\n';
-        case 't': return '\t';
+        case '\n': return '\n';
+        case '\t': return '\t';
         case '\\': return '\\';
         default: return c;
     }
@@ -69,8 +69,8 @@ void expand_expression(const char* input, char* output) {
                 }
             } else {
                 out_idx += sprintf(output + out_idx,
-                    (a == '\n') ? "\\n|" :
-                    (a == '\t') ? "\\t|" :
+                    (a == '\n') ? "\n|" :
+                    (a == '\t') ? "\t|" :
                     (a == ' ') ? "' '|"
                     : "%c|", a);
             }
@@ -318,33 +318,33 @@ void reemplazar_manual(std::string& expresion, const std::string& buscar, const 
 }
 
 
-int main() {
-    // Expresiones a expandir
-    const char* expresiones[] = {
-        "['\x17''\x15']",
-        "delim+",
-        "['A'-'Z''a'-'z']",
-        "(_)*",
-        "digit+(letter|digit)*",
-        "digit+",
-        "letter(letter|str|digit)*",
-        "digits(.digits)?('E'['+''-']?digits)?"
-    };
+// int main() {
+//     // Expresiones a expandir
+//     const char* expresiones[] = {
+//         "[\"\\s\\t\\n\"]",
+//         "delim+",
+//         "['A'-'Z''a'-'z']",
+//         "(_)*",
+//         "digit+(letter|digit)*",
+//         "digit+",
+//         "letter(letter|str|digit)*",
+//         "digits(.digits)?('E'['+''-']?digits)?"
+//     };
 
-    for (int i = 0; i < sizeof(expresiones) / sizeof(expresiones[0]); i++) {
-        char resultado[MAX_EXPR];
-        expand_single_expression(expresiones[i], resultado);
+//     for (int i = 0; i < sizeof(expresiones) / sizeof(expresiones[0]); i++) {
+//         char resultado[MAX_EXPR];
+//         expand_single_expression(expresiones[i], resultado);
 
-        // Convertir a std::string para reemplazo visual
-        //std::string corregida = resultado; //si quieres ver el caracter descomenta esto
-        //reemplazar_manual(corregida, "\x02", "ε"); //esto tambien descomentalo
+//         // Convertir a std::string para reemplazo visual
+//         //std::string corregida = resultado; //si quieres ver el caracter descomenta esto
+//         //reemplazar_manual(corregida, "\x02", "ε"); //esto tambien descomentalo
 
 
-        printf("Expresión original: %s\n", expresiones[i]);
-        printf("Expresión expandida: %s\n\n", resultado); //esto comentalo
+//         printf("Expresión original: %s\n", expresiones[i]);
+//         printf("Expresión expandida: %s\n\n", resultado); //esto comentalo
 
-        //printf("Expresión expandida: %s\n\n", corregida.c_str()); // y esto tambien descomentalo
-    }
+//         //printf("Expresión expandida: %s\n\n", corregida.c_str()); // y esto tambien descomentalo
+//     }
 
-    return 0;
-}
+//     return 0;
+// }

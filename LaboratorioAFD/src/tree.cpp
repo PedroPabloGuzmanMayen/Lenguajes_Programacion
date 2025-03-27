@@ -8,8 +8,9 @@
 #include <algorithm>
 #include <string>
 #include <unordered_map>
-#include "AFD.cpp"
+#include "AFD.h"
 #include <tuple>
+#include "constantes.h"
 
 std::set<int> setUnion(std::set<int >a,std::set<int >b){
     std::set<int>c;
@@ -100,7 +101,7 @@ void Tree::calcNullable(Node* start){
         start->setNullable(true);
     }
     else {
-        if (start->getValue() == '\x02'){
+        if (start->getValue() == EPSILON){
             start->setNullable(true); 
         }
         else {
@@ -129,7 +130,7 @@ void Tree::calclFirstPos(Node* start){
         start->setFirstPos(start->getSon(0)->getFirstPos()); 
     }
     else {
-        if (start->getValue() == '\x02'){
+        if (start->getValue() == EPSILON){
             start->setFirstPos({});
         }
         else {
@@ -159,7 +160,7 @@ void Tree::calcLastPos(Node* start){
         start->setLastPos(start->getSon(0)->getLastPos()); 
     }
     else {
-        if (start->getValue() == '\x02'){ //Verficar si es la cadena vacia
+        if (start->getValue() == EPSILON){ //Verficar si es la cadena vacia
             start->setLastPos({});
         }
         else {

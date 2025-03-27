@@ -5,11 +5,13 @@
 #include "shunting_yard.h"
 #include "tree.h"
 #include "node.h"
-#include "AFD.cpp"
+#include "AFD.h"
 #include "lector.h"
 #include <unordered_set>
 #include <vector>
 #include <map>
+#include "lector_yal.h"
+#include "Regla_Tokens.h"
 
 
 bool isInFinalStates(const std::map<std::set<int>, char>& terminators, const std::set<int>& state) {
@@ -162,7 +164,7 @@ int main() {
 
 
 
-        std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "x1 = 1 + b");
+        std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "x1 = 1 + b abad");
 
         for (const auto& [token, lexema] : resultadofinal) {
             std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;
