@@ -293,7 +293,6 @@ Tree::convertToAFD() {
             }
 
             if (!newState.empty()) {
-
                 if (std::find(findedStates.begin(), findedStates.end(), newState) == findedStates.end()) {
                     findedStates.push_back(newState);
                     DSTATES.push_back(newState);
