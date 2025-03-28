@@ -18,16 +18,16 @@ public:
     char ultimoCaracter;
 
 public:
-    // Constructor desde archivo
+    
     Buffer(const string &filename, int tamano);
 
-    // Constructor desde entrada por teclado
+    
     Buffer(int tamano, const string &cadenaEntrada);
 
-    // Cargar el buffer con la siguiente parte de la entrada
+    
     void cargar_buffer();
 
-    // Obtener el siguiente carácter procesado
+    
     string obtenerSiguienteCaracter();
 
     string obtenerSiguienteCaracter2();

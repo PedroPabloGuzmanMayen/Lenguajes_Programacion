@@ -36,6 +36,8 @@ public:
 
     std::string obtener_token_(const std::string &nombre) const;
 
+    std::string obtener_token_token(const std::string &token_n) const;
+
     std::string generarExpresion() const;
 
     const std::vector<ReglaToken>& obtenerReglas() const;

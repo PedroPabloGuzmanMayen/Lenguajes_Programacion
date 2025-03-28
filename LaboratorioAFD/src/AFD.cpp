@@ -88,6 +88,20 @@
         return false;
     }
 
+    void AFD::mostrarTerminadores() {
+        std::cout << "Estados finales y sus terminadores:" << std::endl;
+        for (const int estadoFinal : F_) {
+            
+            for (const auto& estado : Q_) {
+                if (estado.second.numero == estadoFinal) {
+                    std::cout << "Estado: " << estado.first << " -> Terminador: " << estado.second.nombre << std::endl;
+                }
+            }
+        }
+    }
+    
+    
+
     std::vector<std::pair<std::string, std::string>> AFD::analizarCadena(
         const std::map<std::string, char>& estadosAceptacion,
         const std::map<char, std::string>& terminadorToken,

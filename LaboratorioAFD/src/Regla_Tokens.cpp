@@ -73,6 +73,18 @@ std::string ReglasTokens::obtener_token_(const std::string& nombre) const {
 
 
 
+std::string ReglasTokens::obtener_token_token(const std::string& token_n) const {
+    for (const auto& regla : reglas) {
+        if (regla.token ==  token_n) {
+            return regla.token;
+        }
+    }
+    return token_n; 
+}
+
+
+
+
 std::string ReglasTokens::generarExpresion() const {
     std::string resultado = "";
     
@@ -87,10 +99,10 @@ std::string ReglasTokens::generarExpresion() const {
             expresion = TIMES;
         }
         else if (expresion == "(") {
-            expresion = RPARENTESIS;
+            expresion = LPARENTESIS_s;
         }
         else if (expresion == ")") {
-            expresion = LPARENTESIS;
+            expresion = RPARENTESIS_s;
         }
     
         // Concatenar la expresión y el identificador

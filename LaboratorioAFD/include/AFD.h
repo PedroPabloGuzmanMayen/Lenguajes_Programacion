@@ -44,7 +44,7 @@ public:
     std::vector<std::map<std::string, std::string>>  findTokens(std::string cadena, std::map<int, char> Terminator_State, 
         std::map<char, std::string> tokens );
 
-        
+    void mostrarTerminadores();        
 };
 
 #endif // AFD_H

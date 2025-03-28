@@ -22,11 +22,13 @@ bool isInFinalStates(const std::map<std::set<int>, char>& terminators, const std
 }
 
 
-int main() {
+int main(int argc, char* argv[]) {
 
     string contenido, nombreArchivo;
 
     nombreArchivo = "Tokens.txt";
+
+    std::string  nombreArchivo_lectura = argv[1]; 
 
     //vamos a leer el slr.yal
 
@@ -212,7 +214,7 @@ int main() {
         //minimizamos
         
 
-        std::cout<<"============MINIMIZADO===========\n";
+        //std::cout<<"============MINIMIZADO===========\n";
         automata.minimizarAFD();
         
         //automata.depurarAFD();
@@ -225,7 +227,7 @@ int main() {
 
         reglasTokens.imprimir();
 
-        Buffer* buffer = new Buffer("../lectura_prueba.txt", 10);
+        Buffer* buffer = new Buffer(nombreArchivo_lectura, 10);
         string resultado;
         while (buffer->FLAG_SALIDA) {
             string linea = buffer->obtenerSiguienteLinea();
@@ -246,29 +248,43 @@ int main() {
                     reemplazar_manual(lexema_d, RPARENTESIS_s, "(");
                     reemplazar_manual(lexema_d, TIMES_s, "*");
                     
-                    the_token = reglasTokens.obtener_token_(lexema);
+                    the_token = reglasTokens.obtener_token_(lexema_d);
 
                     if (the_token == ""){
 
                         the_token = token;
-
                     }
+
+
+                    //     the_token = reglasTokens.obtener_token_token(the_token);
+
+                    //     if (the_token == ""){
+
+                    //         if (!lexema_d.empty() && lexema_d.find_first_not_of(" \t\n") != std::string::npos) {
+                    //             the_token = token;
+                    //         }
+
+                    //     }
+
+                    // }
                     
 
 
                     to_write = "["+the_token+","+lexema_d+"]" + to_write;
                     //std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;
+                    
                 }
         
                 escribirArchivo(to_write, nombreArchivo);  // Escribe los tokens en el archivo
             }
+            
         }
         
         
 
        
 
-        std::cout<<"Antes de parsear: "<<valor_expresion<<"\n";
+        //std::cout<<"Antes de parsear: "<<valor_expresion<<"\n";
 
         
 

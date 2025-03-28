@@ -209,7 +209,9 @@ void Tree::displayFollowPos(){
 void Tree::getIdValues(Node* start) {
 
     std::vector<std::string> alfabetoGriego = {
-        "\x03", "\x04", "\x05", "\x06", "\x07", "\x0A", "\x08", "\x09", "\x10", "\x11", "\x12"
+        "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09",
+        "\x13", "\x14", "\x15",
+       "\x16", "\x17", "\x18", "\x19",
    };
    
 
@@ -291,7 +293,7 @@ Tree::convertToAFD() {
             }
 
             if (!newState.empty()) {
-                // Add new state if it hasn't been found before
+
                 if (std::find(findedStates.begin(), findedStates.end(), newState) == findedStates.end()) {
                     findedStates.push_back(newState);
                     DSTATES.push_back(newState);
@@ -303,22 +305,22 @@ Tree::convertToAFD() {
 
     int stateNum = 0;
     for (const auto& state : findedStates) {
-        std::cout << "State " << stateNum++ << ": { ";
+        //std::cout << "State " << stateNum++ << ": { ";
         for (const int& val : state) {
             std::cout << val << " ";
         }
-        std::cout << "}\n";
+        //std::cout << "}\n";
     }
 
     for (const auto& [state, symbolMap] : transitions) {
-        std::cout << "From state { ";
+        //std::cout << "From state { ";
         for (int val : state) std::cout << val << " ";
-        std::cout << "}\n";
+        //std::cout << "}\n";
         
         for (const auto& [symbol, nextState] : symbolMap) {
-            std::cout << "  On '" << symbol << "' -> { ";
+            //std::cout << "  On '" << symbol << "' -> { ";
             for (int val : nextState) std::cout << val << " ";
-            std::cout << "}\n";
+            //std::cout << "}\n";
         }
     }
     return std::make_tuple(findedStates, accepted_states, DSTATES, alphabet, transitions, terminators);

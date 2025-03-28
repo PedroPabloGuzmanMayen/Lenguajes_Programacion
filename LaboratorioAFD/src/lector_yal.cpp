@@ -11,7 +11,9 @@
 #include "lector_yal.h"
 
 std::vector<std::string> alfabetoGriego = {
-     "\x03", "\x04", "\x05", "\x06", "\x07", "\x0A", "\x08", "\x09"
+     "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09",
+     "\x13", "\x14", "\x15",
+    "\x16", "\x17", "\x18", "\x19",
 };
 
 
@@ -130,7 +132,7 @@ ReglasTokens reglas_tokens() {
 
             
 
-            // Detectar inicio de comentario (* ... *)
+          
             if (caracter == "(") {
                 string siguiente = buffer->obtenerSiguienteCaracter();
                 if (siguiente == "*") {
