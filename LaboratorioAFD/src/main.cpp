@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
     
         //std::cout << "\nProcesando expresión regular: " << valor_expresion << std::endl;
 
-        //std::cout<<valor_expresion<<"\n";
+        
         std::string my_str_copy = valor_expresion;
         //std::string my_str_copy = "(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|_)(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|0|1|2|3|4|5|6|7|8|9)*\x03|(=)\x04|+\x05|-\x06|([|])\x07|(0|1|2|3|4|5|6|7|8|9)*\x02|( )( )*\x08|(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z)\x09";
         std::string newStr = add_concatenation(my_str_copy);
@@ -213,7 +213,7 @@ int main(int argc, char* argv[]) {
 
         //minimizamos
         
-
+        std::cout<<valor_expresion<<"\n";
         //std::cout<<"============MINIMIZADO===========\n";
         automata.minimizarAFD();
         
@@ -251,8 +251,18 @@ int main(int argc, char* argv[]) {
                     the_token = reglasTokens.obtener_token_(lexema_d);
 
                     if (the_token == ""){
-
+                        
                         the_token = token;
+                        string expresion_token;
+                        expresion_token = reglasTokens.obtener_token_expresion(the_token);
+
+                        if(expresion_token == ""){
+
+                            the_token = reglasTokens.obtener_token_primer_elemento();
+
+
+                        }
+                        
                     }
 
 

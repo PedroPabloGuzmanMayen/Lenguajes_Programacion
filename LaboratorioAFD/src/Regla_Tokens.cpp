@@ -73,6 +73,16 @@ std::string ReglasTokens::obtener_token_(const std::string& nombre) const {
 
 
 
+
+std::string ReglasTokens::obtener_token_primer_elemento() const {
+    if (!reglas.empty()) {
+        return reglas[0].token;
+    }
+    return "";
+}
+
+
+
 std::string ReglasTokens::obtener_token_token(const std::string& token_n) const {
     for (const auto& regla : reglas) {
         if (regla.token ==  token_n) {
@@ -81,6 +91,16 @@ std::string ReglasTokens::obtener_token_token(const std::string& token_n) const 
     }
     return token_n; 
 }
+
+std::string ReglasTokens::obtener_token_expresion(const std::string& token_n) const {
+    for (const auto& regla : reglas) {
+        if (regla.token ==  token_n) {
+            return regla.expresion_regular;
+        }
+    }
+    return token_n; 
+}
+
 
 
 
@@ -106,7 +126,7 @@ std::string ReglasTokens::generarExpresion() const {
         }
     
         // Concatenar la expresión y el identificador
-        std::string concatenado = expresion + regla.identificador;
+        std::string concatenado = "("+expresion+")" + regla.identificador;
     
         // Si no es el primer elemento, agrega un espacio
         if (!resultado.empty()) {
