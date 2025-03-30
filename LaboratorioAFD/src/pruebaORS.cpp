@@ -18,8 +18,8 @@ int var_count = 0;
 
 char interpret_escape(char c) {
     switch (c) {
-        case '\n': return '\n';
-        case '\t': return '\t';
+        case 'n': return '\n';
+        case 't': return '\t';
         case '\\': return '\\';
         default: return c;
     }
@@ -69,8 +69,8 @@ void expand_expression(const char* input, char* output) {
                 }
             } else {
                 out_idx += sprintf(output + out_idx,
-                    (a == '\n') ? "\n|" :
-                    (a == '\t') ? "\t|" :
+                    (a == '\n') ? "\\n|" :
+                    (a == '\t') ? "\\t|" :
                     (a == ' ') ? "' '|"
                     : "%c|", a);
             }
@@ -321,7 +321,7 @@ void reemplazar_manual(std::string& expresion, const std::string& buscar, const 
 // int main() {
 //     // Expresiones a expandir
 //     const char* expresiones[] = {
-//         "[\"\\s\\t\\n\"]",
+//         "['\x17''\x15']",
 //         "delim+",
 //         "['A'-'Z''a'-'z']",
 //         "(_)*",

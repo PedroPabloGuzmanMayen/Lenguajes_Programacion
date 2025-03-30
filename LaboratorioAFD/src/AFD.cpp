@@ -6,15 +6,25 @@
 #include <fstream>
 #include <cstdlib>
 #include <list>
-#include "AFD.h"
 
+class Estado {
+public:
+    std::string nombre;
+    int numero;
+    Estado() = default;
+    Estado(std::string nombre, int numero) : nombre(nombre), numero(numero) {}
+};
 
+class AFD {
+public:
+    std::unordered_map<std::string, std::unordered_map<std::string, std::string>> S_;
+    std::string q0; 
+    std::unordered_set<int> F_;
+    std::vector<std::string> Alfabeto;
+    std::unordered_map<std::string, Estado> Q_;
 
-
-
-
-
-    AFD::AFD(std::string estadoInicial, 
+public:
+    AFD(std::string estadoInicial, 
         const std::vector<int>& estadosFinales,
         const std::vector<std::string>& alfabeto,
         const std::unordered_map<std::string, Estado> & estados ) : 
@@ -25,7 +35,7 @@
         {}
 
 
-    void AFD::agregarTransicion(const std::string& estado, const std::string& simbolo, const std::string& nuevoEstado) {
+    void agregarTransicion(const std::string& estado, const std::string& simbolo, const std::string& nuevoEstado) {
         S_[estado][simbolo] = nuevoEstado;
     }
     
@@ -35,7 +45,7 @@
         - Terminator_State: un map con el string del estado y su respectivo terminador
     */
    
-    std::vector<std::map<std::string, std::string>> AFD::findTokens(std::string cadena, std::map<int, char> Terminator_State, 
+    std::vector<std::map<std::string, std::string>> findTokens(std::string cadena, std::map<int, char> Terminator_State, 
     std::map<char, std::string> tokens ){
         std::string current = "q0"; //Iniciar en el estado inicial
         std::string lexeme = "";
@@ -58,7 +68,7 @@
     
 
     
-    std::vector<std::string> AFD::move_AFD(const std::vector<std::string>& states, const std::string& symbol) {
+    std::vector<std::string> move_AFD(const std::vector<std::string>& states, const std::string& symbol) {
         std::unordered_set<std::string> nuevosEstados;
 
         for (const std::string& state : states) {
@@ -71,7 +81,7 @@
     }
 
    
-    bool AFD::acept_Chain(const std::string& w) {
+    bool acept_Chain(const std::string& w) {
         std::vector<std::string> current_states = {q0};
         for (char symbol : w) {
             current_states = move_AFD(current_states, std::string(1, symbol));
@@ -88,21 +98,7 @@
         return false;
     }
 
-    void AFD::mostrarTerminadores() {
-        std::cout << "Estados finales y sus terminadores:" << std::endl;
-        for (const int estadoFinal : F_) {
-            
-            for (const auto& estado : Q_) {
-                if (estado.second.numero == estadoFinal) {
-                    std::cout << "Estado: " << estado.first << " -> Terminador: " << estado.second.nombre << std::endl;
-                }
-            }
-        }
-    }
-    
-    
-
-    std::vector<std::pair<std::string, std::string>> AFD::analizarCadena(
+    std::vector<std::pair<std::string, std::string>> analizarCadena(
         const std::map<std::string, char>& estadosAceptacion,
         const std::map<char, std::string>& terminadorToken,
         const std::string& entrada) {
@@ -123,7 +119,7 @@
                     char terminador = estadosAceptacion.at(state);
                     if (terminadorToken.find(terminador) != terminadorToken.end()) {
                         std::string token = terminadorToken.at(terminador);
-                   
+                       
                         size_t lookAhead = i + 1;
                         while (lookAhead < entrada.length()) {
                             std::vector<std::string> nextStates = move_AFD(current_states, std::string(1, entrada[lookAhead]));
@@ -157,7 +153,7 @@
     
     
 
-    void AFD::depurarAFD() {
+    void depurarAFD() {
         std::cout << "Estado inicial: " << q0 << std::endl;
         std::cout << "Estados finales:\n";
         for (int f : F_) std::cout << "  q" << f << "\n";
@@ -169,7 +165,7 @@
         }
     }
 
-    void AFD::generarDot(const std::string& nombreArchivo) {
+    void generarDot(const std::string& nombreArchivo) {
         std::ofstream archivo(nombreArchivo + ".dot");
         if (!archivo.is_open()) {
             std::cerr << "Error al abrir el archivo " << nombreArchivo << ".dot" << std::endl;
@@ -198,7 +194,7 @@
         std::cout << "Archivo " << nombreArchivo << ".dot generado correctamente.\n";
     }
 
-    void AFD::generarImagen(const std::string& nombreArchivo) {  
+    void generarImagen(const std::string& nombreArchivo) {  
         std::string comando = "dot -Tpng " + nombreArchivo + ".dot -o " + nombreArchivo + ".png";
         int resultado = system(comando.c_str());
 
@@ -209,7 +205,7 @@
         }
     }
 
-    void AFD::mostrarTransiciones() {
+    void mostrarTransiciones() {
         std::cout << "Transiciones del AFD:" << std::endl;
         for (const auto& [estado, transiciones] : S_) {
             for (const auto& [simbolo, destino] : transiciones) {
@@ -219,7 +215,7 @@
         std::cout << std::endl;
     }
 
-    void AFD::reconstruirAFD(const std::vector<std::unordered_set<std::string>>& P) {
+    void reconstruirAFD(const std::vector<std::unordered_set<std::string>>& P) {
         std::unordered_map<std::string, std::string> representante;
     
         // Asignar representantes a cada conjunto de estados equivalentes
@@ -283,7 +279,7 @@
     }
     
 
-    std::vector<std::unordered_set<std::string>> AFD::separarEstados() {
+    std::vector<std::unordered_set<std::string>> separarEstados() {
         std::unordered_set<std::string> aceptacion, noAceptacion;
         for (const auto& q : Q_) {
             if (F_.count(q.second.numero)) {
@@ -295,7 +291,7 @@
         return {noAceptacion, aceptacion};
     }
 
-    void AFD::minimizarAFD() {
+    void minimizarAFD() {
         std::vector<std::unordered_set<std::string>> P = separarEstados();
         std::vector<std::unordered_set<std::string>> W = P;
         
@@ -332,3 +328,8 @@
         }
         reconstruirAFD(P);
     }
+
+
+
+
+};
