@@ -209,7 +209,7 @@ void Tree::getIdValues(Node* start) {
 
     std::vector<std::string> alfabetoGriego = {
         "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09", 
-        "\x0A", "\x0B", "\x0C"
+        "\x0A", "\x0B", "\x0C",  "$"
     };
 
     if (!start) return;

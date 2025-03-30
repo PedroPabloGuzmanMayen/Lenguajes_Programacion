@@ -151,7 +151,7 @@ int main() {
         }
 
         std::map<char, std::string> tokensYLexemas;
-        tokensYLexemas['\x0A'] = "NUMERO";
+        tokensYLexemas['$'] = "NUMERO";
         tokensYLexemas['\x04'] = "IGUAL";
         tokensYLexemas['\x03'] = "VARIABLE";
         tokensYLexemas['\x05'] = "MAS";
