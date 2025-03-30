@@ -123,7 +123,7 @@
                     char terminador = estadosAceptacion.at(state);
                     if (terminadorToken.find(terminador) != terminadorToken.end()) {
                         std::string token = terminadorToken.at(terminador);
-                       
+                   
                         size_t lookAhead = i + 1;
                         while (lookAhead < entrada.length()) {
                             std::vector<std::string> nextStates = move_AFD(current_states, std::string(1, entrada[lookAhead]));

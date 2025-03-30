@@ -12,7 +12,7 @@
 #include <map>
 #include "lector_yal.h"
 #include "Regla_Tokens.h"
-#include "outuput_file.cpp"
+#include "outuput_file.h"
 #include "buffer.h"
 #include "constantes.h"
 #include "pruebaORS.h"
