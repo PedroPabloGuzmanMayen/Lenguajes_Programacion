@@ -208,9 +208,11 @@ void Tree::displayFollowPos(){
 void Tree::getIdValues(Node* start) {
 
     std::vector<std::string> alfabetoGriego = {
-        "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09", 
-        "\x0A", "\x0B", "\x0C",  "$", "@", "\x10"
-    };
+        "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09",
+        "\x13", "\x14", "\x15",
+       "\x16", "\x17", "\x18", "\x19",
+   };
+   
 
     if (!start) return;
     if (start->getSon(0) != nullptr) getIdValues(start->getSon(0));
