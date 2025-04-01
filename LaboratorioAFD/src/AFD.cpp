@@ -96,25 +96,27 @@
     
         for (size_t i = 0; i < entrada.length(); ++i) {
             char symbol = entrada[i];
-            //if (std::isspace(symbol) && lexema.empty()) continue;
             lexema += symbol;
-            //std::cout << "\nProcesando símbolo: " << symbol << std::endl;
-            std::cout << "Estados actuales: ";
+            //std::cout << "Procesando símbolo: " << symbol << std::endl;
+            //std::cout << "Estados actuales: ";
             for (const auto& s : current_states) std::cout << s << " ";
+            std::cout << std::endl;
+    
             current_states = move_AFD(current_states, std::string(1, symbol));
+            tokenFound = false;  // Reiniciar la bandera para esta iteración
             
             for (const std::string& state : current_states) {
                 if (estadosAceptacion.find(state) != estadosAceptacion.end()) {
                     char terminador = estadosAceptacion.at(state);
                     if (terminadorToken.find(terminador) != terminadorToken.end()) {
                         std::string token = terminadorToken.at(terminador);
-                        std::cout << "✅ Estado de aceptación encontrado: " << state << " -> Token: " << token << " Terminador asociado: "<< terminador << std::endl;
-                        
+                        //std::cout << "✅ Estado de aceptación encontrado: " << state << " -> Token: " << token << " Terminador asociado: " << terminador << std::endl;
+    
                         size_t lookAhead = i + 1;
                         while (lookAhead < entrada.length()) {
                             std::vector<std::string> nextStates = move_AFD(current_states, std::string(1, entrada[lookAhead]));
                             bool stillValid = false;
-                            
+    
                             for (const std::string& nextState : nextStates) {
                                 if (estadosAceptacion.find(nextState) != estadosAceptacion.end()) {
                                     lexema += entrada[lookAhead];
@@ -123,10 +125,11 @@
                                     break;
                                 }
                             }
-                            
+    
                             if (!stillValid) break;
                             lookAhead++;
                         }
+    
                         tokens.emplace_back(token, lexema);
                         i = lookAhead - 1;
                         lexema.clear();
@@ -135,6 +138,13 @@
                         break;
                     }
                 }
+            }
+    
+            // 🔴 Si ningún estado de aceptación fue encontrado
+            if (!tokenFound) {
+                std::cout << "⚠️ No se encontró estado de aceptación para: " << lexema << std::endl;
+                lexema.clear();
+                current_states = {q0};  // Reiniciar al estado inicial
             }
         }
     
