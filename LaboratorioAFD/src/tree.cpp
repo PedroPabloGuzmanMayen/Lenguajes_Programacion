@@ -219,7 +219,7 @@ void Tree::getIdValues(Node* start) {
     if (start->getSon(0) != nullptr) getIdValues(start->getSon(0));
     if (start->getSon(1) != nullptr) getIdValues(start->getSon(1));
 
-    // Verificar que no sea un operador
+    
     if (start->getID() != 0) {
         this->idValue[start->getID()] = start->getValue();
 
@@ -292,7 +292,7 @@ Tree::convertToAFD() {
                 }
             }
 
-                // Add new state if it hasn't been found before
+
             if (std::find(findedStates.begin(), findedStates.end(), newState) == findedStates.end()) {
                 findedStates.push_back(newState);
                 DSTATES.push_back(newState);
