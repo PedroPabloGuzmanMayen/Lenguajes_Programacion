@@ -6,7 +6,7 @@
 #include "tree.h"
 #include "node.h"
 #include "AFD.h"
-#include "lector.h"
+
 #include <unordered_set>
 #include <vector>
 #include <map>

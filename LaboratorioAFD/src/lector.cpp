@@ -16,7 +16,7 @@ Config leerConfig(const std::string &archivo) {
                 config.expresiones_regulares.push_back(expr.as<std::string>());
             }
         } else {
-            std::cerr << "Error: No se encontró la clave 'expresiones_regulares' en el YAML.\n";
+           // std::cerr << "Error: No se encontró la clave 'expresiones_regulares' en el YAML.\n";
         }
 
         if (data["cadenas"]) {
@@ -24,7 +24,7 @@ Config leerConfig(const std::string &archivo) {
                 config.cadenas.push_back(cadena.as<std::string>());
             }
         } else {
-            std::cerr << "Error: No se encontró la clave 'cadenas' en el YAML.\n";
+            //std::cerr << "Error: No se encontró la clave 'cadenas' en el YAML.\n";
         }
 
     } catch (const YAML::Exception &e) {

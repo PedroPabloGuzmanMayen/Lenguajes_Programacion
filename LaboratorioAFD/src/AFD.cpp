@@ -211,7 +211,7 @@
     
         // Verificar si el estado inicial tiene un representante válido
         if (representante.find(q0) == representante.end()) {
-            std::cerr << "Error: No se encontró representante para el estado inicial.\n";
+            //std::cerr << "Error: No se encontró representante para el estado inicial.\n";
             return;
         }
         std::string newQ0 = representante[q0];

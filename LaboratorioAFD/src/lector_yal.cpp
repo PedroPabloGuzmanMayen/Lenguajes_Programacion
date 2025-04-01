@@ -9,6 +9,7 @@
 #include <string>
 #include "constantes.h"
 #include "lector_yal.h"
+#include <stack>
 
 std::vector<std::string> alfabetoGriego = {
      "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09",
@@ -63,6 +64,49 @@ std::vector<std::string> generarAlfabeto() {
     alfabeto.push_back(PUNTO_s);
 
     return alfabeto;
+}
+
+
+void validarComillas(const std::string& expr, const std::string& contexto) {
+    int count_single = std::count(expr.begin(), expr.end(), '\'');
+    int count_double = std::count(expr.begin(), expr.end(), '"');
+    if (count_single % 2 != 0) {
+        std::cerr << "Error: comillas simples desbalanceadas en: " << contexto << " => " << expr << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    if (count_double % 2 != 0) {
+        std::cerr << "Error: comillas dobles desbalanceadas en: " << contexto << " => " << expr << std::endl;
+        exit(EXIT_FAILURE);
+    }
+}
+
+void validarParentesisBalanceados(const std::vector<std::string>& caracteres) {
+    std::stack<std::string> pila;
+    for (const std::string& c : caracteres) {
+        if (c == "(") pila.push(c);
+        else if (c == ")") {
+            if (pila.empty()) {
+                std::cerr << "Error: paréntesis de cierre ')' sin apertura.\n";
+                exit(EXIT_FAILURE);
+            }
+            pila.pop();
+        }
+    }
+    if (!pila.empty()) {
+        std::cerr << "Error: paréntesis de apertura '(' sin cerrar.\n";
+        exit(EXIT_FAILURE);
+    }
+}
+
+void validarComentariosSintaxis(const std::vector<std::string>& caracteres) {
+    for (size_t i = 0; i < caracteres.size(); ++i) {
+        if (caracteres[i] == "*" && i + 1 < caracteres.size() && caracteres[i + 1] == ")") {
+            if (i == 0 || caracteres[i - 1] != "(") {
+                std::cerr << "Error: comentario mal formado, falta '(*' antes de '*)'.\n";
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
 }
 
 ReglasTokens reglas_tokens() {
@@ -173,6 +217,9 @@ ReglasTokens reglas_tokens() {
 
     delete buffer;
 
+    validarParentesisBalanceados(caracteres);
+    validarComentariosSintaxis(caracteres);
+
     
     //ahora ya hacemos nuestros tokens
 
@@ -233,6 +280,9 @@ ReglasTokens reglas_tokens() {
                 // Guardar en el mapa
 
                 std::string expresion = "";
+                
+                std::string expr = tokens[3];
+                validarComillas(expr, tokens[1]);
                 expresion = tokens[3];
 
                 char resultado[MAX_EXPR];
