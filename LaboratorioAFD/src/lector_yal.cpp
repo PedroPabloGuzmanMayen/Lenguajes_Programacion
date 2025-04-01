@@ -119,9 +119,17 @@ ReglasTokens reglas_tokens() {
 
 
     //Primero aqui vamos a quitar los comentarios
-    Buffer* buffer = nullptr;
+    Buffer* buffer = new Buffer("../slr.yal", 10);
 
-    buffer = new Buffer("../slr.yal", 10);
+    int numeroLinea = 1;
+    while (buffer->FLAG_SALIDA) {
+        std::string linea = buffer->obtenerSiguienteLinea();
+        if (!linea.empty()) {
+            buffer->validarLinea(linea, numeroLinea);  // Aquí validamos la línea
+            numeroLinea++;
+        }
+    }
+
 
     string caracter;
     while (buffer->FLAG_SALIDA) {

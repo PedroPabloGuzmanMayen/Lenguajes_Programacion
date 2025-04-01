@@ -156,6 +156,67 @@ using namespace std;
         return linea;
     }
 
+    bool Buffer::validarLinea(const string& linea, int numeroLinea) {
+        int comillas_simples = 0;
+        int comillas_dobles = 0;
+        int par_abierto = 0;
+        int par_cerrado = 0;
+
+        for (char c : linea) {
+            if (c == '\'') comillas_simples++;
+            if (c == '"') comillas_dobles++;
+            if (c == '(') par_abierto++;
+            if (c == ')') par_cerrado++;
+        }
+
+        // paracomillas desbalanceadas
+        if (comillas_simples % 2 != 0) {
+            cerr << "Error en el yal línea " << numeroLinea << ": comillas simples desbalanceadas.\n";
+            exit(1);
+        }
+
+        if (comillas_dobles % 2 != 0) {
+            cerr << "Error en el yal línea " << numeroLinea << ": comillas dobles desbalanceadas.\n";
+            exit(1);
+        }
+
+        if (par_abierto != par_cerrado) {
+            cerr << "Error en el yal línea " << numeroLinea << ": paréntesis desbalanceados.\n";
+            exit(1);
+        }
+
+        // saber ssi hay "let" con corchetes
+        if (linea.find("let") != string::npos &&
+            linea.find("[") != string::npos &&
+            linea.find("]") != string::npos) {
+
+            size_t desde = linea.find("[");
+            size_t hasta = linea.find("]");
+            string contenido = linea.substr(desde + 1, hasta - desde - 1);
+
+            // Detecta si hay rangos pegados como 'Z'a' sin operador
+            for (size_t i = 0; i + 5 < contenido.size(); i++) {
+                if (contenido[i] == '\'' &&
+                    contenido[i+2] == '\'' &&
+                    contenido[i+3] != '|' &&
+                    contenido[i+3] != '-' &&
+                    contenido[i+3] != ',' &&
+                    contenido[i+3] != ']') {
+
+                    string problema = contenido.substr(i, 5);
+                    cerr << "Error en yal en la línea " << numeroLinea << ": posible rango mal formado cerca de: " << problema << "\n";
+                    exit(1);
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+
+
+
 // int main() {
 //     int opcion;
 //     string input, filename;
