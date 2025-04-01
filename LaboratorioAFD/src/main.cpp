@@ -10,6 +10,12 @@
 #include <unordered_set>
 #include <vector>
 #include <map>
+#include "lector_yal.h"
+#include "Regla_Tokens.h"
+#include "outuput_file.h"
+#include "buffer.h"
+#include "constantes.h"
+#include "pruebaORS.h"
 
 
 bool isInFinalStates(const std::map<std::set<int>, char>& terminators, const std::set<int>& state) {
@@ -17,13 +23,21 @@ bool isInFinalStates(const std::map<std::set<int>, char>& terminators, const std
 }
 
 
-int main() {
-    // Leer expresiones y cadenas desde YAML
-    Config config = leerConfig("../expresiones.yml");
+int main(int argc, char* argv[]) {
 
-    for (const std::string& my_str : config.expresiones_regulares) {
-        std::cout << "\nProcesando expresión regular: " << my_str << std::endl;
-        std::string my_str_copy = my_str;
+    string contenido, nombreArchivo;
+
+    nombreArchivo = "Tokens.txt";
+
+    std::string  nombreArchivo_lectura = argv[1]; 
+
+    // Leer expresiones y cadenas desde YAML
+
+    ReglasTokens reglasTokens;
+    reglasTokens = reglas_tokens();
+
+        std::string valor_expresion = reglasTokens.generarExpresion();
+        std::string my_str_copy = valor_expresion;
         std::string newStr = add_concatenation(my_str_copy);
         std::cout << "Expresión con concatenación explícita: " << newStr << std::endl;
 
@@ -140,41 +154,39 @@ int main() {
         automata.depurarAFD();
         automata.generarDot("afd_visual");
         automata.generarImagen("afd_visual");
-        for (const std::string& cadena : config.cadenas) {
-            if (automata.acept_Chain(cadena)) {
-                std::cout << "La cadena '" << cadena << "' es aceptada por el AFD.\n";
-                
-            } else {
-                
-                std::cout << "La cadena '" << cadena << "' no es aceptada por el AFD.\n";
-            }
-        }
+       
 
-        std::map<char, std::string> tokensYLexemas;
-        tokensYLexemas['\x08'] = "NUMERO";
-        tokensYLexemas['\x04'] = "IGUAL";
-        tokensYLexemas['\x03'] = "VARIABLE";
-        tokensYLexemas['\x05'] = "MAS";
-        tokensYLexemas['\x06'] = "MENOS";
-        tokensYLexemas['\x07'] = "CORCHETE";
-        tokensYLexemas['\x0A'] = "BLANKSPACE";
-        tokensYLexemas['\x0B'] = "DIV";
-        tokensYLexemas['\x10'] = "TIMES";
+
+
+
+        ///aqui vamos a cargar todo
+
         
 
 
+        std::map<char, std::string> tokensYLexemas;
+       
+        
 
-        std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "// / / ass fsfd5 555/ \x0E");
+        for (const auto& regla : reglasTokens.obtenerReglas()) {
+            char identificador = regla.identificador[0];  // Obtiene el primer carácter
+            std::string token = regla.token;  // El token de la regla
+    
+            std::cout << "Token: " <<  token<< " Identificador"<< identificador<< std::endl;
+            // Insertar en el std::map
+            tokensYLexemas[identificador] = token;
+        }
+
+        
+
+        std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "ads 55    ++++------    ");
 
         for (const auto& [token, lexema] : resultadofinal) {
             std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;
         }
         //minimizamos
 
-        std::cout<<"============MINIMIZADO===========\n";
-        automata.minimizarAFD();
         
-        automata.depurarAFD();
         
         //automata.depurarAFD();
 
@@ -182,17 +194,57 @@ int main() {
         automata.generarImagen("afd_visual_min");
         
 
-        for (const std::string& cadena : config.cadenas) {
-            if (automata.acept_Chain(cadena)) {
-                std::cout << "La cadena '" << cadena << "' es aceptada por el AFD.\n";
-                
-            } else {
-                
-                std::cout << "La cadena '" << cadena << "' no es aceptada por el AFD.\n";
+        
+
+        std::cout<<"============MINIMIZADO===========\n";
+        //automata.minimizarAFD();
+        
+        //automata.depurarAFD();
+
+
+
+        /// aqui voy a escribir en el outuput
+
+        Buffer* buffer = new Buffer(nombreArchivo_lectura, 10);
+        string resultado;
+
+        while (buffer->FLAG_SALIDA) {
+            string linea = buffer->obtenerSiguienteLinea();
+            if (!linea.empty()) {
+                std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, linea);
+                string to_write = "";
+                string the_token = "";
+        
+                // Recorrer en orden inverso el vector resultadofinal
+                for (auto it = resultadofinal.rbegin(); it != resultadofinal.rend(); ++it) {
+                    const auto& [token, lexema] = *it;  // Desempaquetar el par
+                    the_token = token;
+                    string lexema_d;
+                    lexema_d = lexema;
+                    
+                    reemplazar_manual(lexema_d, PUNTO_s, ".");
+                    reemplazar_manual(lexema_d, RPARENTESIS_s, ")");
+                    reemplazar_manual(lexema_d, LPARENTESIS_s, "(");
+                    reemplazar_manual(lexema_d, TIMES_s, "*");
+                    
+                    
+                    
+
+
+                    
+
+
+                    to_write = "["+the_token+","+lexema_d+"]" + to_write;
+                    //std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;
+                    
+                }
+        
+                escribirArchivo(to_write, nombreArchivo);  // Escribe los tokens en el archivo
             }
+            
         }
         
-    }
+    
 
     return 0;
 }

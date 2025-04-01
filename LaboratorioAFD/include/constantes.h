@@ -5,9 +5,9 @@
 #define PUNTO   '\\'  // .
 #define PUNTO_s  "\\"  // .
 #define EPSILON  '\x02'  // e
-#define LPARENTESIS  '\x0A'  // (
+#define LPARENTESIS  '\x0E'  // (
 #define RPARENTESIS  '\x0B'  // )
-#define LPARENTESIS_s  "\x0A"  // (
+#define LPARENTESIS_s  "\x0E"  // (
 #define RPARENTESIS_s  "\x0B"  // )
 #define TIMES '\x0C' // *
 #define TIMES_s "\x0C" // *

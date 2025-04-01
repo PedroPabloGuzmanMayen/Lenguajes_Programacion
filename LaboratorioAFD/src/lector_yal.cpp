@@ -17,11 +17,7 @@ std::vector<std::string> alfabetoGriego = {
 };
 
 
-// std::vector<std::string> alfabetoGriego = {
-//     "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ",
-//     "λ", "μ", "ν", "ξ", "ο", "π", "ρ", "σ", "τ", "υ", 
-//     "φ", "χ", "ψ", "ω"
-// };
+
 
 std::unordered_map<std::string, std::string> var;
 
@@ -60,6 +56,11 @@ std::vector<std::string> generarAlfabeto() {
     alfabeto.push_back("\x1A");
     alfabeto.push_back("\x1D");
 
+    //PONER CONSTANTES
+    alfabeto.push_back(TIMES_s);
+    alfabeto.push_back(LPARENTESIS_s);
+    alfabeto.push_back(RPARENTESIS_s);
+
     return alfabeto;
 }
 
@@ -91,7 +92,8 @@ ReglasTokens reglas_tokens() {
     automata.agregarTransicion("q1", "e", "q2");
     automata.agregarTransicion("q2", "t", "q3"); 
 
-    std::string alfabetoCompleto = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_*?.;-|[]+():/<>'=ε\"\x7F\\\x1A\x1D";
+    std::string alfabetoCompleto = std::string("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_*?.;-|[]+():/<>'=ε\"\x7F\\\x1A\x1D") + TIMES_s + LPARENTESIS_s + RPARENTESIS_s;
+
 
     // Transiciones para todo el alfabeto
     for (char c : alfabetoCompleto) {
