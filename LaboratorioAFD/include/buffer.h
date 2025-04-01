@@ -32,6 +32,8 @@ public:
 
     string obtenerSiguienteCaracter2();
     string obtenerSiguienteLinea();
+    bool validarLinea(const string &linea, int numeroLinea);
+
 };
 
-#endif // BUFFER_H
+#endif
