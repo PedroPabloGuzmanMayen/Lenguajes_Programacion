@@ -192,6 +192,7 @@ int main(int argc, char* argv[]) {
         automata.generarImagen("afd_visual_min");
         
 
+
         
 
         std::cout<<"============MINIMIZADO===========\n";
@@ -241,6 +242,18 @@ int main(int argc, char* argv[]) {
             }
             
         }
+    
+        std::cout << "Probando un número en notación científica (3.5E-3): " 
+                << automata.acept_Chain("3%6E-3") << std::endl;
+
+        std::cout << "Probando un número decimal (3.6): " 
+                << automata.acept_Chain("36%55") << std::endl;
+
+        std::cout << "Probando un número entero (3): " 
+                << automata.acept_Chain("3") << std::endl;
+
+    
+    std::cout<<"Valor de la variable: "<<valor_expresion;    
         
     
 
