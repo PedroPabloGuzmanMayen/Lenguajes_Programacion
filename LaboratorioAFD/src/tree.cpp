@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <string>
 #include <unordered_map>
-#include "AFD.cpp"
+#include "AFD.h"
 #include <tuple>
 
 std::set<int> setUnion(std::set<int >a,std::set<int >b){
@@ -209,7 +209,7 @@ void Tree::getIdValues(Node* start) {
 
     std::vector<std::string> alfabetoGriego = {
         "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09", 
-        "\x0A", "\x0B", "\x0C",  "$"
+        "\x0A", "\x0B", "\x0C",  "$", "@", "\x10"
     };
 
     if (!start) return;

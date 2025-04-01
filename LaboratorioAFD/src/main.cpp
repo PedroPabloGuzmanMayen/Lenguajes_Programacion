@@ -5,7 +5,7 @@
 #include "shunting_yard.h"
 #include "tree.h"
 #include "node.h"
-#include "AFD.cpp"
+#include "AFD.h"
 #include "lector.h"
 #include <unordered_set>
 #include <vector>
@@ -151,18 +151,20 @@ int main() {
         }
 
         std::map<char, std::string> tokensYLexemas;
-        tokensYLexemas['$'] = "NUMERO";
+        tokensYLexemas['\x08'] = "NUMERO";
         tokensYLexemas['\x04'] = "IGUAL";
         tokensYLexemas['\x03'] = "VARIABLE";
         tokensYLexemas['\x05'] = "MAS";
         tokensYLexemas['\x06'] = "MENOS";
         tokensYLexemas['\x07'] = "CORCHETE";
-        tokensYLexemas['\x08'] = "BLANKSPACE";
-        tokensYLexemas['\x09'] = "LETRA";
+        tokensYLexemas['\x0A'] = "BLANKSPACE";
+        tokensYLexemas['\x0B'] = "DIV";
+        tokensYLexemas['\x10'] = "TIMES";
+        
 
 
 
-        std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "x1 = 1 + b - 2");
+        std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "// / / ass fsfd5 555/ \x0E");
 
         for (const auto& [token, lexema] : resultadofinal) {
             std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;

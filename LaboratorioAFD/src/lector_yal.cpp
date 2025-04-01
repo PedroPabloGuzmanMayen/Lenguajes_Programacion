@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include "AFD.cpp"
+#include "AFD.h"
 #include "buffer.cpp"
 #include "Regla_Tokens.cpp"
 #include <set>

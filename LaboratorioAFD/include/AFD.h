@@ -26,25 +26,29 @@ public:
 
     AFD(std::string estadoInicial, const std::vector<int>& estadosFinales,
         const std::vector<std::string>& alfabeto, const std::unordered_map<std::string, Estado>& estados);
-
+        
     void agregarTransicion(const std::string& estado, const std::string& simbolo, const std::string& nuevoEstado);
-    bool acept_Chain(const std::string& w);
-    void depurarAFD();
-    void generarDot(const std::string& nombreArchivo);
-    void generarImagen(const std::string& nombreArchivo);
-    void mostrarTransiciones();
-    void minimizarAFD();
-    std::vector<std::pair<std::string, std::string>> analizarCadena(
-        const std::map<std::string, char>& estadosAceptacion,
-        const std::map<char, std::string>& terminadorToken,
-        const std::string& entrada);
-    std::vector<std::string> move_AFD(const std::vector<std::string>& states, const std::string& symbol);
-    void reconstruirAFD(const std::vector<std::unordered_set<std::string>>& P);
-    std::vector<std::unordered_set<std::string>> separarEstados();
-    std::vector<std::map<std::string, std::string>>  findTokens(std::string cadena, std::map<int, char> Terminator_State, 
+
+    std::vector<std::map<std::string, std::string>> findTokens(std::string cadena, std::map<int, char> Terminator_State, 
         std::map<char, std::string> tokens );
 
-    void mostrarTerminadores();        
+        std::vector<std::string> move_AFD(const std::vector<std::string>& states, const std::string& symbol);
+
+        bool acept_Chain(const std::string& w);
+
+        std::vector<std::pair<std::string, std::string>> analizarCadena(
+            const std::map<std::string, char>& estadosAceptacion,
+            const std::map<char, std::string>& terminadorToken,
+            const std::string& entrada);
+
+            void depurarAFD();
+            void generarDot(const std::string& nombreArchivo);
+            void generarImagen(const std::string& nombreArchivo);
+            void mostrarTransiciones();
+
+            void reconstruirAFD(const std::vector<std::unordered_set<std::string>>& P);
+            std::vector<std::unordered_set<std::string>> separarEstados();
+            void minimizarAFD();
 };
 
 #endif // AFD_H
