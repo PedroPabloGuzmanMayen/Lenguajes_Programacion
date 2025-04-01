@@ -14,6 +14,7 @@ rule tokens =
   | ws        { return BLANKSPACE }               (* Cambie por una acción válida, que devuelva el token *)
   | id        { return ID }
   | number    { return NUMBER } 
+  | '.'       { return POINT }
   | '+'       { return PLUS }
   | '-'       { return MINUS }
   | '*'       { return TIMES }

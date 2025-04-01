@@ -60,6 +60,7 @@ std::vector<std::string> generarAlfabeto() {
     alfabeto.push_back(TIMES_s);
     alfabeto.push_back(LPARENTESIS_s);
     alfabeto.push_back(RPARENTESIS_s);
+    alfabeto.push_back(PUNTO_s);
 
     return alfabeto;
 }
@@ -92,7 +93,7 @@ ReglasTokens reglas_tokens() {
     automata.agregarTransicion("q1", "e", "q2");
     automata.agregarTransicion("q2", "t", "q3"); 
 
-    std::string alfabetoCompleto = std::string("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_*?.;-|[]+():/<>'=ε\"\x7F\\\x1A\x1D") + TIMES_s + LPARENTESIS_s + RPARENTESIS_s;
+    std::string alfabetoCompleto = std::string("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_*?.;-|[]+():/<>'=ε\"\x7F\\\x1A\x1D") + TIMES_s + LPARENTESIS_s + RPARENTESIS_s + PUNTO_s;
 
 
     // Transiciones para todo el alfabeto

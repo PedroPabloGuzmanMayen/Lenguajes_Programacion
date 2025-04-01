@@ -172,7 +172,7 @@ int main(int argc, char* argv[]) {
             char identificador = regla.identificador[0];  // Obtiene el primer carácter
             std::string token = regla.token;  // El token de la regla
     
-            std::cout << "Token: " <<  token<< " Identificador"<< identificador<< std::endl;
+            //std::cout << "Token: " <<  token<< " Identificador"<< identificador<< std::endl;
             // Insertar en el std::map
             tokensYLexemas[identificador] = token;
         }
@@ -181,9 +181,7 @@ int main(int argc, char* argv[]) {
 
         std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "ads 55    ++++------    ");
 
-        for (const auto& [token, lexema] : resultadofinal) {
-            std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;
-        }
+        
         //minimizamos
 
         

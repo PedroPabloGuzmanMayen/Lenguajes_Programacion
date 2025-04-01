@@ -98,7 +98,7 @@
             char symbol = entrada[i];
             //if (std::isspace(symbol) && lexema.empty()) continue;
             lexema += symbol;
-            std::cout << "\nProcesando símbolo: " << symbol << std::endl;
+            //std::cout << "\nProcesando símbolo: " << symbol << std::endl;
             std::cout << "Estados actuales: ";
             for (const auto& s : current_states) std::cout << s << " ";
             current_states = move_AFD(current_states, std::string(1, symbol));
