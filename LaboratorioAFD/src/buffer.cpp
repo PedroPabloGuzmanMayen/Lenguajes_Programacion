@@ -68,6 +68,9 @@ using namespace std;
             if (caracter == '\n') {
                 caracterSalida = " ";  // Reemplazo por espacio
             }
+            if (caracter == '\r') {
+                caracterSalida = " ";  // Reemplazo por espacio
+            }
 
             if (caracter == '\0') {
                 FLAG_SALIDA = false;
@@ -97,6 +100,9 @@ using namespace std;
             if (caracter == '.') {
                 caracterSalida = PUNTO;
 
+            }
+            if (caracter == '\r') {
+                caracterSalida = " ";  // Reemplazo por espacio
             }
             if (caracter == ')'){
                 caracterSalida = RPARENTESIS;  // Reemplazo por épsilon
