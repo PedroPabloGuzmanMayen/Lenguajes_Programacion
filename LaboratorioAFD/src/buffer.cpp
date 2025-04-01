@@ -72,6 +72,8 @@ using namespace std;
                 caracterSalida = " ";  // Reemplazo por espacio
             }
 
+            
+
             if (caracter == '\0') {
                 FLAG_SALIDA = false;
                 return "";
@@ -107,6 +109,14 @@ using namespace std;
             if (caracter == ')'){
                 caracterSalida = RPARENTESIS;  // Reemplazo por épsilon
 
+            }
+            if (caracter == '  '){
+                caracterSalida = " ";  // Reemplazo por épsilon
+
+            }
+
+            if (caracter == '\v') {
+                caracterSalida = " ";  // Reemplazo por espacio
             }
 
             if (caracter == '('){

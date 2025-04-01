@@ -182,15 +182,8 @@ int main(int argc, char* argv[]) {
         std::vector<std::pair<std::string, std::string>> resultadofinal = automata.analizarCadena(estado_terminador, tokensYLexemas, "ads 55    ++++------    ");
 
         
-        //minimizamos
-
-        
-        
-        //automata.depurarAFD();
-
-        //automata.generarDot("afd_visual_min");
-        //automata.generarImagen("afd_visual_min");
-        
+        //minimizamosma
+        automata.minimizarAFD();
 
 
         
@@ -203,7 +196,7 @@ int main(int argc, char* argv[]) {
 
 
         /// aqui voy a escribir en el outuput
-
+       
         Buffer* buffer = new Buffer(nombreArchivo_lectura, 10);
         string resultado;
 

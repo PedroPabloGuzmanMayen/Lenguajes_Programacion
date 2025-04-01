@@ -207,15 +207,7 @@
     void AFD::reconstruirAFD(const std::vector<std::unordered_set<std::string>>& P) {
         std::unordered_map<std::string, std::string> representante;
     
-        // Asignar representantes a cada conjunto de estados equivalentes
-        for (const auto& grupo : P) {
-            if (!grupo.empty()) {
-                std::string rep = *grupo.begin();
-                for (const std::string& q : grupo) {
-                    representante[q] = rep;
-                }
-            }
-        }
+        
     
         // Verificar si el estado inicial tiene un representante válido
         if (representante.find(q0) == representante.end()) {
