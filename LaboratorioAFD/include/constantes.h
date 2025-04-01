@@ -2,10 +2,10 @@
 #define CONSTANTES_H
 
 // Definición de letras griegas usando códigos Unicode
-#define PUNTO   '\x0F'  // .
-#define PUNTO_s  "\x0F"  // .
-#define EPSILON  '\x02'  // e
-#define EPSILON_s  "\x02"  // e
+#define PUNTO   '%'  // .
+#define PUNTO_s  "%"  // .
+#define EPSILON  '&'  // e
+#define EPSILON_s  "&"  // e
 #define LPARENTESIS  '\x0E'  // (
 #define RPARENTESIS  '\x0B'  // )
 #define LPARENTESIS_s  "\x0E"  // (

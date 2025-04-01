@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string>
+#include "constantes.h"
 #define MAX_VAR 100
 #define MAX_LINE 512
 #define MAX_NAME 64
@@ -185,7 +186,7 @@ void expand_internal_patterns(char* expr) {
                 j += sprintf(buffer + j, "%s(%s)*", token, token);
                 i++;
             } else if (expr[i] == '?') {
-                j += sprintf(buffer + j, "(%s|\x02)", token);
+                j += sprintf(buffer + j, "(%s|%s)", token, EPSILON_s);
                 i++;
             } else {
                 j += sprintf(buffer + j, "%s", token);
@@ -212,7 +213,7 @@ void expand_internal_patterns(char* expr) {
 
                     j = k; // Sobrescribir desde '('
                     if (op == '?') {
-                        j += sprintf(buffer + j, "(%s|\x02)", group);
+                        j += sprintf(buffer + j, "(%s|%s)", group, EPSILON_s);
                     } else if (op == '+') {
                         j += sprintf(buffer + j, "%s(%s)*", group, group);
                     }
@@ -259,7 +260,7 @@ void expand_single_expression(const char* expr, char* output) {
         char base[MAX_NAME];
         strncpy(base, expanded, len - 1);
         base[len - 1] = '\0';
-        sprintf(transformada, "(%s|\x02)", base); // aca lo estamos dejando vacio porque luego los espacios vacios nos encargamos de reemplazarlos por epsilon
+        sprintf(transformada, "(%s|%s)", base, EPSILON_s); // aca lo estamos dejando vacio porque luego los espacios vacios nos encargamos de reemplazarlos por epsilon
 
     } else {
         strcpy(transformada, expanded);
@@ -337,7 +338,7 @@ void reemplazar_manual(std::string& expresion, const std::string& buscar, const 
 
 //         // Convertir a std::string para reemplazo visual
 //         //std::string corregida = resultado; //si quieres ver el caracter descomenta esto
-//         //reemplazar_manual(corregida, "\x02", "ε"); //esto tambien descomentalo
+//         //reemplazar_manual(corregida, EPSILON_s, "ε"); //esto tambien descomentalo
 
 
 //         printf("Expresión original: %s\n", expresiones[i]);
