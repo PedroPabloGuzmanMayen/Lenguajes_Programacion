@@ -118,8 +118,12 @@ std::string ReglasTokens::generarExpresion() const {
         if (expresion == "*") {
             expresion = TIMES;
         }
+        
         else if (expresion == "(") {
             expresion = LPARENTESIS_s;
+        }
+        else if (expresion == ".") {
+            expresion = PUNTO_s;
         }
         else if (expresion == ")") {
             expresion = RPARENTESIS_s;
