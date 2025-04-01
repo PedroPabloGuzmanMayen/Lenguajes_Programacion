@@ -90,55 +90,55 @@
         const std::map<char, std::string>& terminadorToken,
         const std::string& entrada) {
         
-    std::vector<std::pair<std::string, std::string>> tokens;
-    std::string lexema;
-    size_t i = 0;
-    
-    while (i < entrada.length()) {
-        std::vector<std::string> current_states = {q0};
-        lexema.clear();
-        size_t lastAcceptPos = std::string::npos;
-        std::string lastAcceptState;
+        std::vector<std::pair<std::string, std::string>> tokens;
+        std::string lexema;
+        size_t i = 0;
         
-        // Avanzar carácter por carácter construyendo el token más largo posible
-        size_t j = i;
-        while (j < entrada.length()) {
-            lexema += entrada[j];
-            current_states = move_AFD(current_states, std::string(1, entrada[j]));
+        while (i < entrada.length()) {
+            std::vector<std::string> current_states = {q0};
+            lexema.clear();
+            size_t lastAcceptPos = std::string::npos;
+            std::string lastAcceptState;
             
-            // Si no hay estados válidos, terminar este intento
-            if (current_states.empty()) {
-                break;
-            }
-            
-            // Verificar si llegamos a un estado de aceptación
-            for (const std::string& state : current_states) {
-                if (estadosAceptacion.find(state) != estadosAceptacion.end()) {
-                    lastAcceptPos = j;
-                    lastAcceptState = state;
+            // Avanzar carácter por carácter construyendo el token más largo posible
+            size_t j = i;
+            while (j < entrada.length()) {
+                lexema += entrada[j];
+                current_states = move_AFD(current_states, std::string(1, entrada[j]));
+                
+                // Si no hay estados válidos, terminar este intento
+                if (current_states.empty()) {
                     break;
                 }
+                
+                // Verificar si llegamos a un estado de aceptación
+                for (const std::string& state : current_states) {
+                    if (estadosAceptacion.find(state) != estadosAceptacion.end()) {
+                        lastAcceptPos = j;
+                        lastAcceptState = state;
+                        break;
+                    }
+                }
+                
+                j++;
             }
             
-            j++;
+            // Si encontramos un token válido
+            if (lastAcceptPos != std::string::npos) {
+                // Extraer el lexema que conforma el token
+                std::string tokenLexema = entrada.substr(i, lastAcceptPos - i + 1);
+                char terminador = estadosAceptacion.at(lastAcceptState);
+                std::string tipoToken = terminadorToken.at(terminador);
+                
+                tokens.emplace_back(tipoToken, tokenLexema);
+                i = lastAcceptPos + 1;
+            } else {
+                std::cerr << "Error: No se pudo reconocer el token en la posición " << i << "siendo: " <<lexema <<std::endl;
+                i++;
+            }
         }
         
-        // Si encontramos un token válido
-        if (lastAcceptPos != std::string::npos) {
-            // Extraer el lexema que conforma el token
-            std::string tokenLexema = entrada.substr(i, lastAcceptPos - i + 1);
-            char terminador = estadosAceptacion.at(lastAcceptState);
-            std::string tipoToken = terminadorToken.at(terminador);
-            
-            tokens.emplace_back(tipoToken, tokenLexema);
-            i = lastAcceptPos + 1;
-        } else {
-            // No se encontró ningún token válido, avanzar un carácter e intentar de nuevo
-            i++;
-        }
-    }
-    
-    return tokens;
+        return tokens;
 }
 
 

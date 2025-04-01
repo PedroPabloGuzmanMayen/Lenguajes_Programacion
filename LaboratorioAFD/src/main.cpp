@@ -152,8 +152,8 @@ int main(int argc, char* argv[]) {
         }
         
         automata.depurarAFD();
-        automata.generarDot("afd_visual");
-        automata.generarImagen("afd_visual");
+        //automata.generarDot("afd_visual");
+        //automata.generarImagen("afd_visual");
        
 
 
@@ -188,8 +188,8 @@ int main(int argc, char* argv[]) {
         
         //automata.depurarAFD();
 
-        automata.generarDot("afd_visual_min");
-        automata.generarImagen("afd_visual_min");
+        //automata.generarDot("afd_visual_min");
+        //automata.generarImagen("afd_visual_min");
         
 
 
@@ -243,19 +243,7 @@ int main(int argc, char* argv[]) {
             
         }
     
-        std::cout << "Probando un número en notación científica (3.5E-3): " 
-                << automata.acept_Chain("3%6E-3") << std::endl;
-
-        std::cout << "Probando un número decimal (3.6): " 
-                << automata.acept_Chain("36%55") << std::endl;
-
-        std::cout << "Probando un número entero (3): " 
-                << automata.acept_Chain("3") << std::endl;
-
-    
-    std::cout<<"Valor de la variable: "<<valor_expresion;    
-        
-    
+      
 
     return 0;
 }
