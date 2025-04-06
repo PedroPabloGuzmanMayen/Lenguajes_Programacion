@@ -30,11 +30,12 @@ int main(int argc, char* argv[]) {
     nombreArchivo = "Tokens.txt";
 
     std::string  nombreArchivo_lectura = argv[1]; 
+    std::string  nombreArchivo_yal = argv[2]; 
 
     // Leer expresiones y cadenas desde YAML
 
     ReglasTokens reglasTokens;
-    reglasTokens = reglas_tokens();
+    reglasTokens = reglas_tokens(nombreArchivo_yal);
 
         std::string valor_expresion = reglasTokens.generarExpresion();
         std::string my_str_copy = valor_expresion;

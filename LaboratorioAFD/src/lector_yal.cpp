@@ -109,7 +109,7 @@ void validarComentariosSintaxis(const std::vector<std::string>& caracteres) {
     }
 }
 
-ReglasTokens reglas_tokens() {
+ReglasTokens reglas_tokens(const std::string& nombreArchivo) {
     
     ReglasTokens reglasTokens;
     
@@ -168,7 +168,7 @@ ReglasTokens reglas_tokens() {
     //Primero aqui vamos a quitar los comentarios
     Buffer* buffer = nullptr;
 
-    buffer = new Buffer("../slr.yal", 10);
+    buffer = new Buffer(nombreArchivo, 10);
 
     string caracter;
     while (buffer->FLAG_SALIDA) {
