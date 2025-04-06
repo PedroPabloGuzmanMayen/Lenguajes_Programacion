@@ -133,7 +133,7 @@
                 tokens.emplace_back(tipoToken, tokenLexema);
                 i = lastAcceptPos + 1;
             } else {
-                std::string tokenLexema(1, entrada[j]);
+                std::string tokenLexema = entrada.substr(i, lastAcceptPos - i + 1);
                std::cerr << " ⚠️  Error: No se pudo reconocer el token en la posición " << i << " lexema: "<< entrada[j]<<"\n"<<std::endl;
                tokens.emplace_back("Error", tokenLexema);
                i++;
