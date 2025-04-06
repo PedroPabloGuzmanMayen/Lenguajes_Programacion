@@ -7,7 +7,7 @@
 #include <string>
 #include "Regla_Tokens.h"  // Asegúrate de que este esté incluido antes de usar ReglasTokens
 // Declaración de la función que genera las reglas de tokens
-ReglasTokens reglas_tokens();   // Ahora debería funcionar correctamente
+ReglasTokens reglas_tokens(const std::string& nombreArchivo);
 
 // Declaración de las variables globales
 extern std::unordered_map<std::string, std::string> var;
