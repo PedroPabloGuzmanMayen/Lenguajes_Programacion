@@ -226,7 +226,7 @@ int main(int argc, char* argv[]) {
                     
 
 
-                    to_write = "["+the_token+","+lexema_d+"]" + to_write;
+                    to_write = "["+the_token+","+lexema_d+"]"+"\n" + to_write;
                     //std::cout << "Token: " << token << ", Lexema: " << lexema << std::endl;
                     
                 }
