@@ -345,6 +345,9 @@ ReglasTokens reglas_tokens(const std::string& nombreArchivo) {
                     if (valor.front() == '\'' && valor.back() == '\'') {
                         valor = valor.substr(1, valor.size() - 2);  // Elimina las comillas
                     }
+                    else if (valor.front() == '\"' && valor.back() == '\"') {
+                        valor = valor.substr(1, valor.size() - 2);
+                    }
                     reglas[valor] = tokens[3];
 
                     std::string expresion_regular = var[valor];
