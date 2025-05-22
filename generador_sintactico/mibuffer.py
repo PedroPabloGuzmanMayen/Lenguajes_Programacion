@@ -41,21 +41,23 @@ class BufferHandler:
         return self.lexemas
 
 
-# if __name__ == "__main__":
-#     if len(sys.argv) != 2:
-#         print("Uso: python buffer.py archivo.yalp")
-#         sys.exit(1)
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Uso: python buffer.py archivo.yalp")
+        sys.exit(1)
 
-#     archivo_yalp = sys.argv[1]
+    archivo_yalp = sys.argv[1]
 
-#     try:
-#         with open(archivo_yalp, "r", encoding="utf-8") as f:
-#             contenido = f.read()
-#     except FileNotFoundError:
-#         print(f"Archivo no encontrado: {archivo_yalp}")
-#         sys.exit(1)
+    try:
+        with open(archivo_yalp, "r", encoding="utf-8") as f:
+            contenido = f.read()
+    except FileNotFoundError:
+        print(f"Archivo no encontrado: {archivo_yalp}")
+        sys.exit(1)
 
-#     manejador = BufferHandler(tamano_buffer=10)
-#     resultado = manejador.ejecutar(contenido)
+    manejador = BufferHandler(tamano_buffer=10)
+    resultado = manejador.ejecutar(contenido)
 
-#     print(resultado)
+
+    for n in resultado:
+        print(n)
