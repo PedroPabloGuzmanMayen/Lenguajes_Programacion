@@ -16,8 +16,51 @@ class Lector_Gramar:
     self.contenido = manejador.ejecutar(contenido)
 
 
+  def es_nombre_produccion(self, token):
+     return token.endswith(':') and not token.startswith('%') and token != 'IGNORE'
   
+  def verificar_producciones(self, tokens):
+    dentro_produccion = False
+    ignorando_comentario = False
+    encontrado_primera_produccion = False
 
+    i = 0
+    while i < len(tokens):
+        token = tokens[i]
+        if ignorando_comentario:
+            if '*/' in token:
+                ignorando_comentario = False
+            i += 1
+            continue
+        elif '/*' in token:
+            if '*/' not in token:
+                ignorando_comentario = True
+            i += 1
+            continue
+
+        if self.es_nombre_produccion(token):
+            if not encontrado_primera_produccion:
+                encontrado_primera_produccion = True
+
+            if dentro_produccion:
+                print(f"❌ Error: producción anterior no termina con ';' antes de '{token}' en la posición {i}")
+                exit(1)
+                return
+            dentro_produccion = True
+
+        elif token == ';':
+            if dentro_produccion:
+                dentro_produccion = False
+
+        i += 1
+
+    if dentro_produccion:
+        print("❌ Error: la última producción no termina con ';'")
+        exit(1)
+    elif not encontrado_primera_produccion:
+        print("ℹ️ No se encontró ninguna producción que verificar.")
+    else:
+        pass
   def alfabeto_generator(self):
     alfabeto = []
     alfabeto.extend([chr(c) for c in range(ord('a'), ord('z') + 1)])
@@ -30,6 +73,25 @@ class Lector_Gramar:
     return alfabeto
 
 
+  def verificar_comentarios(self, tokens):
+    dentro_comentario = False
+    for i, token in enumerate(tokens):
+        if '/*' in token and '*/' in token:
+            continue
+        elif '/*' in token:
+            if dentro_comentario:
+                print(f" ❌ Error: comentario anidado sin cerrar previamente en token '{tokens[i-1]} {token} {tokens[i+1]}' (posición {i})")
+                exit(1)
+            dentro_comentario = True
+        elif '*/' in token:
+            if not dentro_comentario:
+                print(f" ❌ Error: comentario cerrado sin haberse abierto en token '{tokens[i-1]} {token} {tokens[i+1]}' (posición {i})")
+                exit(1)
+            dentro_comentario = False
+
+    if dentro_comentario:
+        print(" ❌ Error: comentario abierto sin cerrar al final del archivo.")
+        exit(1)
 
   def parser_grammar(self):
     alfabeto = self.alfabeto_generator()
@@ -76,6 +138,8 @@ class Lector_Gramar:
     
 
     print(tokens)
+    self.verificar_comentarios(tokens)
+    self.verificar_producciones(tokens)
 
 
     i = 0
@@ -89,9 +153,9 @@ class Lector_Gramar:
       
 
       # Saltar comentarios: /* ... */
-      if tokens[i] == '/*':
+      if tokens[i] == '/*' or '/*' in tokens[i]:
           i += 1
-          while i < len(tokens) and tokens[i] != '*/':
+          while i < len(tokens) and tokens[i] != '*/' and '*/' not in tokens[i]:
               i += 1
           i += 1  # Saltar el '*/'
           continue
@@ -101,19 +165,25 @@ class Lector_Gramar:
           i += 1
           while i < len(tokens):
               t = tokens[i]
-
-
-              if t == '/*':
+              if '/*' in t and '*/' in t:
+                 i += 1
+                 continue
+              
+              if t == '/*' or '/*' in t:
                   i += 1
-                  while i < len(tokens) and tokens[i] != '*/':
+                  while i < len(tokens) and tokens[i] != '*/' and '*/' not in tokens[i]:
                       i += 1
                   i += 1  # Saltar '*/'
                   continue
+              
+              
 
               if t == '%token' or ':' in t or t == 'IGNORE':
                   break
               
-
+              if not t.isupper():
+                 print(f"El token no esta en mayuscula {t}")
+                 exit(1)
               terminales.append(t)
               i += 1
           continue
@@ -123,38 +193,51 @@ class Lector_Gramar:
         i += 1
         while i < len(tokens):
           t = tokens[i]
-          if t == '/*':
+          if t == '/*' or '/*' in t:
               i += 1
-              while i < len(tokens) and tokens[i] != '*/':
+              while i < len(tokens) and tokens[i] != '*/'  and '*/' not in tokens[i]:
                   i += 1
               i += 1  # Saltar '*/'
               continue
 
           if t == '%token' or ':' in t or t == 'IGNORE':
               break
+          if not t.isupper():
+            print(f"El token no esta en mayuscula {t}")
+            exit(1)
           ignorados.append(t)
           i += 1
         continue
       
       #si es una produccion
       if ':' in tokens[i]:
-        nombre = tokens[i].replace(":", "")  # quitar el ":" del nombre
+        nombre = tokens[i].replace(":", "")
+
+        if not nombre.islower():
+          print(f"Las producciones deben ser en minusculas '{nombre}'")
+          exit(1)
         no_terminales.append(nombre)
         i += 1
         actual = []
 
         while i < len(tokens):
           t = tokens[i]
-          if t == '/*':
+          if t == '/*' or '/*' in t:
               i += 1
-              while i < len(tokens) and tokens[i] != '*/':
+              while i < len(tokens) and tokens[i] != '*/'  and '*/' not in tokens[i]:
                   i += 1
               i += 1  # Saltar '*/'
               continue
 
-          if t == ';':
+          if t == ';' or ';' in t:
+              
+              if ';' in t:
+                 
+                 nueva = t.replace(";", "")
+                 if nueva != "":
+                    actual.append(nueva)
               if actual:
-                  producciones.setdefault(nombre, []).append(tuple(actual))
+                producciones.setdefault(nombre, []).append(tuple(actual))
               break
           if t == '|':
                 producciones.setdefault(nombre, []).append(tuple(actual))
