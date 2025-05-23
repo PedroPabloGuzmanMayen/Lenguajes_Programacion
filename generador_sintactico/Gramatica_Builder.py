@@ -10,6 +10,23 @@ class Gramatica_Builder:
         self.follow = {nt: set() for nt in self.non_terminals}
         self.compute_first()
         self.compute_follow("S'")
+        self.start_symbol = "S'"
+        self.symbols =self.terminals.union(self.non_terminals)
+
+    def get_grammar(self):
+        return self.grammar
+    
+    def get_start_symbol(self):
+        return self.start_symbol
+    
+    def get_terminals(self):
+        return self.terminals
+    
+    def get_non_terminals(self):
+        return self.non_terminals
+    
+    def get_symbols(self):
+        return self.symbols
 
     def _extract_terminals(self):
         terms = set()
