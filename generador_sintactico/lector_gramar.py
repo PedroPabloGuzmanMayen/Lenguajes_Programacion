@@ -4,7 +4,7 @@ from mibuffer import *
 
 class Lector_Gramar:
   def __init__(self, path_yalp):
-    self.gramar = {}
+
     self.contenido = []
     try: 
         with open(path_yalp, "r", encoding="utf-8") as f:
@@ -137,7 +137,7 @@ class Lector_Gramar:
     tokens.append(cadena_actual)
     
 
-    print(tokens)
+    # print(tokens)
     self.verificar_comentarios(tokens)
     self.verificar_producciones(tokens)
 
@@ -152,7 +152,7 @@ class Lector_Gramar:
     while i < len(tokens):
       
 
-      # Saltar comentarios: /* ... */
+      
       if tokens[i] == '/*' or '/*' in tokens[i]:
           i += 1
           while i < len(tokens) and tokens[i] != '*/' and '*/' not in tokens[i]:
