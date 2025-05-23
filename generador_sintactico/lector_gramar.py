@@ -1,6 +1,7 @@
 from AFD_normal import *
 import sys
 from mibuffer import *
+from Gramatica_Builder import *
 
 class Lector_Gramar:
   def __init__(self, path_yalp):
@@ -250,18 +251,25 @@ class Lector_Gramar:
         continue     
       
       i += 1
+    simbolo_inicial = next(iter(producciones))
 
-    print("Terminales:", terminales)
-    print("Terminales Ignorados:", ignorados)
-    print("No Terminales: ", no_terminales)
-    print("Producciones: ", producciones)
+    return simbolo_inicial, terminales, ignorados, no_terminales, producciones
 
        
        
 
 
   def build_grammar(self):
-    pass
+    simbolo_inicial, terminales, ignorados, no_terminales, producciones = self.parser_grammar()
+    no_terminales+= ["S'"]
+    producciones["S'"] = [(simbolo_inicial,)]
+    ff = Gramatica_Builder(
+                            producciones=producciones,
+                            no_terminales=no_terminales,
+                            terminales=terminales
+
+                            )
+    return ff
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -271,4 +279,5 @@ if __name__ == "__main__":
     archivo_yalp = sys.argv[1]
 
     lector = Lector_Gramar(archivo_yalp)
-    lector.parser_grammar()
+    gramatica = lector.build_grammar()
+    gramatica.print_sets()
