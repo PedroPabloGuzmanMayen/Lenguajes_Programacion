@@ -126,18 +126,26 @@ class Gramatica_Builder:
             symbols = sorted(list(self.follow[nt]))
             print(f"FOLLOW({nt}) = {{ {', '.join(symbols)} }}")
 
-# if __name__ == "__main__":
-#     ff = Gramatica_Builder(producciones=
-#                            {
-#                             "S'": [("expression",)],
-#                             'expression': [('expression', 'PLUS', 'term'), ('term',)], 
-#                             'term': [('term', 'TIMES', 'factor'), ('factor',)], 
-#                             'factor': [('LPAREN', 'expression', 'RPAREN'), ('ID',)]
-#                             },
-#                             no_terminales=['expression', 'term', 'factor', "S'"],
-#                             terminales=['ID', 'PLUS', 'TIMES', 'LPAREN', 'RPAREN'],
+    def list_and_enum_productions(self):
+        pass
+
+if __name__ == "__main__":
+    ff = Gramatica_Builder(producciones=
+                           {
+                            "S'": [("expression",)],
+                            'expression': [('expression', 'PLUS', 'term'), ('term',)], 
+                            'term': [('term', 'TIMES', 'factor'), ('factor',)], 
+                            'factor': [('LPAREN', 'expression', 'RPAREN'), ('ID',)]
+                            },
+                            no_terminales=['expression', 'term', 'factor', "S'"],
+                            terminales=['ID', 'PLUS', 'TIMES', 'LPAREN', 'RPAREN'],
                             
-#                            )
-#     ff.print_grammar()
-#     ff.print_sets()
+                           )
+    ff.get_grammar()
+    
+    print(ff.grammar)
+    for symbol in ff.non_terminals:
+        print(symbol)
+
+    print('S' in ff.non_terminals)
    

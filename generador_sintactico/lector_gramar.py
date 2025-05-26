@@ -273,13 +273,14 @@ class Lector_Gramar:
 
 # Para ejecutarlo vaya a generador_sintactico y ejecute:
 # python lector_gramar.py ./archivos_yalp/slr-1.yalp  el archivo yalp puede probar con todos los que estan
-# if __name__ == "__main__":
-#     if len(sys.argv) != 2:
-#         print("Uso: python buffer.py archivo.yalp")
-#         sys.exit(1)
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Uso: python buffer.py archivo.yalp")
+        sys.exit(1)
 
-#     archivo_yalp = sys.argv[1]
+    archivo_yalp = sys.argv[1]
 
-#     lector = Lector_Gramar(archivo_yalp)
-#     gramatica = lector.build_grammar()
-#     gramatica.print_sets()
+    lector = Lector_Gramar(archivo_yalp)
+    gramatica = lector.build_grammar()
+    gramatica.print_sets()
+    print(gramatica.grammar)

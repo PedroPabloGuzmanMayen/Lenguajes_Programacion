@@ -173,38 +173,48 @@ class LR0_Automata:
 
 
 # # Ejemplo de uso:
-# if __name__ == "__main__":
-#     class GrammarBuilder:
-#         def __init__(self):
+if __name__ == "__main__":
+     class GrammarBuilder:
+        def __init__(self):
             
-#             self.grammar = {
-#                 "S'": [("E",)],
-#                 "E": [("T", "+", "E"), ("T",)],
-#                 "T": [("int", "*", "T"), ("int",),("(", "E", ")")]
-#             }
-#             self.start_symbol = "S'"
-#             self.terminals = {"+", "*", "(", ")", "int"}
-#             self.non_terminals = {"S'", "E", "T"}
-#             self.symbols = self.terminals.union(self.non_terminals)
+            self.grammar = {
+                "S'": [("E",)],
+                "E": [("E", "+", "T"), ("T",)],
+                "T": [("T", "*", "F"), ("F",)],
+                "F": [("(", "E", ")"), ("int",)]
+            }
+            self.start_symbol = "S'"
+            self.terminals = {"+", "*", "(", ")", "int"}
+            self.non_terminals = {"S'", "E", "T", "F"}
+            self.symbols = self.terminals.union(self.non_terminals)
         
-#         def get_grammar(self):
-#             return self.grammar
+        def get_grammar(self):
+            return self.grammar
+                 
+        def get_start_symbol(self):
+            return self.start_symbol
         
-#         def get_start_symbol(self):
-#             return self.start_symbol
+        def get_terminals(self):
+            return self.terminals
+             
+        def get_non_terminals(self):
+            return self.non_terminals
         
-#         def get_terminals(self):
-#             return self.terminals
-        
-#         def get_non_terminals(self):
-#             return self.non_terminals
-        
-#         def get_symbols(self):
-#             return self.symbols
+        def get_symbols(self):
+            return self.symbols
     
 #     # Crear la gramática y el autómata
-#     grammar_builder = GrammarBuilder()
-#     automaton = LR0_Automata(grammar_builder)
+     grammar_builder = GrammarBuilder()
+     automaton = LR0_Automata(grammar_builder)
     
 #     # Imprimir el autómata
-#     automaton.print_automaton()
+     automaton.print_automaton()
+     print(len(automaton.states))
+
+     print(automaton.transitions)
+
+     for state in automaton.transitions:
+         for symbol in automaton.transitions[state]:
+             print(state, symbol)
+
+     print(automaton.states)
