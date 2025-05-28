@@ -12,17 +12,41 @@ class ParsingTable:
         
     
     def construirTablaSLR(self):
-        
-        for state in self.automata.states:
-            pass
+        self.construirGoto()
+        self.construirAction() #Hacemos la contrucción de las 2 tablas
 
     def contruirAction(self):
-        pass
+        state_counter = 0
+        fue_encontrado = False #Esta flag nos ayuda a determinar si la producción inicial fue encontrada
+        for state in self.automata.states:
+            for item in state:
+                if item[0] == self.grammar.start_symbol and item[2] == 1: #Es la producción incial, lo agregamos como estado de aceptación
+                    self.action_table[state_counter]['$'] = ['accept']
+                else:
+                    posicion_token = item[2] # Guardamos la posición del token
+                    if posicion_token >= len(item[1]): #Vemos que sucede si la posición está fuera de los límites, si se da el caso aplica el caso no terminal antes de un punto (posiblemente)
+                        if item[1][-1] in self.grammar.non_terminals:
+                            
+                            pass
+                    else:
+                        if item[1][posicion_token] in self.grammar.terminals: #Verficar si en la posición del token hay un terminal
+                            elemento_en_comun = list(self.grammar.terminals & set(item[1])) #Guardamos el elemento en común que tienen
+                            if elemento_en_comun[0] in self.automata.transitions[state_counter]:
+                                self.action_table[state_counter][elemento_en_comun[0]] = ['shift', self.automata.transitions[state_counter][elemento_en_comun[0]] ]
+                        #También verificar si aplica para el caso #2
+
+            state_counter += 1 # Aumentamos la numeración de lo estados
     def construirGoto(self):
         for state in self.automata.transitions: #Verificar todos los estados
             for nt in self.grammar.non_terminals: #Verificar todos los no terminales
                 if nt in self.automata.transitions[state]: #Si el no terminal tiene una transición en el estado actual
                     self.goto_table[state][nt] = self.automata.transitions[state][nt] # Agregarlo a la tabla goto
+    def encontrarShifts(self): #Esta función nos ayuda a encontrar producciones que generan operaciones shift
+        for state in self.automata.states: #Recorrer todos los objetos en el array
+            for item in state: #Recorrer todos los ítems
+                pass
+    def encontrarReduce(self): #Nos ayuda a encontrar produccions que generan operaciones 
+        pass
                 
             
         
@@ -71,4 +95,7 @@ if __name__ == "__main__":
      print(automaton.transitions)
      slrtable = ParsingTable(automaton, grammar_builder)
      slrtable.construirGoto()
-     print("Tabla goto: ", slrtable.goto_table)
+     slrtable.contruirAction()
+     #print("Tabla goto: ", slrtable.goto_table)
+     print("Action: ", slrtable.action_table)
+     
