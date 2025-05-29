@@ -211,10 +211,17 @@ if __name__ == "__main__":
      automaton.print_automaton()
      print(len(automaton.states))
 
+     
+
+     print(automaton.states[8])
+
+     for element in automaton.states[8]:
+         print(element)
+         print(len(element[1]))
      print(automaton.transitions)
 
-     for state in automaton.transitions:
-         for symbol in automaton.transitions[state]:
-             print(state, symbol)
+     print('int' in automaton.transitions[0])
 
-     print(automaton.states)
+   
+
+     print(automaton.goto({3}, '('))
