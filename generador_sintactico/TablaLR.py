@@ -18,6 +18,8 @@ class ParsingTable:
     def contruirAction(self):
         copia = [state.copy() for state in self.automata.states] #Copiamos la tabla de estados 
         self.encontrarShifts(copia)
+        self.encontrarReduceYAccept(copia)
+   
         
     def construirGoto(self):
         for state in self.automata.transitions: #Verificar todos los estados
@@ -30,19 +32,29 @@ class ParsingTable:
             items_a_eliminar = [] #Aquí almacenamos los ítems que vamos a eliminar
             for item in state: #Recorrer todos los ítems
                 posicion_token = item[2] # Guardamos la posición del token
-                if posicion_token >= len(item[1]): #Vemos que sucede si la posición está fuera de los límites, si se da el caso aplica el caso no terminal antes de un punto (posiblemente)
+                if posicion_token >= len(item[1]): #Si la posición del punto esta fuera de los límtes, omitimos el caso
                     continue
                 else:
                     if item[1][posicion_token] in self.grammar.terminals: #Verficar si en la posición del token hay un terminal
-                        terminal = item[1][posicion_token] #Guardamos el elemento en común que tienen
+                        terminal = item[1][posicion_token] #Guardamos el terminal que encontramos
                         if terminal in self.automata.transitions[state_counter]:
                             self.action_table[state_counter][terminal] = ['shift', self.automata.transitions[state_counter][terminal] ]
                             items_a_eliminar.append(item)
             for item in items_a_eliminar:
                 state.discard(item)
             state_counter += 1
-    def encontrarReduce(self): #Nos ayuda a encontrar produccions que generan operaciones 
-        pass
+    def encontrarReduceYAccept(self, estados): #Nos ayuda a encontrar reduce y accepts
+        state_counter = 0
+        for state in estados:
+            for item in state:
+                posicion_token = item[2]
+                if item[0] == "S'" and item[2] == 1:#Primer caso: Hallamos el caso de aceptación
+                    self.action_table[state_counter]['$'] = ['accept']
+                elif posicion_token >= len(item[1]):  # El punto está al final
+                # Para reduce, usamos FOLLOW del lado izquierdo de la producción
+                    for terminal in self.grammar.follow[item[0]]:
+                        self.action_table[state_counter][terminal] = ['reduce', (item[0], item[1])]
+            state_counter += 1
                 
             
         
@@ -54,42 +66,23 @@ class ParsingTable:
 #Ejemplo de uso
 
 if __name__ == "__main__":
-     class GrammarBuilder:
-        def __init__(self):
-            
-            self.grammar = {
-                "S'": [("E",)],
-                "E": [("E", "+", "T"), ("T",)],
-                "T": [("T", "*", "F"), ("F",)],
-                "F": [("(", "E", ")"), ("int",)]
-            }
-            self.start_symbol = "S'"
-            self.terminals = {"+", "*", "(", ")", "int"}
-            self.non_terminals = {"S'", "E", "T", "F"}
-            self.symbols = self.terminals.union(self.non_terminals)
-        
-        def get_grammar(self):
-            return self.grammar
-                 
-        def get_start_symbol(self):
-            return self.start_symbol
-        
-        def get_terminals(self):
-            return self.terminals
-             
-        def get_non_terminals(self):
-            return self.non_terminals
-        
-        def get_symbols(self):
-            return self.symbols
+     
     
 #     # Crear la gramática y el autómata
-     grammar_builder = GrammarBuilder()
-     automaton = LR0_Automata(grammar_builder)
+     gramatica = Gramatica_Builder(
+        producciones={
+        "S'": [("E",)],
+        "E": [("E", "+", "T"), ("T",)],
+        "T": [("T", "*", "F"), ("F",)],
+        "F": [("(", "E", ")"), ("int",)]
+        },
+        no_terminales=["S'", "E", "T", "F"],
+        terminales=["+", "*", "(", ")", "int"]
+    )
+     automaton = LR0_Automata(gramatica)
 
      automaton.print_automaton()
-     print(automaton.transitions)
-     slrtable = ParsingTable(automaton, grammar_builder)
+     slrtable = ParsingTable(automaton, gramatica)
      slrtable.construirGoto()
      slrtable.contruirAction()
      #print("Tabla goto: ", slrtable.goto_table)
