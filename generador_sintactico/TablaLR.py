@@ -79,12 +79,12 @@ if __name__ == "__main__":
         no_terminales=["S'", "E", "T", "F"],
         terminales=["+", "*", "(", ")", "int"]
     )
-     automaton = LR0_Automata(gramatica)
+     automaton = LR0_Automata(gramatica) #Hacer un autómata en base a la gramática
 
      automaton.print_automaton()
-     slrtable = ParsingTable(automaton, gramatica)
-     slrtable.construirGoto()
-     slrtable.contruirAction()
-     #print("Tabla goto: ", slrtable.goto_table)
+     slrtable = ParsingTable(automaton, gramatica) #Crear la tabla pasando como argumentos la tabla y la gramática
+     slrtable.construirGoto() #Usar la función para construir la tabala goto
+     slrtable.contruirAction() #Usar la función para construir la tabla action
+     print("Tabla goto: ", slrtable.goto_table)
      print("Action: ", slrtable.action_table)
      
