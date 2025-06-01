@@ -80,6 +80,51 @@ class ParsingTable:
             if not self.goto_table[state]:
                 print("  (vacío)")
         
+    def parse(self, input_tokens):
+        stack = [0]
+        idx = 0
+
+        print("\n== Proceso de Parsing ==")
+        print(f"{'Stack':<30} {'Entrada':<30} {'Acción'}")
+
+        while True:
+            state = stack[-1]
+            token = input_tokens[idx] if idx < len(input_tokens) else '$'
+
+            while True:  # ciclo para aplicar múltiples reducciones antes de un shift
+                action = self.action_table.get(state, {}).get(token, None)
+                entrada_restante = ' '.join(input_tokens[idx:])
+                pila_actual = ' '.join(map(str, stack))
+                accion_str = "Error" if not action else f"{action[0]} {action[1] if len(action) > 1 else ''}"
+                print(f"{pila_actual:<30} {entrada_restante:<30} {accion_str}")
+                print(f"DEBUG - Acción obtenida: {action}")
+
+                if action is None:
+                    print(" Error de sintaxis.")
+                    return False
+
+                if action[0] == "shift":
+                    stack.append(token)
+                    stack.append(action[1])
+                    idx += 1
+                    break  # salimos del ciclo interno y continuamos con el siguiente token
+                elif action[0] == "reduce":
+                    lhs, rhs = action[1]
+                    if rhs != ('ε',):
+                        for _ in range(len(rhs) * 2):
+                            stack.pop()
+                    top_state = stack[-1]
+                    stack.append(lhs)
+                    goto_state = self.goto_table.get(top_state, {}).get(lhs)
+                    if goto_state is None:
+                        print(f"Error: no hay transición GOTO desde estado {top_state} con símbolo {lhs}")
+                        return False
+                    stack.append(goto_state)
+                    state = goto_state  # importante: actualizar `state` después de reducción
+                    # y seguimos en el ciclo interno sin avanzar `idx`
+                elif action[0] == "accept":
+                    print(" Cadena aceptada correctamente. 😁👍")
+                    return True
 
 #Ejemplo de uso
 
