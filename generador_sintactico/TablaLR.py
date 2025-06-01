@@ -15,7 +15,7 @@ class ParsingTable:
         self.construirGoto()
         self.construirAction() #Hacemos la contrucción de las 2 tablas
 
-    def contruirAction(self):
+    def construirAction(self):
         copia = [state.copy() for state in self.automata.states] #Copiamos la tabla de estados 
         self.encontrarShifts(copia)
         self.encontrarReduceYAccept(copia)
@@ -55,13 +55,31 @@ class ParsingTable:
                     for terminal in self.grammar.follow[item[0]]:
                         self.action_table[state_counter][terminal] = ['reduce', (item[0], item[1])]
             state_counter += 1
-                
-            
-        
-    def parse(self, input_tokens):
-        
-        pass
 
+    def print_tables(self):
+        print("\n=== ACTION TABLE ===")
+        for state in sorted(self.action_table.keys()):
+            print(f"Estado {state}:")
+            for symbol, action in self.action_table[state].items():
+                if action[0] == "shift":
+                    print(f"  {symbol} -> shift {action[1]}")
+                elif action[0] == "reduce":
+                    lhs, rhs = action[1]
+                    rhs_str = ' '.join(rhs)
+                    print(f"  {symbol} -> reduce {lhs} → {rhs_str}")
+                elif action[0] == "accept":
+                    print(f"  {symbol} -> accept")
+            if not self.action_table[state]:
+                print("  (vacío)")
+
+        print("\n=== GOTO TABLE ===")
+        for state in sorted(self.goto_table.keys()):
+            print(f"Estado {state}:")
+            for symbol, target in self.goto_table[state].items():
+                print(f"  {symbol} -> {target}")
+            if not self.goto_table[state]:
+                print("  (vacío)")
+        
 
 #Ejemplo de uso
 
@@ -84,7 +102,7 @@ if __name__ == "__main__":
      automaton.print_automaton()
      slrtable = ParsingTable(automaton, gramatica) #Crear la tabla pasando como argumentos la tabla y la gramática
      slrtable.construirGoto() #Usar la función para construir la tabala goto
-     slrtable.contruirAction() #Usar la función para construir la tabla action
+     slrtable.construirAction() #Usar la función para construir la tabla action
      print("Tabla goto: ", slrtable.goto_table)
      print("Action: ", slrtable.action_table)
      
