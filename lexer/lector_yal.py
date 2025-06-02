@@ -170,7 +170,7 @@ class Lector_Yal:
 
             # Asegurar que el siguiente token sea '='
             if i >= len(tokens) or tokens[i] != '=':
-                print(f"Se esperaba '=' después del nombre {nombre}")
+                print(f"❌ Error: Se esperaba '=' después del nombre {nombre}")
                 exit(1)
             i += 1
 
@@ -245,7 +245,8 @@ class Lector_Yal:
                       i += 1
                   
                   if nivel_llaves > 0:
-                      print(f"Error: No se encontró '}}' para cerrar la acción de '{expresion}'")
+                      print(f" ❌ Error: No se encontró '}}' para cerrar la acción de '{expresion}'")
+                      sys.exit(1)
                       break
                   
                   # Verificar si la acción tiene 'return'
