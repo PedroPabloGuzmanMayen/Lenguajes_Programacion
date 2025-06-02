@@ -1,0 +1,32 @@
+{
+  "transitions": {
+    "M0": {
+      "5": "M1"
+    },
+    "M1": {
+      "2": "M2"
+    },
+    "M2": {
+      "5": "M3"
+    },
+    "M3": {
+      "1": "M4"
+    }
+  },
+  "acceptance_states": [
+    "M4"
+  ],
+  "initial_state": "M0",
+  "states": {
+    "frozenset({'A'})": "M0",
+    "frozenset({'B'})": "M1",
+    "frozenset({'C'})": "M2",
+    "frozenset({'D'})": "M3",
+    "frozenset({'E'})": "M4"
+  },
+  "state_tags": {
+    "M4": "#5"
+  },
+  "token_type": "PLUS",
+  "original_pattern": "5251"
+}
