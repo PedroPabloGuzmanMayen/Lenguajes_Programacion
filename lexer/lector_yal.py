@@ -10,51 +10,7 @@ class Lector_Yal:
     }
     self.buffer = Buffer(path_yalp, 10)
 
-  # def es_nombre_produccion(self, token):
-  #    return token.endswith(':') and not token.startswith('%') and token != 'IGNORE'
   
-  # def verificar_producciones(self, tokens):
-  #   dentro_produccion = False
-  #   ignorando_comentario = False
-  #   encontrado_primera_produccion = False
-
-  #   i = 0
-  #   while i < len(tokens):
-  #       token = tokens[i]
-  #       if ignorando_comentario:
-  #           if '*/' in token:
-  #               ignorando_comentario = False
-  #           i += 1
-  #           continue
-  #       elif '/*' in token:
-  #           if '*/' not in token:
-  #               ignorando_comentario = True
-  #           i += 1
-  #           continue
-
-  #       if self.es_nombre_produccion(token):
-  #           if not encontrado_primera_produccion:
-  #               encontrado_primera_produccion = True
-
-  #           if dentro_produccion:
-  #               print(f"❌ Error: producción anterior no termina con ';' antes de '{token}' en la posición {i}")
-  #               exit(1)
-  #               return
-  #           dentro_produccion = True
-
-  #       elif token == ';':
-  #           if dentro_produccion:
-  #               dentro_produccion = False
-
-  #       i += 1
-
-  #   if dentro_produccion:
-  #       print("❌ Error: la última producción no termina con ';'")
-  #       exit(1)
-  #   elif not encontrado_primera_produccion:
-  #       print("ℹ️ No se encontró ninguna producción que verificar.")
-  #   else:
-  #       pass
   def alfabeto_generator(self):
     alfabeto = []
     alfabeto.extend([chr(c) for c in range(ord('a'), ord('z') + 1)])
@@ -119,7 +75,6 @@ class Lector_Yal:
        self.buffer.cargar_buffer()
        while self.buffer.FLAG_SALIDA:
           caracter = self.buffer.obtener_siguiente_caracter()
-          print(caracter)
           tempCadena = cadena_actual + str(caracter)
 
           if (afd.acept_Chain(tempCadena)):
@@ -135,7 +90,7 @@ class Lector_Yal:
     tokens.append(cadena_actual)
     tokens = [token.replace('ε', ' ') for token in tokens]
 
-    print(tokens)
+   
     self.verificar_comentarios(tokens)
 
 
@@ -275,94 +230,10 @@ class Lector_Yal:
           
           # Avanzar para evitar ciclo infinito en tokens no reconocidos
           i += 1
-
-    print("Tokens", tokens)
-    print("\nContenido",self.contenido)
-
-      
-    #   if (tokens[i] == "IGNORE"):
-    #     i += 1
-    #     while i < len(tokens):
-    #       t = tokens[i]
-    #       if t == '/*' or '/*' in t:
-    #           i += 1
-    #           while i < len(tokens) and tokens[i] != '*/'  and '*/' not in tokens[i]:
-    #               i += 1
-    #           i += 1  # Saltar '*/'
-    #           continue
-
-    #       if t == '%token' or ':' in t or t == 'IGNORE':
-    #           break
-    #       if not t.isupper():
-    #         print(f"El token no esta en mayuscula {t}")
-    #         exit(1)
-    #       ignorados.append(t)
-    #       i += 1
-    #     continue
-      
-    #   #si es una produccion
-    #   if ':' in tokens[i]:
-    #     nombre = tokens[i].replace(":", "")
-
-    #     if not nombre.islower():
-    #       print(f"Las producciones deben ser en minusculas '{nombre}'")
-    #       exit(1)
-    #     no_terminales.append(nombre)
-    #     i += 1
-    #     actual = []
-
-    #     while i < len(tokens):
-    #       t = tokens[i]
-    #       if t == '/*' or '/*' in t:
-    #           i += 1
-    #           while i < len(tokens) and tokens[i] != '*/'  and '*/' not in tokens[i]:
-    #               i += 1
-    #           i += 1  # Saltar '*/'
-    #           continue
-
-    #       if t == ';' or ';' in t:
-              
-    #           if ';' in t:
-                 
-    #              nueva = t.replace(";", "")
-    #              if nueva != "":
-    #                 actual.append(nueva)
-    #           if actual:
-    #             producciones.setdefault(nombre, []).append(tuple(actual))
-    #           break
-    #       if t == '|':
-    #             producciones.setdefault(nombre, []).append(tuple(actual))
-    #             actual = []
-    #       else:
-    #             actual.append(t)
-
-    #       i += 1
-    #     i += 1
-    #     continue     
-      
-    #   i += 1
-    # simbolo_inicial = next(iter(producciones))
-
-    # return simbolo_inicial, terminales, ignorados, no_terminales, producciones
-
-       
-       
+    
 
 
-  # def build_grammar(self):
-  #   simbolo_inicial, terminales, ignorados, no_terminales, producciones = self.parser_grammar()
-  #   no_terminales+= ["S'"]
-  #   producciones["S'"] = [(simbolo_inicial,)]
-  #   ff = Gramatica_Builder(
-  #                           producciones=producciones,
-  #                           no_terminales=no_terminales,
-  #                           terminales=terminales
 
-  #                           )
-  #   return ff
-
-# Para ejecutarlo vaya a generador_sintactico y ejecute:
-# python lector_gramar.py ./archivos_yalp/slr-1.yalp  el archivo yalp puede probar con todos los que estan
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Uso: python buffer.py archivo.yalp")
@@ -371,4 +242,5 @@ if __name__ == "__main__":
     archivo_yalp = sys.argv[1]
 
     lector = Lector_Yal(archivo_yalp)
-    contenido = lector.parse_lexers()
+    lector.parse_lexers()
+    print(lector.contenido)
