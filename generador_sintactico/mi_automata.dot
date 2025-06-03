@@ -1,0 +1,43 @@
+digraph LR0_Automaton {
+    rankdir=LR;
+    node [shape=circle];
+
+    start [shape=point, style=invis];
+    0 [label="Estado 0\nT → · T * F\lS' → · E\lF → · ( E )\lF → · int\lT → · F\lE → · E + T\lE → · T\l"];
+    1 [label="Estado 1\nS' → E ·\lE → E · + T\l", shape=doublecircle];
+    2 [label="Estado 2\nT → F ·\l"];
+    3 [label="Estado 3\nF → int ·\l"];
+    4 [label="Estado 4\nT → · T * F\lF → ( · E )\lF → · ( E )\lF → · int\lT → · F\lE → · E + T\lE → · T\l"];
+    5 [label="Estado 5\nE → T ·\lT → T · * F\l"];
+    6 [label="Estado 6\nT → · T * F\lE → E + · T\lF → · ( E )\lF → · int\lT → · F\l"];
+    7 [label="Estado 7\nF → ( E · )\lE → E · + T\l"];
+    8 [label="Estado 8\nF → · ( E )\lT → T * · F\lF → · int\l"];
+    9 [label="Estado 9\nE → E + T ·\lT → T · * F\l"];
+    10 [label="Estado 10\nF → ( E ) ·\l"];
+    11 [label="Estado 11\nT → T * F ·\l"];
+
+    start -> 0;
+
+    0 -> 1 [label="E"];
+    0 -> 2 [label="F"];
+    0 -> 3 [label="int"];
+    0 -> 4 [label="("];
+    0 -> 5 [label="T"];
+    1 -> 6 [label="+"];
+    4 -> 7 [label="E"];
+    4 -> 2 [label="F"];
+    4 -> 3 [label="int"];
+    4 -> 4 [label="("];
+    4 -> 5 [label="T"];
+    5 -> 8 [label="*"];
+    6 -> 2 [label="F"];
+    6 -> 3 [label="int"];
+    6 -> 4 [label="("];
+    6 -> 9 [label="T"];
+    7 -> 6 [label="+"];
+    7 -> 10 [label=")"];
+    8 -> 11 [label="F"];
+    8 -> 3 [label="int"];
+    8 -> 4 [label="("];
+    9 -> 8 [label="*"];
+}

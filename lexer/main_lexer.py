@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
 
     afd_instance.minimizumAFD()
-    afd_instance.graphicminimizumAFD()
+    #afd_instance.graphicminimizumAFD()
   
 
     convert_automata_structure(afd_instance)

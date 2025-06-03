@@ -261,40 +261,15 @@ class Lector_Yal:
             return text[start_pos:end_pos+1] if start_pos <= end_pos else ''
     
     def convert_to_ascii_code(self, token):
-            """Convierte tokens de un carácter a su código ASCII."""
             if len(token) == 1:
                 return str(ord(token))
             return token
     
     def advance_past_whitespace(self, line, current_pos):
-        """Avanza el índice saltando espacios en blanco."""
         while current_pos < len(line) and line[current_pos] in [' ', '\t', '\n', '\r']:
             current_pos += 1
         return current_pos
-    def extract_variable_definitions(self, text_lines):
-        """Extrae definiciones de variables (let <name> = <expression>)."""
-        variable_map = {}
-        for line in text_lines:
-            pos = self.advance_past_whitespace(line, 0)
-            if pos >= len(line):
-                continue
-            if pos + 3 <= len(line) and line[pos:pos+3] == "let":
-                pos += 3
-                pos = self.advance_past_whitespace(line, pos)
-                name_start = pos
-                while pos < len(line) and not line[pos].isspace() and line[pos] != '=':
-                    pos += 1
-                var_name = line[name_start:pos]
-                pos = self.advance_past_whitespace(line, pos)
-                if pos < len(line) and line[pos] == '=':
-                    pos += 1
-                pos = self.advance_past_whitespace(line, pos)
-                definition = ""
-                while pos < len(line):
-                    definition += line[pos]
-                    pos += 1
-                variable_map[var_name] = definition
-        return variable_map
+    
 
     def handle_literal_dot_replacement(self, expression):
         """Reemplaza puntos literales por su código ASCII para evitar confusión con concatenación."""

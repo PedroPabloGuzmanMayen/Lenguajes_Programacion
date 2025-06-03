@@ -1,14 +1,5 @@
 def convert_automata_structure(afd_instance, filename='automata_converted.json'):
-    """
-    Convierte la estructura del autómata a partir de la instancia AFD al formato deseado y lo guarda como JSON.
-    
-    Args:
-        afd_instance: Instancia de la clase AFD
-        filename: Nombre del archivo JSON donde guardar (por defecto: 'automata_converted.json')
-    
-    Returns:
-        Diccionario con la estructura convertida
-    """
+   
     import json
     
     # Extraer transiciones de la instancia AFD
@@ -75,19 +66,7 @@ def convert_automata_structure(afd_instance, filename='automata_converted.json')
 
 
 def load_automata_from_json(filepath):
-    """
-    Carga la estructura del autómata desde un archivo JSON.
     
-    Args:
-        filepath: Ruta completa del archivo JSON a cargar
-    
-    Returns:
-        Diccionario con la estructura del autómata cargada desde el archivo
-    
-    Raises:
-        FileNotFoundError: Si el archivo no existe
-        json.JSONDecodeError: Si el archivo no es un JSON válido
-    """
     import json
     import ast
     

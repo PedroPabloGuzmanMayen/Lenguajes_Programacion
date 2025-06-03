@@ -10,11 +10,6 @@ TIMES = "*"
 
 class Buffer:
     def __init__(self, filename_or_size, tamano_or_entrada=None):
-        """
-        Constructor que puede trabajar con archivo o entrada manual
-        - Si filename_or_size es str: lee desde archivo
-        - Si filename_or_size es int: usa entrada manual
-        """
         self.inicio_lexema = 0
         self.avance = 0
         self.FLAG_SALIDA = True
@@ -36,7 +31,6 @@ class Buffer:
             self.entrada = tamano_or_entrada or ""
 
     def cargar_buffer(self):
-        """Cargar el buffer con la siguiente parte de la entrada"""
         self.buffer = []
         inicio = self.inicio_lexema
         fin = min(inicio + self.tamano_buffer, len(self.entrada))
@@ -50,7 +44,6 @@ class Buffer:
         self.avance = 0
 
     def obtener_siguiente_caracter(self):
-        """Obtener el siguiente carácter procesado"""
         if self.avance >= len(self.buffer):
             self.inicio_lexema += len(self.buffer)
             self.cargar_buffer()
@@ -86,7 +79,6 @@ class Buffer:
         return ""
 
     def obtener_siguiente_caracter2(self):
-        """Segunda versión del método para obtener caracteres"""
         if self.avance >= len(self.buffer):
             self.inicio_lexema += len(self.buffer)
             self.cargar_buffer()
@@ -132,7 +124,6 @@ class Buffer:
         return ""
 
     def obtener_siguiente_linea(self):
-        """Obtener la siguiente línea completa"""
         linea = ""
         
         while self.FLAG_SALIDA:
@@ -152,7 +143,6 @@ class Buffer:
         return linea
 
     def validar_linea(self, linea, numero_linea):
-        """Validar que una línea tenga la sintaxis correcta"""
         comillas_simples = 0
         comillas_dobles = 0
         par_abierto = 0
