@@ -2,8 +2,18 @@
 ✔️ Token: return PLUS, lexeme: '+'
 ✔️ Token: return LPAREN, lexeme: '('
 ✔️ Token: return RPAREN, lexeme: ')'
-✔️ Token: return ID, lexeme: 'a'
+❌ Lexical error: unexpected symbol 'a' at position 9
 ✔️ Token: return WHITESPACE, lexeme: '   '
-✔️ Token: return ID, lexeme: 'adfasdf'
+❌ Lexical error: unexpected symbol 'a' at position 13
+❌ Lexical error: unexpected symbol 'd' at position 14
+❌ Lexical error: unexpected symbol 'f' at position 15
+❌ Lexical error: unexpected symbol 'a' at position 16
+❌ Lexical error: unexpected symbol 's' at position 17
+❌ Lexical error: unexpected symbol 'd' at position 18
+❌ Lexical error: unexpected symbol 'f' at position 19
 ✔️ Token: return WHITESPACE, lexeme: ' '
-✔️ Token: return ID, lexeme: 'ee5666'
+❌ Lexical error: unexpected symbol 'e' at position 21
+❌ Lexical error: unexpected symbol 'e' at position 22
+✔️ Token: return NUMBER, lexeme: '5666'
+✔️ Token: return WHITESPACE, lexeme: ' 	
+'
