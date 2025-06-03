@@ -132,15 +132,17 @@ class ParsingTable:
         token = next(lexer)
 
         print("Token", token)
+        print("Ignorados", self.grammar.ignore)
         print("\n== Proceso de Parsing ==")
         print(f"{'Stack':<30} {'Entrada':<30} {'Acción'}")
-
+        
         while True:
             # Ignorar tokens vacíos
             while token[0] is None:
                 token = next(lexer)
-
-            # Extraer solo el tipo de token (por ejemplo, de "return NUMBER" → "NUMBER")
+            while  any(item in token[0] for item in self.grammar.ignore):
+                token = next(lexer)
+            
             entrada = token[0].split()[-1] if token[0] != '$' else '$'
             state = stack[-1]
 
