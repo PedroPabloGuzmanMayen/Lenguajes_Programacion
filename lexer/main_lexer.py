@@ -31,15 +31,20 @@ if __name__ == "__main__":
     # Crearlo con clase principal
     afd_instance = create_dfa(root=raiz, position_map=posiciones,follow_positions=followpos )
 
+
+    print("\nTags", afd_instance.state_tags)
     afd_instance.minimizumAFD()
+    print("\nNext tags",afd_instance.state_tags)
     
+
     convert_automata_structure(afd_instance)
+
 
     loaded_automata = load_automata_from_json('./automata_converted.json')
 
     lexer = Lexer(loaded_automata, reglas, debug=True)
 
-    resultado = lexer.analyze("5.6E-3+()a   adfasdf ee5666 \t\n")
+    resultado = lexer.analyze("5.6E-3+()a   adfasdf ee5666 ---*** \t\n")
     print(resultado)
 
 

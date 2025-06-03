@@ -70,18 +70,19 @@ class AFD:
         f.view()
 
     def separate_states(self):
-        acept = []
-        not_acept = []
-        to_return = []
+        groups = {}
+        
         for q in self.Q_:
-            if q in self.F_:
-                acept.append(q)
-            else:
-                not_acept.append(q)
-        if len(not_acept) > 0:
-            to_return.append(not_acept)
-        to_return.append(acept)
-        return to_return
+            # Crear clave basada en: (es_final, tag)
+            is_final = q in self.F_
+            tag = self.state_tags.get(str(q.numero), None)
+            key = (is_final, tag)
+            
+            if key not in groups:
+                groups[key] = []
+            groups[key].append(q)
+        
+        return list(groups.values())
 
     def minimizumAFD(self):
         P = self.separate_states()
@@ -135,17 +136,12 @@ class AFD:
             if self.q0 in p:
                 state_initial.append(estado)
             
-            # Preservar tags: buscar si algún estado del grupo tiene tag
-            group_tags = []
+            # Preservar tags: buscar el tag de cualquier estado del grupo que lo tenga
             for state in p:
-                if str(state.numero) in self.state_tags:
-                    tag_value = int(self.state_tags[str(state.numero)][1:])  # Extraer número después de '#'
-                    group_tags.append(tag_value)
-            
-            if group_tags:
-                # Seleccionar el tag con menor valor (mayor prioridad)
-                min_tag = min(group_tags)
-                new_state_tags[group_name] = '#' + str(min_tag)
+                state_key = str(state.numero)
+                if state_key in self.state_tags:
+                    new_state_tags[group_name] = self.state_tags[state_key]
+                    break  # Tomar el primer tag encontrado y salir
             
             states.append(estado)
 
