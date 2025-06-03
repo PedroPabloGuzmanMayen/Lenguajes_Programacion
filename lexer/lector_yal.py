@@ -1,6 +1,7 @@
 from AFD_lector import *
 import sys
 from buffer_lexer import Buffer
+from shuting_yard import *
 
 class Lector_Yal:
     def __init__(self, path_yalp):
@@ -807,3 +808,15 @@ if __name__ == "__main__":
     print(lector.contenido)
     print(expresion_principal)
     print(reglas)
+
+    postfix = convert_to_postfix(expresion_principal)
+
+    print(postfix)
+
+    raiz, posiciones = construct_syntax_tree(postfix)
+
+    followpos = calculate_follow_positions(root=raiz, position_map=posiciones)
+
+    
+
+

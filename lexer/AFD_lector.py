@@ -1,5 +1,5 @@
 
-
+import graphviz
 class AFD:
     def __init__(self, alfabeto, estados, transiciones, estado_inicial, estados_finales):
         self.Alfabeto_ = [s for s in alfabeto if s != 'ε']
@@ -30,33 +30,33 @@ class AFD:
         numeros = [x.numero for x in self.F_]
         return any(state.numero in numeros for state in current_states)
     
-    # def graphicAFD(self):
-    #     f = graphviz.Digraph('finite_state_machine', filename='AFD_automata', format='png')
-    #     f.attr(rankdir='LR', size='8,5')
-    #     f.attr('node', shape='doublecircle')
-    #     for l in self.F_:
-    #         f.node(str(l.numero))
-    #     f.attr('node', shape='circle')
-    #     for transicion in self.S_:
-    #         if transicion.q0.numero == self.q0.numero:
-    #             f.node('', style='invis')
-    #             f.edge('', str(transicion.q0.numero))
-    #         f.edge(str(transicion.q0.numero), str(transicion.qf.numero), label=str(transicion.valor))
-    #     f.view()
+    def graphicAFD(self):
+        f = graphviz.Digraph('finite_state_machine', filename='AFD_automata', format='png')
+        f.attr(rankdir='LR', size='8,5')
+        f.attr('node', shape='doublecircle')
+        for l in self.F_:
+            f.node(str(l.numero))
+        f.attr('node', shape='circle')
+        for transicion in self.S_:
+            if transicion.q0.numero == self.q0.numero:
+                f.node('', style='invis')
+                f.edge('', str(transicion.q0.numero))
+            f.edge(str(transicion.q0.numero), str(transicion.qf.numero), label=str(transicion.valor))
+        f.view()
     
-    # def graphicminimizumAFD(self):
-    #     f = graphviz.Digraph('finite_state_machine', filename='AFD_automata_minimizum', format='png')
-    #     f.attr(rankdir='LR', size='8,5')
-    #     f.attr('node', shape='doublecircle')
-    #     for l in self.F_:
-    #         f.node(str(l.numero))
-    #     f.attr('node', shape='circle')
-    #     for transicion in self.S_:
-    #         if transicion.q0.numero == self.q0.numero:
-    #             f.node('', style='invis')
-    #             f.edge('', str(transicion.q0.numero))
-    #         f.edge(str(transicion.q0.numero), str(transicion.qf.numero), label=str(transicion.valor))
-    #     f.view()
+    def graphicminimizumAFD(self):
+        f = graphviz.Digraph('finite_state_machine', filename='AFD_automata_minimizum', format='png')
+        f.attr(rankdir='LR', size='8,5')
+        f.attr('node', shape='doublecircle')
+        for l in self.F_:
+            f.node(str(l.numero))
+        f.attr('node', shape='circle')
+        for transicion in self.S_:
+            if transicion.q0.numero == self.q0.numero:
+                f.node('', style='invis')
+                f.edge('', str(transicion.q0.numero))
+            f.edge(str(transicion.q0.numero), str(transicion.qf.numero), label=str(transicion.valor))
+        f.view()
 
     def separate_states(self):
         acept = []
