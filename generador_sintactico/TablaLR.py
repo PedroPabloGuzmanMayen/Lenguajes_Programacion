@@ -166,7 +166,7 @@ class ParsingTable:
                     if debug:
                         log_file.write("❌ Error de sintaxis.\n")
                         log_file.flush()
-                    error_msg = self._generate_syntax_error_message(state, entrada, token, stack, log_file if debug else None)
+                    error_msg = self._generate_syntax_error_message(state, entrada, token, stack, log_file if debug else None, debug=debug)
                     if debug:
                         log_file.write(f"❌ {error_msg}\n")
                     print(f"❌ {error_msg}\n")
@@ -201,7 +201,7 @@ class ParsingTable:
             
             return accepted
         
-    def _generate_syntax_error_message(self, state, entrada, token, stack, log_file):
+    def _generate_syntax_error_message(self, state, entrada, token, stack, log_file, debug=True):
         # Obtener todos los símbolos válidos para este estado
         expected_symbols = []
         if state in self.action_table:
@@ -240,18 +240,19 @@ class ParsingTable:
         if suggestions:
             error_parts.extend(suggestions)
         
-        # Escribir información detallada al log
-        log_file.write("\n=== ANÁLISIS DETALLADO DEL ERROR ===\n")
-        for part in error_parts:
-            log_file.write(f"  • {part}\n")
-        log_file.write("=====================================\n\n")
-        log_file.flush()
+        # Escribir información detallada al log SOLO SI debug está activado
+        if debug and log_file:
+            log_file.write("\n=== ANÁLISIS DETALLADO DEL ERROR ===\n")
+            for part in error_parts:
+                log_file.write(f"  • {part}\n")
+            log_file.write("=====================================\n\n")
+            log_file.flush()
         
         # Retornar mensaje principal para consola
         return error_parts[0] + " - " + error_parts[1]
+
     def _get_error_suggestions(self, found_symbol, expected_symbols):
         suggestions = []
-        
         
         if found_symbol == '$' and 'ID' in expected_symbols:
             suggestions.append("Posible causa: falta un identificador al final de la expresión")
