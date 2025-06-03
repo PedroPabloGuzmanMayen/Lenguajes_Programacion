@@ -7,13 +7,14 @@ from tree import compute_empty_transition_closure
 import graphviz
 
 class AFD:
-    def __init__(self, alfabeto, estados, transiciones, estado_inicial, estados_finales):
+    def __init__(self, alfabeto, estados, transiciones, estado_inicial, estados_finales, state_tags=None):
         self.Alfabeto_ = [s for s in alfabeto if s != 'ε']
         self.Q_ = estados
         self.S_ = transiciones
         self.q0 = estado_inicial
         self.F_ = estados_finales
         self.state_count = len(estados)
+        self.state_tags = state_tags if state_tags is not None else {}
 
     def set_q0(self, q0):
         self.q0 = q0
@@ -35,6 +36,10 @@ class AFD:
             current_states = list(self.move_AFD(current_states, symbol))
         numeros = [x.numero for x in self.F_]
         return any(state.numero in numeros for state in current_states)
+    
+    def get_tags(self):
+        """Retorna los tags actuales del AFD"""
+        return self.state_tags.copy()
     
     def graphicAFD(self):
         f = graphviz.Digraph('finite_state_machine', filename='AFD_automata', format='png')
@@ -115,9 +120,9 @@ class AFD:
         final_states = []
         transicions = []
         state_initial = []
+        new_state_tags = {}
         
         for i, p in enumerate(P):
-            state = p[0]
             # Crear nombre único para el grupo de estados
             group_name = f"G{i}"
             estado = Estado_AFD(numero=group_name)
@@ -129,6 +134,18 @@ class AFD:
             # Verificar si el estado inicial está en este grupo
             if self.q0 in p:
                 state_initial.append(estado)
+            
+            # Preservar tags: buscar si algún estado del grupo tiene tag
+            group_tags = []
+            for state in p:
+                if str(state.numero) in self.state_tags:
+                    tag_value = int(self.state_tags[str(state.numero)][1:])  # Extraer número después de '#'
+                    group_tags.append(tag_value)
+            
+            if group_tags:
+                # Seleccionar el tag con menor valor (mayor prioridad)
+                min_tag = min(group_tags)
+                new_state_tags[group_name] = '#' + str(min_tag)
             
             states.append(estado)
 
@@ -153,6 +170,7 @@ class AFD:
         self.F_ = final_states
         self.Q_ = states
         self.S_ = transicions
+        self.state_tags = new_state_tags  # Actualizar tags
         if state_initial:
             self.q0 = state_initial[0]
 
@@ -175,10 +193,9 @@ class Transicion:
 
 
 ## Creacion del AFD
+
 def create_dfa(root, position_map, follow_positions):
     """Genera un autómata finito determinista (DFA) a partir del árbol sintáctico."""
-    dfa = graphviz.Digraph('DFA')
-    dfa.attr(rankdir='LR')
     
     # Calcular el estado inicial con cierre epsilon
     initial_state = frozenset(compute_empty_transition_closure(root.first_positions, position_map, follow_positions))
@@ -186,29 +203,19 @@ def create_dfa(root, position_map, follow_positions):
     pending_states = [initial_state]
     state_counter = 0
     
-    # Crear diccionario para almacenar el DFA
-    dfa_structure = {
-        'transitions': {}, 
-        'acceptance_states': [], 
-        'initial_state': 'A', 
-        'states': {},
-    }
-    
-    # Crear nodo inicial invisible
-    dfa.node('', shape='none')
-    dfa.edge('', 'A', label='')
-    
     # Identificar posiciones de aceptación (nodos marcados con '#')
     acceptance_positions = {pos for pos, node in position_map.items() if node.symbol.startswith('#')}
+    
+    # Listas para construir el AFD
+    estados = []
+    transiciones = []
+    estados_finales = []
+    alfabeto = set()
+    state_tags = {}
     
     while pending_states:
         current_state = pending_states.pop(0)
         current_name = states_dict[current_state]
-        dfa_structure['states'][current_state] = current_name
-        
-        # Marcar estado de aceptación si contiene alguna posición final
-        if any(p in current_state for p in acceptance_positions):
-            dfa_structure['acceptance_states'].append(current_name)
         
         # Calcular transiciones
         transitions = {}
@@ -221,9 +228,9 @@ def create_dfa(root, position_map, follow_positions):
                 transitions[symbol] = set()
                 
             transitions[symbol] |= follow_positions[pos]
+            alfabeto.add(symbol)  # Agregar símbolo al alfabeto
         
-        # Registrar transiciones en el DFA
-        dfa_structure['transitions'][current_name] = {}
+        # Registrar transiciones
         for symbol, next_pos in transitions.items():
             if not next_pos:
                 continue
@@ -234,31 +241,68 @@ def create_dfa(root, position_map, follow_positions):
                 state_counter += 1
                 states_dict[next_state] = chr(ord('A') + state_counter)
                 pending_states.append(next_state)
-                
-            dfa.edge(current_name, states_dict[next_state], label=str(symbol))
-            dfa_structure['transitions'][current_name][symbol] = states_dict[next_state]
     
-    # Agregar todos los estados al gráfico
+    # Crear objetos Estado_AFD
+    estado_objects = {}
     for state_set, name in states_dict.items():
-        shape = 'doublecircle' if name in dfa_structure['acceptance_states'] else 'circle'
-        dfa.node(name, shape=shape)
-    
-    # Asignar etiquetas (tags) a estados de aceptación
-    state_tags = {}
-    for state_set, name in states_dict.items():
-        # Buscar nodos hoja que sean tags
-        tag_candidates = [int(position_map[pos].symbol[1:]) 
+        estado_obj = Estado_AFD(numero=name)
+        estado_objects[name] = estado_obj
+        estados.append(estado_obj)
+        
+        # Marcar estado de aceptación si contiene alguna posición final
+        if any(p in state_set for p in acceptance_positions):
+            estados_finales.append(estado_obj)
+        
+        # Asignar tags a estados de aceptación
+        tag_candidates = [int(position_map[pos].symbol[1:])
                          for pos in state_set if position_map[pos].symbol.startswith('#')]
         if tag_candidates:
             # Seleccionar el tag con menor valor (mayor prioridad)
             min_tag = min(tag_candidates)
             state_tags[name] = '#' + str(min_tag)
-            
-    dfa_structure['state_tags'] = state_tags
     
-    return dfa, dfa_structure
-
-
+    # Crear objetos Transicion
+    for state_set, name in states_dict.items():
+        current_state = state_set
+        
+        # Recalcular transiciones para crear objetos Transicion
+        transitions = {}
+        for pos in current_state:
+            symbol = position_map[pos].symbol
+            if symbol == '949' or symbol.startswith('#'):
+                continue
+                
+            if symbol not in transitions:
+                transitions[symbol] = set()
+                
+            transitions[symbol] |= follow_positions[pos]
+        
+        # Crear objetos Transicion
+        for symbol, next_pos in transitions.items():
+            if not next_pos:
+                continue
+                
+            next_state = frozenset(compute_empty_transition_closure(next_pos, position_map, follow_positions))
+            
+            if next_state in states_dict:
+                q0 = estado_objects[name]
+                qf = estado_objects[states_dict[next_state]]
+                transicion = Transicion(q0, qf, symbol)
+                transiciones.append(transicion)
+    
+    # Crear y retornar instancia de AFD con tags
+    estado_inicial = estado_objects['A']
+    
+    afd_instance = AFD(
+        alfabeto=list(alfabeto),
+        estados=estados,
+        transiciones=transiciones,
+        estado_inicial=estado_inicial,
+        estados_finales=estados_finales,
+        state_tags=state_tags
+    )
+    
+    return afd_instance
 def create_afd_instance_numeric(root, position_map, follow_positions):
     """
     Crea una instancia de AFD con nombres numéricos para evitar problemas en minimización.

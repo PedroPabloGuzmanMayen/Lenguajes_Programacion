@@ -2,7 +2,7 @@ import sys
 from lector_yal import Lector_Yal
 from Lexer import Lexer
 from shuting_yard import construct_syntax_tree, convert_to_postfix,  calculate_follow_positions
-from AFD_lector import create_afd_instance_numeric
+from AFD_lector import create_afd_instance_numeric, create_dfa
 from guardar_afd import *
 
 if __name__ == "__main__":
@@ -29,12 +29,11 @@ if __name__ == "__main__":
     followpos = calculate_follow_positions(root=raiz, position_map=posiciones)
 
     # Crearlo con clase principal
-    afd_instance, dfa_structure, state_name_to_number = create_afd_instance_numeric(root=raiz, position_map=posiciones,follow_positions=followpos )
+    afd_instance = create_dfa(root=raiz, position_map=posiciones,follow_positions=followpos )
 
     afd_instance.minimizumAFD()
-   
     
-    result = convert_automata_structure(dfa_structure, state_name_to_number)
+    convert_automata_structure(afd_instance)
 
     loaded_automata = load_automata_from_json('./automata_converted.json')
 

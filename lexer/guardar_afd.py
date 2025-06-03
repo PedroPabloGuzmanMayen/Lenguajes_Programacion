@@ -1,62 +1,61 @@
-def convert_automata_structure(original_structure, state_name_to_number, filename='automata_converted.json'):
+def convert_automata_structure(afd_instance, filename='automata_converted.json'):
     """
-    Convierte la estructura original del autómata al formato deseado y lo guarda como JSON.
+    Convierte la estructura del autómata a partir de la instancia AFD al formato deseado y lo guarda como JSON.
     
     Args:
-        original_structure: Diccionario con la estructura original
-        state_name_to_number: Diccionario que mapea nombres de estados a números
+        afd_instance: Instancia de la clase AFD
         filename: Nombre del archivo JSON donde guardar (por defecto: 'automata_converted.json')
     
     Returns:
         Diccionario con la estructura convertida
     """
+    import json
     
-    # Crear el mapeo inverso (número a nombre)
-    number_to_name = {v: k for k, v in state_name_to_number.items()}
-    
-    # Convertir transiciones
+    # Extraer transiciones de la instancia AFD
     new_transitions = {}
-    for state_num, transitions in original_structure['transitions'].items():
-        # Convertir el número de estado a nombre de estado
-        state_name = number_to_name.get(state_num.replace('M', ''), state_num)
+    
+    # Inicializar diccionario de transiciones para todos los estados
+    for estado in afd_instance.Q_:
+        state_name = str(estado.numero)
         new_transitions[state_name] = {}
+    
+    # Llenar transiciones desde la instancia AFD
+    for transicion in afd_instance.S_:
+        q0_name = str(transicion.q0.numero)
+        qf_name = str(transicion.qf.numero)
+        symbol = transicion.valor
         
-        # Convertir cada transición
-        for input_char, target_state_num in transitions.items():
-            target_state_name = number_to_name.get(target_state_num.replace('M', ''), target_state_num)
-            new_transitions[state_name][input_char] = target_state_name
+        if q0_name not in new_transitions:
+            new_transitions[q0_name] = {}
+        
+        new_transitions[q0_name][symbol] = qf_name
     
-    # Asegurar que todos los estados existen en transitions (incluso si están vacíos)
-    for state_name in state_name_to_number.keys():
-        if state_name not in new_transitions:
-            new_transitions[state_name] = {}
-    
-    # Convertir estados de aceptación
+    # Extraer estados de aceptación de la instancia AFD
     new_acceptance_states = []
-    for state_num in original_structure['acceptance_states']:
-        state_name = number_to_name.get(state_num.replace('M', ''), state_num)
+    for estado_final in afd_instance.F_:
+        state_name = str(estado_final.numero)
         new_acceptance_states.append(state_name)
     
-    # Convertir estado inicial
-    initial_state_num = original_structure['initial_state']
-    new_initial_state = number_to_name.get(initial_state_num.replace('M', ''), initial_state_num)
+    # Extraer estado inicial de la instancia AFD
+    new_initial_state = str(afd_instance.q0.numero)
     
-    # Convertir states (convertir frozenset keys a strings)
+    # Crear states: mapear cada estado a su propio nombre
     new_states = {}
-    for frozenset_key, state_num in original_structure['states'].items():
-        state_name = number_to_name.get(state_num.replace('M', ''), state_num)
-        # Convertir frozenset a string si es necesario
-        if isinstance(frozenset_key, frozenset):
-            str_key = str(frozenset_key)
-        else:
-            str_key = frozenset_key
-        new_states[str_key] = state_name
+    for estado in afd_instance.Q_:
+        state_name = str(estado.numero)
+        # Usar el nombre del estado como clave y valor para mantener consistencia
+        new_states[f"state_{state_name}"] = state_name
     
-    # Convertir state_tags
+    # Extraer state_tags de la instancia AFD
     new_state_tags = {}
-    for state_num, tag in original_structure['state_tags'].items():
-        state_name = number_to_name.get(state_num.replace('M', ''), state_num)
-        new_state_tags[state_name] = tag
+    if hasattr(afd_instance, 'state_tags') and afd_instance.state_tags:
+        for state_name, tag in afd_instance.state_tags.items():
+            new_state_tags[str(state_name)] = tag
+    else:
+        # Si no hay tags, crear tags genéricos para estados finales
+        for i, estado_final in enumerate(afd_instance.F_):
+            state_name = str(estado_final.numero)
+            new_state_tags[state_name] = f"#{i+1}"
     
     # Crear la nueva estructura
     converted_structure = {
@@ -68,7 +67,6 @@ def convert_automata_structure(original_structure, state_name_to_number, filenam
     }
     
     # Guardar en archivo JSON
-    import json
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(converted_structure, f, indent=2, ensure_ascii=False)
     print(f"Estructura convertida guardada en '{filename}'")
