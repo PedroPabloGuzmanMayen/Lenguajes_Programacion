@@ -119,8 +119,7 @@ class Lexer:
                             log_file.write(f"❌ Lexical error: unexpected symbol '{error_char}' at current position\n")
                             log_file.flush()
                         
-                        # CRÍTICO: NO usar continue aquí
-                        # El carácter ya fue consumido, simplemente continuar al siguiente
+                        
                         
                     else:
                         # Token válido encontrado
