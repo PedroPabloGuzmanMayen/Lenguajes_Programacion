@@ -2,7 +2,7 @@ class Gramatica_Builder:
     EPSILON = 'ε'
     END_MARKER = '$'
 
-    def __init__(self , producciones, no_terminales, terminales):
+    def __init__(self , producciones, no_terminales, terminales, ignorados= None):
         self.grammar = producciones
         self.non_terminals = set(no_terminales)
         self.terminals = set(terminales)
@@ -11,6 +11,7 @@ class Gramatica_Builder:
         self.compute_first()
         self.compute_follow("S'")
         self.start_symbol = "S'"
+        self.ignore = ignorados
         self.symbols =self.terminals.union(self.non_terminals)
 
     def get_grammar(self):

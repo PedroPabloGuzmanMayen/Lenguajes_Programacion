@@ -266,7 +266,8 @@ class Lector_Gramar:
     ff = Gramatica_Builder(
                             producciones=producciones,
                             no_terminales=no_terminales,
-                            terminales=terminales
+                            terminales=terminales,
+                            ignorados=ignorados
 
                             )
     return ff
