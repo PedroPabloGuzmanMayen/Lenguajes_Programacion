@@ -29,27 +29,42 @@ if __name__ == "__main__":
 
     followpos = calculate_follow_positions(root=raiz, position_map=posiciones)
 
-    # afd_instance, dfa_structure, state_name_to_number = create_afd_instance_numeric(root=raiz, position_map=posiciones,follow_positions=followpos )
 
-    dfa, dfa_structure = create_dfa(root=raiz, position_map=posiciones, follow_positions=followpos)
 
-    minimized_afd, afd_dict_min = minimize_dfa(dfa_structure)
 
-    afd_Serial = DFASerializer()
+    ## CREAR DFA con funcion. 
 
-    afd_Serial.guardar_dfa(afd_dict_min, "afd.json")
+    # dfa, dfa_structure = create_dfa(root=raiz, position_map=posiciones, follow_positions=followpos)
 
-    afd_dict = afd_Serial.cargar_dfa("afd.json")
+    # minimized_afd, afd_dict_min = minimize_dfa(dfa_structure)
 
-    lexer = Lexer(afd_dict, reglas)
-    resultado = lexer.analyze("9.35E-2+()  aa")
-    print(resultado)
-    # afd_dict = afd_to_json(afd_instance, "afd.json")
+    # afd_Serial = DFASerializer()
 
-    # lexer = Lexer(afd_dict, reglas, debug=True)
+    # afd_Serial.guardar_dfa(afd_dict_min, "afd.json")
 
-    # resultado = lexer.analyze("ass")
+    # afd_dict = afd_Serial.cargar_dfa("afd.json")
+
+    # lexer = Lexer(afd_dict, reglas)
+    # resultado = lexer.analyze("9.35E-2+()  aa")
     # print(resultado)
+
+
+
+
+    # Crearlo con clase principal
+    afd_instance, dfa_structure, state_name_to_number = create_afd_instance_numeric(root=raiz, position_map=posiciones,follow_positions=followpos )
+
+    afd_instance.minimizumAFD()
+    # afd_dict = afd_to_json(afd_instance, "afd.json")
+    
+    result = convert_automata_structure(dfa_structure, state_name_to_number)
+
+    loaded_automata = load_automata_from_json('./automata_converted.json')
+
+    lexer = Lexer(loaded_automata, reglas, debug=True)
+
+    resultado = lexer.analyze("5.6E-3+()a   adfasdf ee5666")
+    print(resultado)
 
 
 

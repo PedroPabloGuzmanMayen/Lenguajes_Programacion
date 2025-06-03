@@ -1,181 +1,130 @@
-import json
-from datetime import datetime
-from AFD_lector import *
-
-def afd_to_json(afd, filename=None, include_metadata=True):
+def convert_automata_structure(original_structure, state_name_to_number, filename='automata_converted.json'):
     """
-    Convierte un AFD a formato JSON y lo guarda en un archivo.
+    Convierte la estructura original del autómata al formato deseado y lo guarda como JSON.
     
     Args:
-        afd: Instancia de la clase AFD
-        filename: Nombre del archivo JSON (opcional)
-        include_metadata: Si incluir metadatos como fecha de creación
+        original_structure: Diccionario con la estructura original
+        state_name_to_number: Diccionario que mapea nombres de estados a números
+        filename: Nombre del archivo JSON donde guardar (por defecto: 'automata_converted.json')
     
     Returns:
-        dict: Diccionario con la estructura del AFD
+        Diccionario con la estructura convertida
     """
     
-    # Crear estructura JSON
-    afd_dict = {
-        "alfabeto": afd.Alfabeto_,
-        "estados": [],
-        "transiciones": [],
-        "estado_inicial": afd.q0.numero,
-        "estados_finales": [estado.numero for estado in afd.F_],
-        "total_estados": len(afd.Q_),
-        "total_transiciones": len(afd.S_)
+    # Crear el mapeo inverso (número a nombre)
+    number_to_name = {v: k for k, v in state_name_to_number.items()}
+    
+    # Convertir transiciones
+    new_transitions = {}
+    for state_num, transitions in original_structure['transitions'].items():
+        # Convertir el número de estado a nombre de estado
+        state_name = number_to_name.get(state_num.replace('M', ''), state_num)
+        new_transitions[state_name] = {}
+        
+        # Convertir cada transición
+        for input_char, target_state_num in transitions.items():
+            target_state_name = number_to_name.get(target_state_num.replace('M', ''), target_state_num)
+            new_transitions[state_name][input_char] = target_state_name
+    
+    # Asegurar que todos los estados existen en transitions (incluso si están vacíos)
+    for state_name in state_name_to_number.keys():
+        if state_name not in new_transitions:
+            new_transitions[state_name] = {}
+    
+    # Convertir estados de aceptación
+    new_acceptance_states = []
+    for state_num in original_structure['acceptance_states']:
+        state_name = number_to_name.get(state_num.replace('M', ''), state_num)
+        new_acceptance_states.append(state_name)
+    
+    # Convertir estado inicial
+    initial_state_num = original_structure['initial_state']
+    new_initial_state = number_to_name.get(initial_state_num.replace('M', ''), initial_state_num)
+    
+    # Convertir states (convertir frozenset keys a strings)
+    new_states = {}
+    for frozenset_key, state_num in original_structure['states'].items():
+        state_name = number_to_name.get(state_num.replace('M', ''), state_num)
+        # Convertir frozenset a string si es necesario
+        if isinstance(frozenset_key, frozenset):
+            str_key = str(frozenset_key)
+        else:
+            str_key = frozenset_key
+        new_states[str_key] = state_name
+    
+    # Convertir state_tags
+    new_state_tags = {}
+    for state_num, tag in original_structure['state_tags'].items():
+        state_name = number_to_name.get(state_num.replace('M', ''), state_num)
+        new_state_tags[state_name] = tag
+    
+    # Crear la nueva estructura
+    converted_structure = {
+        'transitions': new_transitions,
+        'acceptance_states': new_acceptance_states,
+        'initial_state': new_initial_state,
+        'states': new_states,
+        'state_tags': new_state_tags
     }
     
-    # Agregar estados
-    for estado in afd.Q_:
-        estado_dict = {
-            "numero": estado.numero,
-            "estados_AFN": estado.estados_AFN if hasattr(estado, 'estados_AFN') else []
-        }
-        afd_dict["estados"].append(estado_dict)
-    
-    # Agregar transiciones
-    for transicion in afd.S_:
-        transicion_dict = {
-            "estado_origen": transicion.q0.numero,
-            "estado_destino": transicion.qf.numero,
-            "simbolo": transicion.valor
-        }
-        afd_dict["transiciones"].append(transicion_dict)
-    
-    # Agregar metadatos si se solicita
-    if include_metadata:
-        afd_dict["metadatos"] = {
-            "fecha_creacion": datetime.now().isoformat(),
-            "tipo": "AFD",
-            "version": "1.0"
-        }
-    
-    # Guardar en archivo si se especifica nombre
-    if filename:
-        if not filename.endswith('.json'):
-            filename += '.json'
-        
-        with open(filename, 'w', encoding='utf-8') as f:
-            json.dump(afd_dict, f, indent=4, ensure_ascii=False)
-        
-        print(f"AFD guardado en: {filename}")
-    
-    return afd_dict
-
-def json_to_afd(filename_or_dict):
-    """
-    Carga un AFD desde un archivo JSON o diccionario.
-    
-    Args:
-        filename_or_dict: Nombre del archivo JSON o diccionario con la estructura
-    
-    Returns:
-        AFD: Instancia de la clase AFD
-    """
-    
-    # Cargar datos desde archivo o usar el diccionario directamente
-    if isinstance(filename_or_dict, str):
-        with open(filename_or_dict, 'r', encoding='utf-8') as f:
-            afd_dict = json.load(f)
-        print(f"AFD cargado desde: {filename_or_dict}")
-    else:
-        afd_dict = filename_or_dict
-    
-    # Crear estados
-    estados = []
-    estados_dict = {}
-    
-    for estado_data in afd_dict["estados"]:
-        estado = Estado_AFD(
-            numero=estado_data["numero"],
-            estados_AFN=estado_data.get("estados_AFN", [])
-        )
-        estados.append(estado)
-        estados_dict[estado_data["numero"]] = estado
-    
-    # Crear transiciones
-    transiciones = []
-    for trans_data in afd_dict["transiciones"]:
-        q0 = estados_dict[trans_data["estado_origen"]]
-        qf = estados_dict[trans_data["estado_destino"]]
-        transicion = Transicion(q0, qf, trans_data["simbolo"])
-        transiciones.append(transicion)
-    
-    # Identificar estado inicial
-    estado_inicial = estados_dict[afd_dict["estado_inicial"]]
-    
-    # Identificar estados finales
-    estados_finales = set()
-    for numero_final in afd_dict["estados_finales"]:
-        estados_finales.add(estados_dict[numero_final])
-    
-    # Crear instancia AFD
-    afd = AFD(
-        alfabeto=afd_dict["alfabeto"],
-        estados=estados,
-        transiciones=transiciones,
-        estado_inicial=estado_inicial,
-        estados_finales=estados_finales
-    )
-    
-    return afd
-
-def save_afd_with_info(afd, base_filename, dfa_structure=None, test_results=None):
-    """
-    Guarda el AFD con información adicional completa.
-    
-    Args:
-        afd: Instancia AFD
-        base_filename: Nombre base del archivo
-        dfa_structure: Estructura original del DFA (opcional)
-        test_results: Resultados de pruebas (opcional)
-    """
-    
-    # Crear estructura completa
-    complete_structure = {
-        "afd": afd_to_json(afd, filename=None),
-        "informacion_adicional": {
-            "estructura_original": dfa_structure,
-            "resultados_pruebas": test_results,
-            "estadisticas": {
-                "total_estados": len(afd.Q_),
-                "total_transiciones": len(afd.S_),
-                "alfabeto_size": len(afd.Alfabeto_),
-                "estados_finales_count": len(afd.F_)
-            }
-        }
-    }
-    
-    # Guardar archivo completo
-    filename = f"{base_filename}_completo.json"
+    # Guardar en archivo JSON
+    import json
     with open(filename, 'w', encoding='utf-8') as f:
-        json.dump(complete_structure, f, indent=4, ensure_ascii=False)
+        json.dump(converted_structure, f, indent=2, ensure_ascii=False)
+    print(f"Estructura convertida guardada en '{filename}'")
     
-    # Guardar solo el AFD
-    afd_to_json(afd, f"{base_filename}_afd.json")
-    
-    print(f"Archivos guardados:")
-    print(f"  - AFD completo: {filename}")
-    print(f"  - AFD simple: {base_filename}_afd.json")
+    return converted_structure
 
-def compare_afds(afd1, afd2):
+
+def load_automata_from_json(filepath):
     """
-    Compara dos AFDs y devuelve las diferencias.
+    Carga la estructura del autómata desde un archivo JSON.
     
     Args:
-        afd1, afd2: Instancias de AFD a comparar
+        filepath: Ruta completa del archivo JSON a cargar
     
     Returns:
-        dict: Diccionario con las diferencias encontradas
+        Diccionario con la estructura del autómata cargada desde el archivo
+    
+    Raises:
+        FileNotFoundError: Si el archivo no existe
+        json.JSONDecodeError: Si el archivo no es un JSON válido
     """
+    import json
+    import ast
     
-    differences = {
-        "alfabeto": afd1.Alfabeto_ != afd2.Alfabeto_,
-        "total_estados": len(afd1.Q_) != len(afd2.Q_),
-        "total_transiciones": len(afd1.S_) != len(afd2.S_),
-        "estado_inicial": afd1.q0.numero != afd2.q0.numero,
-        "estados_finales": {e.numero for e in afd1.F_} != {e.numero for e in afd2.F_}
-    }
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            automata_structure = json.load(f)
+        
+        # Convertir strings de frozenset de vuelta a frozenset objects si es necesario
+        if 'states' in automata_structure:
+            new_states = {}
+            for str_key, value in automata_structure['states'].items():
+                # Si la clave parece ser un frozenset string, convertirla de vuelta
+                if str_key.startswith('frozenset'):
+                    try:
+                        # Evaluar de forma segura el string del frozenset
+                        frozenset_obj = ast.literal_eval(str_key)
+                        new_states[frozenset_obj] = value
+                    except (ValueError, SyntaxError):
+                        # Si no se puede convertir, mantener como string
+                        new_states[str_key] = value
+                else:
+                    new_states[str_key] = value
+            automata_structure['states'] = new_states
+        
+        print(f"Estructura del autómata cargada exitosamente desde '{filepath}'")
+        return automata_structure
     
-    return differences
+    except FileNotFoundError:
+        print(f"Error: No se encontró el archivo '{filepath}'")
+        raise
+    
+    except json.JSONDecodeError as e:
+        print(f"Error: El archivo '{filepath}' no contiene un JSON válido: {e}")
+        raise
+    
+    except Exception as e:
+        print(f"Error inesperado al cargar '{filepath}': {e}")
+        raise
