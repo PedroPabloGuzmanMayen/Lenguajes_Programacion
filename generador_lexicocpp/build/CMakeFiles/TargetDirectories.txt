@@ -1,3 +1,0 @@
-/home/ppguz/Lenguajes_Programacion/build/CMakeFiles/my_program.dir
-/home/ppguz/Lenguajes_Programacion/build/CMakeFiles/edit_cache.dir
-/home/ppguz/Lenguajes_Programacion/build/CMakeFiles/rebuild_cache.dir

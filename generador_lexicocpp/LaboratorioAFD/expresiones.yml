@@ -1,5 +1,0 @@
-expresiones_regulares:
-  - "(+)@|(-)$"
-cadenas:
-  - " "
-  - "&"
