@@ -7,6 +7,12 @@
 %token PLUS
 %token TIMES
 %token LPAREN RPAREN
+%token SEMICOLON
+
+general:
+    general SEMICOLON expression
+  | expression
+;
 
 expression:
     term PLUS expression
