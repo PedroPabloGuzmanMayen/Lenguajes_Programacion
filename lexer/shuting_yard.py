@@ -3,7 +3,12 @@ import graphviz
 
 def convert_to_postfix(infix_expr):
     """Convierte una expresión infix a postfix (notación polaca inversa)."""
-    operator_precedence = {'|': 1, '.': 2, '*': 3}
+    operator_precedence = {"#": 4,
+    "*": 3,
+    "+": 3,
+    "?": 3,
+    ".": 2,
+    "|": 1}
     result = []
     operator_stack = []
 
@@ -33,6 +38,10 @@ def convert_to_postfix(infix_expr):
         # Manejo de letras
         elif current.isalpha():
             result.append(current)
+            i += 1
+            continue
+        elif current == '_':
+            result.append('949')  # <-- Convertir _ a 949
             i += 1
             continue
             

@@ -299,67 +299,6 @@ def create_dfa(root, position_map, follow_positions):
     )
     
     return afd_instance
-def create_afd_instance_numeric(root, position_map, follow_positions):
-    """
-    Crea una instancia de AFD con nombres numéricos para evitar problemas en minimización.
-    """
-    # Obtener la estructura del DFA
-    dfa_graph, dfa_structure = create_dfa(root, position_map, follow_positions)
-    
-    # Extraer el alfabeto del position_map
-    alfabeto = set()
-    for pos, node in position_map.items():
-        symbol = node.symbol
-        if symbol != '949' and not symbol.startswith('#'):
-            alfabeto.add(symbol)
-    alfabeto = list(alfabeto)
-    
-    # Crear mapeo de nombres de letras a números
-    state_name_to_number = {}
-    number_counter = 0
-    
-    # Crear estados AFD con números
-    estados = []
-    estados_dict = {}
-    
-    for state_set, name in dfa_structure['states'].items():
-        # Asignar número único a cada estado
-        state_number = str(number_counter)
-        state_name_to_number[name] = state_number
-        number_counter += 1
-        
-        # Convertir el frozenset a lista para estados_AFN
-        estados_afn = list(state_set)
-        estado = Estado_AFD(numero=state_number, estados_AFN=estados_afn)
-        estados.append(estado)
-        estados_dict[name] = estado
-    
-    # Crear transiciones
-    transiciones = []
-    for state_name, transitions in dfa_structure['transitions'].items():
-        q0 = estados_dict[state_name]
-        for symbol, target_state in transitions.items():
-            qf = estados_dict[target_state]
-            transiciones.append(Transicion(q0, qf, symbol))
-    
-    # Identificar estado inicial
-    estado_inicial = estados_dict[dfa_structure['initial_state']]
-    
-    # Identificar estados finales
-    estados_finales = set()
-    for state_name in dfa_structure['acceptance_states']:
-        estados_finales.add(estados_dict[state_name])
-    
-    # Crear y retornar la instancia AFD
-    afd_instance = AFD(
-        alfabeto=alfabeto,
-        estados=estados,
-        transiciones=transiciones,
-        estado_inicial=estado_inicial,
-        estados_finales=estados_finales
-    )
-    
-    return afd_instance, dfa_structure, state_name_to_number
 
 
 #===============USO DE AFD=====================
