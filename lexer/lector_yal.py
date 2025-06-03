@@ -1,7 +1,7 @@
-from AFD_lector import *
+from lexer.AFD_lector import *
 import sys
-from buffer_lexer import Buffer
-from shuting_yard import *
+from lexer.buffer_lexer import Buffer
+from lexer.shuting_yard import *
 
 class Lector_Yal:
     def __init__(self, path_yalp):

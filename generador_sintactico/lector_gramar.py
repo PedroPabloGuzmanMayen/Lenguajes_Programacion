@@ -1,7 +1,7 @@
-from AFD_normal import *
+from generador_sintactico.AFD_normal import *
 import sys
-from mibuffer import *
-from Gramatica_Builder import *
+from generador_sintactico.mibuffer import *
+from generador_sintactico.Gramatica_Builder import *
 
 class Lector_Gramar:
   def __init__(self, path_yalp):

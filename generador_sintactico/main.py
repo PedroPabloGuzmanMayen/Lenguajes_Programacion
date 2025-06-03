@@ -2,7 +2,7 @@ from lector_gramar import Lector_Gramar
 from lr0 import LR0_Automata
 from TablaLR import ParsingTable
 import os
-
+ 
 
 def main():
     print("== YAPar: Generador de Analizadores Sintácticos SLR(1) ==")
@@ -29,7 +29,7 @@ def main():
     cadena = input("Ingresa una cadena de tokens separados por espacio (ej. ID PLUS ID): ")
     tokens = cadena.strip().split()
     tokens.append('$')  # Fin de entrada
-
+    print(tokens)
     print("\n== Resultado del Análisis ==")
     tabla.parse(tokens)
 

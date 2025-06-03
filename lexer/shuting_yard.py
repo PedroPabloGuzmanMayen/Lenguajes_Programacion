@@ -1,4 +1,4 @@
-from tree import *
+from lexer.tree import *
 import graphviz
 
 def convert_to_postfix(infix_expr):

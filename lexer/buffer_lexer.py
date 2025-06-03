@@ -69,14 +69,37 @@ class Buffer:
 
             if caracter == '\0':
                 self.FLAG_SALIDA = False
-                return ""
+                return None  # Cambiado a None para indicar EOF
 
             self.ultimo_caracter = caracter
             self.avance += 1
 
             return caracter_salida
 
-        return ""
+        return None  # Cambiado a None para consistencia
+
+    def retroceder_caracter(self):
+        """
+        Retrocede un carácter en el buffer.
+        Permite al lexer hacer backtracking cuando no encuentra una transición válida.
+        """
+        if self.avance > 0:
+            self.avance -= 1
+            # Actualizar ultimo_caracter al caracter anterior
+            if self.avance > 0:
+                self.ultimo_caracter = self.buffer[self.avance - 1]
+            else:
+                self.ultimo_caracter = ''
+        else:
+            # Si estamos al inicio del buffer actual, necesitamos retroceder al buffer anterior
+            if self.inicio_lexema > 0:
+                self.inicio_lexema -= 1
+                self.cargar_buffer()
+                self.avance = len(self.buffer) - 1
+                if self.avance > 0:
+                    self.ultimo_caracter = self.buffer[self.avance - 1]
+                else:
+                    self.ultimo_caracter = ''
 
     def obtener_siguiente_caracter2(self):
         if self.avance >= len(self.buffer):

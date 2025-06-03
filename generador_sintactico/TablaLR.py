@@ -1,5 +1,5 @@
-from lr0 import LR0_Automata
-from Gramatica_Builder import Gramatica_Builder
+from generador_sintactico.lr0 import LR0_Automata
+from generador_sintactico.Gramatica_Builder import Gramatica_Builder
 class ParsingTable:
     def __init__(self, lr0_automata, grammar):
         self.automata = lr0_automata # El autómata mediante el cuál armaremos la tabla
@@ -124,6 +124,61 @@ class ParsingTable:
                     # y seguimos en el ciclo interno sin avanzar `idx`
                 elif action[0] == "accept":
                     print(" Cadena aceptada correctamente. 😁👍")
+                    return True
+    
+
+    def parse_consumer_producer(self, lexer):
+        stack = [0]
+        token = next(lexer)
+
+        print("Token", token)
+        print("\n== Proceso de Parsing ==")
+        print(f"{'Stack':<30} {'Entrada':<30} {'Acción'}")
+
+        while True:
+            # Ignorar tokens vacíos
+            while token[0] is None:
+                token = next(lexer)
+
+            # Extraer solo el tipo de token (por ejemplo, de "return NUMBER" → "NUMBER")
+            entrada = token[0].split()[-1] if token[0] != '$' else '$'
+            state = stack[-1]
+
+            while True:
+                action = self.action_table.get(state, {}).get(entrada, None)
+                pila_actual = ' '.join(map(str, stack))
+                entrada_str = f"{entrada} '{token[1]}'" if entrada != '$' else '$'
+                accion_str = "Error" if not action else f"{action[0]} {action[1] if len(action) > 1 else ''}"
+                print(f"{pila_actual:<30} {entrada_str:<30} {accion_str}")
+                print(f"DEBUG - Acción obtenida: {action}")
+
+                if action is None:
+                    print("❌ Error de sintaxis.")
+                    return False
+
+                if action[0] == "shift":
+                    stack.append(entrada)
+                    stack.append(action[1])
+                    token = next(lexer)
+                    while token[0] is None:
+                        token = next(lexer)
+                    entrada = token[0].split()[-1] if token[0] != '$' else '$'
+                    break
+                elif action[0] == "reduce":
+                    lhs, rhs = action[1]
+                    if rhs != ('ε',):
+                        for _ in range(len(rhs) * 2):
+                            stack.pop()
+                    top_state = stack[-1]
+                    stack.append(lhs)
+                    goto_state = self.goto_table.get(top_state, {}).get(lhs)
+                    if goto_state is None:
+                        print(f"❌ Error: no hay transición GOTO desde estado {top_state} con símbolo {lhs}")
+                        return False
+                    stack.append(goto_state)
+                    state = goto_state
+                elif action[0] == "accept":
+                    print("✅ Cadena aceptada correctamente. 😁👍")
                     return True
 
 #Ejemplo de uso

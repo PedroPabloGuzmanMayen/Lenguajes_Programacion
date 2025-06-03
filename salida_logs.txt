@@ -1,0 +1,7 @@
+✔️ Token: return NUMBER, lexeme: '15'
+✔️ Token: return PLUS, lexeme: '+'
+✔️ Token: return NUMBER, lexeme: '69'
+✔️ Token: return MINUS, lexeme: '-'
+✔️ Token: return NUMBER, lexeme: '42'
+✔️ Token: return SEMICOLON, lexeme: ';'
+✔️ Token: return WS, lexeme: ' '

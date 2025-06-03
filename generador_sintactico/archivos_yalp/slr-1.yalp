@@ -7,7 +7,16 @@
 %token ID
 %token PLUS
 %token TIMES
+%token WS
+%token SEMICOLON 
 %token LPAREN RPAREN
+IGNORE WS
+
+
+general:
+    general expression SEMICOLON
+  | expression SEMICOLON
+;
 
 expression:
     expression PLUS term

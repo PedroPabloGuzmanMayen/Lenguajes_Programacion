@@ -1,6 +1,6 @@
 
 import graphviz
-from tree import compute_empty_transition_closure
+from lexer.tree import compute_empty_transition_closure
 
 
 
