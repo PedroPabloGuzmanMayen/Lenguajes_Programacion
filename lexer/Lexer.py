@@ -106,41 +106,48 @@ class Lexer:
                     # Procesar el resultado
                     if last_valid_state is None:
                         # Error léxico - no se encontró token válido
-                        if lexeme_chars:
-                            error_char = lexeme_chars[0]
+                        if chars_processed == 0:
+                            # No se procesó ningún carácter, obtener uno para reportar error
+                            error_char = self.buffer.obtener_siguiente_caracter()
+                            if error_char is None:
+                                break  # No hay más caracteres
+                        else:
+                            # Ya tenemos caracteres procesados
+                            error_char = lexeme_chars[0] if lexeme_chars else None
+                        
+                        if error_char:
                             log_file.write(f"❌ Lexical error: unexpected symbol '{error_char}' at current position\n")
                             log_file.flush()
-                            # Avanzar solo un caracter para continuar
-                            if chars_processed > 1:
-                                # Retroceder todos los caracteres excepto el primero
-                                for _ in range(chars_processed - 1):
-                                    self.buffer.retroceder_caracter()
-                        continue
-                    
-                    # Token válido encontrado
-                    # Retroceder caracteres que no forman parte del token válido
-                    valid_lexeme_length = len([c for c in lexeme_chars])
-                    if chars_processed > valid_lexeme_length:
-                        for _ in range(chars_processed - valid_lexeme_length):
-                            self.buffer.retroceder_caracter()
-                    
-                    # Construir el lexema válido
-                    lexeme = ''.join(lexeme_chars)
-                    
-                    # Obtener el tipo de token
-                    if last_valid_state in self.automaton.get('state_tags', {}):
-                        tag = self.automaton['state_tags'][last_valid_state]
-                        token_type = self.token_labels.get(tag, 'UNKNOWN')
+                        
+                        # CRÍTICO: NO usar continue aquí
+                        # El carácter ya fue consumido, simplemente continuar al siguiente
+                        
                     else:
-                        token_type = 'UNKNOWN'
-                    
-                    # Producir el token
-                    token = (token_type, lexeme)
-                    
-                    if self.debug:
-                        log_file.write(f"✔️ Token: {token_type}, lexeme: '{lexeme}'\n")
-                        log_file.flush()
-                    
-                    # Yield para hacer esta función un generador
-                    yield token
+                        # Token válido encontrado
+                        # Retroceder caracteres que no forman parte del token válido
+                        valid_lexeme_length = len([c for c in lexeme_chars])
+                        if chars_processed > valid_lexeme_length:
+                            for _ in range(chars_processed - valid_lexeme_length):
+                                self.buffer.retroceder_caracter()
+                        
+                        # Construir el lexema válido
+                        lexeme = ''.join(lexeme_chars)
+                        
+                        # Obtener el tipo de token
+                        if last_valid_state in self.automaton.get('state_tags', {}):
+                            tag = self.automaton['state_tags'][last_valid_state]
+                            token_type = self.token_labels.get(tag, 'UNKNOWN')
+                        else:
+                            token_type = 'UNKNOWN'
+                        
+                        # Producir el token
+                        token = (token_type, lexeme)
+                        
+                        if self.debug:
+                            log_file.write(f"✔️ Token: {token_type}, lexeme: '{lexeme}'\n")
+                            log_file.flush()
+                        
+                        # Yield para hacer esta función un generador
+                        yield token
+        
         yield ('$', '$')

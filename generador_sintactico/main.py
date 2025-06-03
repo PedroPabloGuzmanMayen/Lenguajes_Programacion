@@ -8,7 +8,7 @@ def main():
     print("== YAPar: Generador de Analizadores Sintácticos SLR(1) ==")
     archivo = input("Ingresa el nombre del archivo YALP (ej. slr-1.yalp): ")
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    ruta = os.path.join(base_dir, "archivos_yalp", archivo)
+    ruta = os.path.join(base_dir, "archivos_yalp_parser", archivo)
 
     # 1. Leer y construir la gramática
     lector = Lector_Gramar(ruta)

@@ -1,11 +1,13 @@
 from generador_sintactico.lr0 import LR0_Automata
 from generador_sintactico.Gramatica_Builder import Gramatica_Builder
 class ParsingTable:
-    def __init__(self, lr0_automata, grammar):
+    def __init__(self, lr0_automata, grammar, output_path='salida_parser.txt'):
         self.automata = lr0_automata # El autómata mediante el cuál armaremos la tabla
         self.grammar = grammar #La gramática que usaremos
         self.action_table = {}  #Aquí guardamos todas las acciones de action
         self.goto_table = {}   #Aquí guardamos todas las acciones goto
+
+        self.output_path = output_path
         for i in range(len(self.automata.states)): #Inicializar las tablas
             self.action_table[i] = {}
             self.goto_table[i] = {}
@@ -128,44 +130,46 @@ class ParsingTable:
     
 
     def parse_consumer_producer(self, lexer):
-        stack = [0]
-        token = next(lexer)
+        with open(self.output_path, 'w', encoding='utf-8') as log_file:
+            stack = [0]
+            token = next(lexer)
 
-        print("Token", token)
-        print("Ignorados", self.grammar.ignore)
-        print("\n== Proceso de Parsing ==")
-        print(f"{'Stack':<30} {'Entrada':<30} {'Acción'}")
-        
-        while True:
-            # Ignorar tokens vacíos
-            while token[0] is None:
-                token = next(lexer)
-            while  any(item in token[0] for item in self.grammar.ignore):
-                token = next(lexer)
-            
-            entrada = token[0].split()[-1] if token[0] != '$' else '$'
-            state = stack[-1]
+            log_file.write(f"Token: {token}\n")
+            log_file.write(f"Ignorados: {self.grammar.ignore}\n")
+            log_file.write(f"\n== Proceso de Parsing ==\n")
+            log_file.write(f"{'Stack':<30} {'Entrada':<30} {'Acción'}\n")
+            log_file.flush()
 
-            while True:
+            accepted = False
+            finished = False
+
+            while not finished:
+                # Ignorar tokens vacíos o ignorados
+                while token[0] is None or any(item in token[0] for item in self.grammar.ignore):
+                    token = next(lexer)
+
+                entrada = token[0].split()[-1] if token[0] != '$' else '$'
+                state = stack[-1]
                 action = self.action_table.get(state, {}).get(entrada, None)
+
                 pila_actual = ' '.join(map(str, stack))
                 entrada_str = f"{entrada} '{token[1]}'" if entrada != '$' else '$'
                 accion_str = "Error" if not action else f"{action[0]} {action[1] if len(action) > 1 else ''}"
-                print(f"{pila_actual:<30} {entrada_str:<30} {accion_str}")
-                print(f"DEBUG - Acción obtenida: {action}")
+
+                log_file.write(f"{pila_actual:<30} {entrada_str:<30} {accion_str}\n")
+                log_file.write(f"DEBUG - Acción obtenida: {action}\n")
+                log_file.flush()
 
                 if action is None:
-                    print("❌ Error de sintaxis.")
+                    log_file.write("❌ Error de sintaxis.\n")
+                    log_file.flush()
+                    print("❌ Error de sintaxis.\n")
                     return False
 
                 if action[0] == "shift":
                     stack.append(entrada)
                     stack.append(action[1])
                     token = next(lexer)
-                    while token[0] is None:
-                        token = next(lexer)
-                    entrada = token[0].split()[-1] if token[0] != '$' else '$'
-                    break
                 elif action[0] == "reduce":
                     lhs, rhs = action[1]
                     if rhs != ('ε',):
@@ -175,13 +179,19 @@ class ParsingTable:
                     stack.append(lhs)
                     goto_state = self.goto_table.get(top_state, {}).get(lhs)
                     if goto_state is None:
-                        print(f"❌ Error: no hay transición GOTO desde estado {top_state} con símbolo {lhs}")
+                        log_file.write(f"❌ Error: no hay transición GOTO desde estado {top_state} con símbolo {lhs}\n")
+                        log_file.flush()
+                        print(f"❌ Error: no hay transición GOTO desde estado {top_state} con símbolo {lhs}\n")
                         return False
                     stack.append(goto_state)
-                    state = goto_state
                 elif action[0] == "accept":
-                    print("✅ Cadena aceptada correctamente. 😁👍")
-                    return True
+                    log_file.write("✅ Cadena aceptada correctamente. 😁👍\n")
+                    log_file.flush()
+                    print("\n✅ Cadena aceptada correctamente. 😁👍\n")
+                    accepted = True
+                    finished = True
+
+            return accepted
 
 #Ejemplo de uso
 
