@@ -1,0 +1,253 @@
+digraph finite_state_machine {
+	rankdir=LR size="8,5"
+	node [shape=doublecircle]
+	E
+	B
+	D
+	F
+	G
+	C
+	node [shape=circle]
+	"" [style=invis]
+	"" -> A
+	A -> B [label=32]
+	"" [style=invis]
+	"" -> A
+	A -> B [label=9]
+	"" [style=invis]
+	"" -> A
+	A -> B [label=10]
+	"" [style=invis]
+	"" -> A
+	A -> C [label=41]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=65]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=66]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=67]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=68]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=69]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=70]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=71]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=72]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=73]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=74]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=75]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=76]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=77]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=78]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=79]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=80]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=81]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=82]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=83]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=84]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=85]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=86]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=87]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=88]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=89]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=90]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=97]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=98]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=99]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=100]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=101]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=102]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=103]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=104]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=105]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=106]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=107]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=108]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=109]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=110]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=111]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=112]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=113]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=114]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=115]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=116]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=117]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=118]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=119]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=120]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=121]
+	"" [style=invis]
+	"" -> A
+	A -> D [label=122]
+	"" [style=invis]
+	"" -> A
+	A -> E [label=43]
+	"" [style=invis]
+	"" -> A
+	A -> F [label=42]
+	"" [style=invis]
+	"" -> A
+	A -> G [label=40]
+	B -> B [label=32]
+	B -> B [label=9]
+	B -> B [label=10]
+	D -> D [label=65]
+	D -> D [label=66]
+	D -> D [label=67]
+	D -> D [label=68]
+	D -> D [label=69]
+	D -> D [label=70]
+	D -> D [label=71]
+	D -> D [label=72]
+	D -> D [label=73]
+	D -> D [label=74]
+	D -> D [label=75]
+	D -> D [label=76]
+	D -> D [label=77]
+	D -> D [label=78]
+	D -> D [label=79]
+	D -> D [label=80]
+	D -> D [label=81]
+	D -> D [label=82]
+	D -> D [label=83]
+	D -> D [label=84]
+	D -> D [label=85]
+	D -> D [label=86]
+	D -> D [label=87]
+	D -> D [label=88]
+	D -> D [label=89]
+	D -> D [label=90]
+	D -> D [label=97]
+	D -> D [label=98]
+	D -> D [label=99]
+	D -> D [label=100]
+	D -> D [label=101]
+	D -> D [label=102]
+	D -> D [label=103]
+	D -> D [label=104]
+	D -> D [label=105]
+	D -> D [label=106]
+	D -> D [label=107]
+	D -> D [label=108]
+	D -> D [label=109]
+	D -> D [label=110]
+	D -> D [label=111]
+	D -> D [label=112]
+	D -> D [label=113]
+	D -> D [label=114]
+	D -> D [label=115]
+	D -> D [label=116]
+	D -> D [label=117]
+	D -> D [label=118]
+	D -> D [label=119]
+	D -> D [label=120]
+	D -> D [label=121]
+	D -> D [label=122]
+	D -> D [label=48]
+	D -> D [label=49]
+	D -> D [label=50]
+	D -> D [label=51]
+	D -> D [label=52]
+	D -> D [label=53]
+	D -> D [label=54]
+	D -> D [label=55]
+	D -> D [label=56]
+	D -> D [label=57]
+}

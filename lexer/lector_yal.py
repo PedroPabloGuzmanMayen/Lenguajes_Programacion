@@ -794,29 +794,30 @@ class Lector_Yal:
         master_pattern = self.clean_expression_syntax(master_pattern)
 
         return master_pattern, tag_mapping
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Uso: python buffer.py archivo.yalp")
-        sys.exit(1)
 
-    archivo_yalp = sys.argv[1]
+# if __name__ == "__main__":
+#     if len(sys.argv) != 2:
+#         print("Uso: python buffer.py archivo.yalp")
+#         sys.exit(1)
 
-    lector = Lector_Yal(archivo_yalp)
-    lector.parse_lexers()
-    expresion_principal, reglas = lector.merge_rule_expressions(lector.contenido)
+#     archivo_yalp = sys.argv[1]
 
-    print(lector.contenido)
-    print(expresion_principal)
-    print(reglas)
+#     lector = Lector_Yal(archivo_yalp)
+#     lector.parse_lexers()
+#     expresion_principal, reglas = lector.merge_rule_expressions(lector.contenido)
 
-    postfix = convert_to_postfix(expresion_principal)
+#     print(lector.contenido)
+#     print(expresion_principal)
+#     print(reglas)
 
-    print(postfix)
+#     postfix = convert_to_postfix(expresion_principal)
 
-    raiz, posiciones = construct_syntax_tree(postfix)
+#     print(postfix)
 
-    followpos = calculate_follow_positions(root=raiz, position_map=posiciones)
+#     raiz, posiciones = construct_syntax_tree(postfix)
 
-    
+#     followpos = calculate_follow_positions(root=raiz, position_map=posiciones)
+
+
 
 

@@ -1,0 +1,6 @@
+✔️ Token: return NUMBER, lexeme: '9.35E-2'
+✔️ Token: return PLUS, lexeme: '+'
+✔️ Token: return LPAREN, lexeme: '('
+✔️ Token: return RPAREN, lexeme: ')'
+✔️ Token: return WHITESPACE, lexeme: '  '
+✔️ Token: return ID, lexeme: 'aa'

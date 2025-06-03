@@ -11,9 +11,9 @@ class Lexer:
 
         with open(self.output_path, 'w', encoding='utf-8') as log_file:
             while current_pos < len(input_string):
-                current_state = self.automaton['initial']
+                current_state = self.automaton['initial_state']
                 transitions = self.automaton['transitions']
-                accepting_states = set(self.automaton['accepted'])
+                accepting_states = set(self.automaton['acceptance_states'])
 
                 last_valid_state = None
                 lexeme_end = current_pos

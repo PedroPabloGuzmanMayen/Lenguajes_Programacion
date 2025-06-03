@@ -1,5 +1,11 @@
 
 import graphviz
+from tree import compute_empty_transition_closure
+
+
+
+import graphviz
+
 class AFD:
     def __init__(self, alfabeto, estados, transiciones, estado_inicial, estados_finales):
         self.Alfabeto_ = [s for s in alfabeto if s != 'ε']
@@ -109,30 +115,46 @@ class AFD:
         final_states = []
         transicions = []
         state_initial = []
-        for p in P:
+        
+        for i, p in enumerate(P):
             state = p[0]
-            estado = Estado_AFD(numero=f"{[int(i.numero) for i in p]}")
-            if state.numero in [x.numero for x in self.F_]:
+            # Crear nombre único para el grupo de estados
+            group_name = f"G{i}"
+            estado = Estado_AFD(numero=group_name)
+            
+            # Verificar si algún estado del grupo es final
+            if any(q in self.F_ for q in p):
                 final_states.append(estado)
-            if self.q0.numero in estado.numero:
+            
+            # Verificar si el estado inicial está en este grupo
+            if self.q0 in p:
                 state_initial.append(estado)
+            
             states.append(estado)
 
-        for p in P:
+        # Crear transiciones entre grupos
+        for i, p in enumerate(P):
             for s in self.Alfabeto_:
                 next_States = self.move_AFD(p, s)
                 lista_nex_states = list(next_States)
                 if not lista_nex_states:
                     continue
-                state_actual = str([int(i.numero) for i in p])
-                q0 = [i for i in states if state_actual == i.numero][0]
-                qf = [i for i in states if lista_nex_states[0].numero in i.numero][0]
-                transicions.append(Transicion(q0, qf, s))
+                
+                # Encontrar el estado actual (grupo fuente)
+                q0 = states[i]
+                
+                # Encontrar el grupo destino
+                for j, p_dest in enumerate(P):
+                    if any(state in p_dest for state in lista_nex_states):
+                        qf = states[j]
+                        transicions.append(Transicion(q0, qf, s))
+                        break
 
         self.F_ = final_states
         self.Q_ = states
         self.S_ = transicions
-        self.q0 = state_initial.pop()
+        if state_initial:
+            self.q0 = state_initial[0]
 
 class Estado_AFD:
     def __init__(self, numero, estados_AFN=None):
@@ -146,6 +168,158 @@ class Transicion:
         self.valor = valor
 
 
+
+
+
+
+
+
+## Creacion del AFD
+def create_dfa(root, position_map, follow_positions):
+    """Genera un autómata finito determinista (DFA) a partir del árbol sintáctico."""
+    dfa = graphviz.Digraph('DFA')
+    dfa.attr(rankdir='LR')
+    
+    # Calcular el estado inicial con cierre epsilon
+    initial_state = frozenset(compute_empty_transition_closure(root.first_positions, position_map, follow_positions))
+    states_dict = {initial_state: 'A'}
+    pending_states = [initial_state]
+    state_counter = 0
+    
+    # Crear diccionario para almacenar el DFA
+    dfa_structure = {
+        'transitions': {}, 
+        'acceptance_states': [], 
+        'initial_state': 'A', 
+        'states': {},
+    }
+    
+    # Crear nodo inicial invisible
+    dfa.node('', shape='none')
+    dfa.edge('', 'A', label='')
+    
+    # Identificar posiciones de aceptación (nodos marcados con '#')
+    acceptance_positions = {pos for pos, node in position_map.items() if node.symbol.startswith('#')}
+    
+    while pending_states:
+        current_state = pending_states.pop(0)
+        current_name = states_dict[current_state]
+        dfa_structure['states'][current_state] = current_name
+        
+        # Marcar estado de aceptación si contiene alguna posición final
+        if any(p in current_state for p in acceptance_positions):
+            dfa_structure['acceptance_states'].append(current_name)
+        
+        # Calcular transiciones
+        transitions = {}
+        for pos in current_state:
+            symbol = position_map[pos].symbol
+            if symbol == '949' or symbol.startswith('#'):
+                continue
+                
+            if symbol not in transitions:
+                transitions[symbol] = set()
+                
+            transitions[symbol] |= follow_positions[pos]
+        
+        # Registrar transiciones en el DFA
+        dfa_structure['transitions'][current_name] = {}
+        for symbol, next_pos in transitions.items():
+            if not next_pos:
+                continue
+                
+            next_state = frozenset(compute_empty_transition_closure(next_pos, position_map, follow_positions))
+            
+            if next_state not in states_dict:
+                state_counter += 1
+                states_dict[next_state] = chr(ord('A') + state_counter)
+                pending_states.append(next_state)
+                
+            dfa.edge(current_name, states_dict[next_state], label=str(symbol))
+            dfa_structure['transitions'][current_name][symbol] = states_dict[next_state]
+    
+    # Agregar todos los estados al gráfico
+    for state_set, name in states_dict.items():
+        shape = 'doublecircle' if name in dfa_structure['acceptance_states'] else 'circle'
+        dfa.node(name, shape=shape)
+    
+    # Asignar etiquetas (tags) a estados de aceptación
+    state_tags = {}
+    for state_set, name in states_dict.items():
+        # Buscar nodos hoja que sean tags
+        tag_candidates = [int(position_map[pos].symbol[1:]) 
+                         for pos in state_set if position_map[pos].symbol.startswith('#')]
+        if tag_candidates:
+            # Seleccionar el tag con menor valor (mayor prioridad)
+            min_tag = min(tag_candidates)
+            state_tags[name] = '#' + str(min_tag)
+            
+    dfa_structure['state_tags'] = state_tags
+    
+    return dfa, dfa_structure
+
+
+def create_afd_instance_numeric(root, position_map, follow_positions):
+    """
+    Crea una instancia de AFD con nombres numéricos para evitar problemas en minimización.
+    """
+    # Obtener la estructura del DFA
+    dfa_graph, dfa_structure = create_dfa(root, position_map, follow_positions)
+    
+    # Extraer el alfabeto del position_map
+    alfabeto = set()
+    for pos, node in position_map.items():
+        symbol = node.symbol
+        if symbol != '949' and not symbol.startswith('#'):
+            alfabeto.add(symbol)
+    alfabeto = list(alfabeto)
+    
+    # Crear mapeo de nombres de letras a números
+    state_name_to_number = {}
+    number_counter = 0
+    
+    # Crear estados AFD con números
+    estados = []
+    estados_dict = {}
+    
+    for state_set, name in dfa_structure['states'].items():
+        # Asignar número único a cada estado
+        state_number = str(number_counter)
+        state_name_to_number[name] = state_number
+        number_counter += 1
+        
+        # Convertir el frozenset a lista para estados_AFN
+        estados_afn = list(state_set)
+        estado = Estado_AFD(numero=state_number, estados_AFN=estados_afn)
+        estados.append(estado)
+        estados_dict[name] = estado
+    
+    # Crear transiciones
+    transiciones = []
+    for state_name, transitions in dfa_structure['transitions'].items():
+        q0 = estados_dict[state_name]
+        for symbol, target_state in transitions.items():
+            qf = estados_dict[target_state]
+            transiciones.append(Transicion(q0, qf, symbol))
+    
+    # Identificar estado inicial
+    estado_inicial = estados_dict[dfa_structure['initial_state']]
+    
+    # Identificar estados finales
+    estados_finales = set()
+    for state_name in dfa_structure['acceptance_states']:
+        estados_finales.add(estados_dict[state_name])
+    
+    # Crear y retornar la instancia AFD
+    afd_instance = AFD(
+        alfabeto=alfabeto,
+        estados=estados,
+        transiciones=transiciones,
+        estado_inicial=estado_inicial,
+        estados_finales=estados_finales
+    )
+    
+    return afd_instance, dfa_structure, state_name_to_number
 
 
 #===============USO DE AFD=====================
