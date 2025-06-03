@@ -67,7 +67,7 @@ class AFD:
                 f.node('', style='invis')
                 f.edge('', str(transicion.q0.numero))
             f.edge(str(transicion.q0.numero), str(transicion.qf.numero), label=str(transicion.valor))
-        f.view()
+        #f.view()
 
     def separate_states(self):
         groups = {}

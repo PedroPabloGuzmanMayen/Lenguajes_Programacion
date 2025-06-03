@@ -129,43 +129,49 @@ class ParsingTable:
                     return True
     
 
-    def parse_consumer_producer(self, lexer):
+    def parse_consumer_producer(self, lexer, debug=True):
         with open(self.output_path, 'w', encoding='utf-8') as log_file:
             stack = [0]
             token = next(lexer)
-
-            log_file.write(f"Token: {token}\n")
-            log_file.write(f"Ignorados: {self.grammar.ignore}\n")
-            log_file.write(f"\n== Proceso de Parsing ==\n")
-            log_file.write(f"{'Stack':<30} {'Entrada':<30} {'Acción'}\n")
-            log_file.flush()
-
+            
+            if debug:
+                log_file.write(f"Token: {token}\n")
+                log_file.write(f"Ignorados: {self.grammar.ignore}\n")
+                log_file.write(f"\n== Proceso de Parsing ==\n")
+                log_file.write(f"{'Stack':<30} {'Entrada':<30} {'Acción'}\n")
+                log_file.flush()
+            
             accepted = False
             finished = False
-
+            
             while not finished:
                 # Ignorar tokens vacíos o ignorados
                 while token[0] is None or any(item in token[0] for item in self.grammar.ignore):
                     token = next(lexer)
-
+                
                 entrada = token[0].split()[-1] if token[0] != '$' else '$'
                 state = stack[-1]
                 action = self.action_table.get(state, {}).get(entrada, None)
-
-                pila_actual = ' '.join(map(str, stack))
-                entrada_str = f"{entrada} '{token[1]}'" if entrada != '$' else '$'
-                accion_str = "Error" if not action else f"{action[0]} {action[1] if len(action) > 1 else ''}"
-
-                log_file.write(f"{pila_actual:<30} {entrada_str:<30} {accion_str}\n")
-                log_file.write(f"DEBUG - Acción obtenida: {action}\n")
-                log_file.flush()
-
-                if action is None:
-                    log_file.write("❌ Error de sintaxis.\n")
+                
+                if debug:
+                    pila_actual = ' '.join(map(str, stack))
+                    entrada_str = f"{entrada} '{token[1]}'" if entrada != '$' else '$'
+                    accion_str = "Error" if not action else f"{action[0]} {action[1] if len(action) > 1 else ''}"
+                    
+                    log_file.write(f"{pila_actual:<30} {entrada_str:<30} {accion_str}\n")
+                    log_file.write(f"DEBUG - Acción obtenida: {action}\n")
                     log_file.flush()
-                    print("❌ Error de sintaxis.\n")
+                
+                if action is None:
+                    if debug:
+                        log_file.write("❌ Error de sintaxis.\n")
+                        log_file.flush()
+                    error_msg = self._generate_syntax_error_message(state, entrada, token, stack, log_file if debug else None)
+                    if debug:
+                        log_file.write(f"❌ {error_msg}\n")
+                    print(f"❌ {error_msg}\n")
                     return False
-
+                
                 if action[0] == "shift":
                     stack.append(entrada)
                     stack.append(action[1])
@@ -179,19 +185,89 @@ class ParsingTable:
                     stack.append(lhs)
                     goto_state = self.goto_table.get(top_state, {}).get(lhs)
                     if goto_state is None:
-                        log_file.write(f"❌ Error: no hay transición GOTO desde estado {top_state} con símbolo {lhs}\n")
-                        log_file.flush()
+                        if debug:
+                            log_file.write(f"❌ Error: no hay transición GOTO desde estado {top_state} con símbolo {lhs}\n")
+                            log_file.flush()
                         print(f"❌ Error: no hay transición GOTO desde estado {top_state} con símbolo {lhs}\n")
                         return False
                     stack.append(goto_state)
                 elif action[0] == "accept":
-                    log_file.write("✅ Cadena aceptada correctamente. 😁👍\n")
-                    log_file.flush()
+                    if debug:
+                        log_file.write("✅ Cadena aceptada correctamente. 😁👍\n")
+                        log_file.flush()
                     print("\n✅ Cadena aceptada correctamente. 😁👍\n")
                     accepted = True
                     finished = True
-
+            
             return accepted
+        
+    def _generate_syntax_error_message(self, state, entrada, token, stack, log_file):
+        # Obtener todos los símbolos válidos para este estado
+        expected_symbols = []
+        if state in self.action_table:
+            expected_symbols = list(self.action_table[state].keys())
+        
+        # Información básica del error
+        error_parts = []
+        error_parts.append(f"Error de sintaxis en el símbolo '{entrada}' (lexema: '{token[1]}')")
+        
+        # Mostrar qué se esperaba
+        if expected_symbols:
+            if len(expected_symbols) == 1:
+                error_parts.append(f"Se esperaba: {expected_symbols[0]}")
+            else:
+                expected_str = ", ".join(expected_symbols[:-1]) + f" o {expected_symbols[-1]}"
+                error_parts.append(f"Se esperaba uno de: {expected_str}")
+        else:
+            error_parts.append("No hay símbolos válidos para este estado")
+        
+        # Información del contexto actual
+        error_parts.append(f"Estado actual del parser: {state}")
+        
+        # Mostrar el contenido actual de la pila (solo los símbolos, no los estados)
+        symbol_stack = []
+        for i in range(1, len(stack), 2):  # Saltar los estados, solo tomar símbolos
+            if i < len(stack):
+                symbol_stack.append(str(stack[i]))
+        
+        if symbol_stack:
+            error_parts.append(f"Símbolos ya procesados: {' '.join(symbol_stack)}")
+        else:
+            error_parts.append("No se han procesado símbolos aún")
+        
+        # Sugerencias adicionales si es posible
+        suggestions = self._get_error_suggestions(entrada, expected_symbols)
+        if suggestions:
+            error_parts.extend(suggestions)
+        
+        # Escribir información detallada al log
+        log_file.write("\n=== ANÁLISIS DETALLADO DEL ERROR ===\n")
+        for part in error_parts:
+            log_file.write(f"  • {part}\n")
+        log_file.write("=====================================\n\n")
+        log_file.flush()
+        
+        # Retornar mensaje principal para consola
+        return error_parts[0] + " - " + error_parts[1]
+    def _get_error_suggestions(self, found_symbol, expected_symbols):
+        suggestions = []
+        
+        
+        if found_symbol == '$' and 'ID' in expected_symbols:
+            suggestions.append("Posible causa: falta un identificador al final de la expresión")
+        elif found_symbol == '$' and any(op in expected_symbols for op in ['+', '-', '*', '/', '=']):
+            suggestions.append("Posible causa: expresión incompleta, falta el operando derecho")
+        elif found_symbol in ['+', '-', '*', '/'] and 'ID' in expected_symbols:
+            suggestions.append("Posible causa: operador sin operando izquierdo")
+        elif found_symbol == 'ID' and any(op in expected_symbols for op in ['+', '-', '*', '/', ';', '$']):
+            suggestions.append("Posible causa: falta un operador o terminador de sentencia")
+        elif found_symbol == '(' and ')' in expected_symbols:
+            suggestions.append("Posible causa: paréntesis vacíos o expresión incompleta")
+        elif found_symbol == ')' and any(op in expected_symbols for op in ['+', '-', '*', '/']):
+            suggestions.append("Posible causa: paréntesis cerrado prematuramente")
+        
+        return suggestions
+
 
 #Ejemplo de uso
 
