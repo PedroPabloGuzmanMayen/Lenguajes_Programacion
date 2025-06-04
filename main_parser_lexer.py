@@ -49,7 +49,7 @@ def main():
 
   buffer = Buffer(path_data, 10)
   lexer_geted  = lexer.token_producer(buffer)
-  tabla.parse_consumer_producer(lexer=lexer_geted, debug=False)    
+  tabla.parse_consumer_producer(lexer=lexer_geted, debug=True)    
 
 
   

@@ -1,0 +1,495 @@
+Token: ('return ID', 'x')
+Ignorados: []
+
+== Proceso de Parsing ==
+Stack                          Entrada                        Acción
+0                              ID 'x'                         shift 3
+DEBUG - Acción obtenida: ['shift', 3]
+0 ID 3                         ASSIGNOP ':='                  shift 6
+DEBUG - Acción obtenida: ['shift', 6]
+0 ID 3 ASSIGNOP 6              NUMBER '5'                     shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 ID 3 ASSIGNOP 6 NUMBER 14    PLUS '+'                       reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 ID 3 ASSIGNOP 6 f 11         PLUS '+'                       reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 ID 3 ASSIGNOP 6 r 9          PLUS '+'                       shift 19
+DEBUG - Acción obtenida: ['shift', 19]
+0 ID 3 ASSIGNOP 6 r 9 PLUS 19  NUMBER '3'                     shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 ID 3 ASSIGNOP 6 r 9 PLUS 19 NUMBER 14 TIMES '*'                      reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 ID 3 ASSIGNOP 6 r 9 PLUS 19 f 11 TIMES '*'                      shift 23
+DEBUG - Acción obtenida: ['shift', 23]
+0 ID 3 ASSIGNOP 6 r 9 PLUS 19 f 11 TIMES 23 NUMBER '2'                     shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 ID 3 ASSIGNOP 6 r 9 PLUS 19 f 11 TIMES 23 NUMBER 14 SEMICOLON ';'                  reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 ID 3 ASSIGNOP 6 r 9 PLUS 19 f 11 TIMES 23 f 34 SEMICOLON ';'                  reduce ('j', ('TIMES', 'f'))
+DEBUG - Acción obtenida: ['reduce', ('j', ('TIMES', 'f'))]
+0 ID 3 ASSIGNOP 6 r 9 PLUS 19 f 11 j 25 SEMICOLON ';'                  reduce ('v', ('j',))
+DEBUG - Acción obtenida: ['reduce', ('v', ('j',))]
+0 ID 3 ASSIGNOP 6 r 9 PLUS 19 f 11 v 22 SEMICOLON ';'                  reduce ('r', ('f', 'v'))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f', 'v'))]
+0 ID 3 ASSIGNOP 6 r 9 PLUS 19 r 32 SEMICOLON ';'                  reduce ('y', ('PLUS', 'r'))
+DEBUG - Acción obtenida: ['reduce', ('y', ('PLUS', 'r'))]
+0 ID 3 ASSIGNOP 6 r 9 y 17     SEMICOLON ';'                  reduce ('w', ('y',))
+DEBUG - Acción obtenida: ['reduce', ('w', ('y',))]
+0 ID 3 ASSIGNOP 6 r 9 w 20     SEMICOLON ';'                  reduce ('x', ('r', 'w'))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r', 'w'))]
+0 ID 3 ASSIGNOP 6 x 13         SEMICOLON ';'                  reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 ID 3 ASSIGNOP 6 e 15         SEMICOLON ';'                  reduce ('a', ('ID', 'ASSIGNOP', 'e'))
+DEBUG - Acción obtenida: ['reduce', ('a', ('ID', 'ASSIGNOP', 'e'))]
+0 a 2                          SEMICOLON ';'                  reduce ('m', ('a',))
+DEBUG - Acción obtenida: ['reduce', ('m', ('a',))]
+0 m 4                          SEMICOLON ';'                  shift 8
+DEBUG - Acción obtenida: ['shift', 8]
+0 m 4 SEMICOLON 8              ID 'y'                         shift 3
+DEBUG - Acción obtenida: ['shift', 3]
+0 m 4 SEMICOLON 8 ID 3         ASSIGNOP ':='                  shift 6
+DEBUG - Acción obtenida: ['shift', 6]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN '('                     shift 10
+DEBUG - Acción obtenida: ['shift', 10]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 NUMBER '10'                    shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 NUMBER 14 MINUS '-'                      reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 f 11 MINUS '-'                      reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 MINUS '-'                      shift 18
+DEBUG - Acción obtenida: ['shift', 18]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 MINUS 18 NUMBER '4'                     shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 MINUS 18 NUMBER 14 RPAREN ')'                     reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 MINUS 18 f 11 RPAREN ')'                     reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 MINUS 18 r 31 RPAREN ')'                     reduce ('y', ('MINUS', 'r'))
+DEBUG - Acción obtenida: ['reduce', ('y', ('MINUS', 'r'))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 y 17 RPAREN ')'                     reduce ('w', ('y',))
+DEBUG - Acción obtenida: ['reduce', ('w', ('y',))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 w 20 RPAREN ')'                     reduce ('x', ('r', 'w'))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r', 'w'))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 x 13 RPAREN ')'                     reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 e 21 RPAREN ')'                     shift 33
+DEBUG - Acción obtenida: ['shift', 33]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 e 21 RPAREN 33 DIV '/'                        reduce ('f', ('LPAREN', 'e', 'RPAREN'))
+DEBUG - Acción obtenida: ['reduce', ('f', ('LPAREN', 'e', 'RPAREN'))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 DIV '/'                        shift 24
+DEBUG - Acción obtenida: ['shift', 24]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 DIV 24 NUMBER '2'                     shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 DIV 24 NUMBER 14 SEMICOLON ';'                  reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 DIV 24 f 35 SEMICOLON ';'                  reduce ('j', ('DIV', 'f'))
+DEBUG - Acción obtenida: ['reduce', ('j', ('DIV', 'f'))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 j 25 SEMICOLON ';'                  reduce ('v', ('j',))
+DEBUG - Acción obtenida: ['reduce', ('v', ('j',))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 v 22 SEMICOLON ';'                  reduce ('r', ('f', 'v'))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f', 'v'))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 SEMICOLON ';'                  reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 SEMICOLON ';'                  reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 ID 3 ASSIGNOP 6 e 15 SEMICOLON ';'                  reduce ('a', ('ID', 'ASSIGNOP', 'e'))
+DEBUG - Acción obtenida: ['reduce', ('a', ('ID', 'ASSIGNOP', 'e'))]
+0 m 4 SEMICOLON 8 a 2          SEMICOLON ';'                  reduce ('m', ('a',))
+DEBUG - Acción obtenida: ['reduce', ('m', ('a',))]
+0 m 4 SEMICOLON 8 m 16         SEMICOLON ';'                  shift 8
+DEBUG - Acción obtenida: ['shift', 8]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 'result'                    shift 3
+DEBUG - Acción obtenida: ['shift', 3]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP ':='                  shift 6
+DEBUG - Acción obtenida: ['shift', 6]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 ID 'x'                         shift 12
+DEBUG - Acción obtenida: ['shift', 12]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 ID 12 LT '<'                         reduce ('f', ('ID',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('ID',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 LT '<'                         reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 LT '<'                         reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT '<'                         shift 27
+DEBUG - Acción obtenida: ['shift', 27]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 ID 'y'                         shift 12
+DEBUG - Acción obtenida: ['shift', 12]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 ID 12 SEMICOLON ';'                  reduce ('f', ('ID',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('ID',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 f 11 SEMICOLON ';'                  reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 r 9 SEMICOLON ';'                  reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 x 38 SEMICOLON ';'                  reduce ('z', ('LT', 'x'))
+DEBUG - Acción obtenida: ['reduce', ('z', ('LT', 'x'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 z 28 SEMICOLON ';'                  reduce ('e', ('x', 'z'))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x', 'z'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 e 15 SEMICOLON ';'                  reduce ('a', ('ID', 'ASSIGNOP', 'e'))
+DEBUG - Acción obtenida: ['reduce', ('a', ('ID', 'ASSIGNOP', 'e'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 a 2 SEMICOLON ';'                  reduce ('m', ('a',))
+DEBUG - Acción obtenida: ['reduce', ('m', ('a',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON ';'                  shift 8
+DEBUG - Acción obtenida: ['shift', 8]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 'flag'                      shift 3
+DEBUG - Acción obtenida: ['shift', 3]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP ':='                  shift 6
+DEBUG - Acción obtenida: ['shift', 6]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 ID 'x'                         shift 12
+DEBUG - Acción obtenida: ['shift', 12]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 ID 12 EQ '='                         reduce ('f', ('ID',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('ID',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 EQ '='                         reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 EQ '='                         reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 EQ '='                         shift 26
+DEBUG - Acción obtenida: ['shift', 26]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 EQ 26 ID 'y'                         shift 12
+DEBUG - Acción obtenida: ['shift', 12]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 EQ 26 ID 12 SEMICOLON ';'                  reduce ('f', ('ID',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('ID',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 EQ 26 f 11 SEMICOLON ';'                  reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 EQ 26 r 9 SEMICOLON ';'                  reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 EQ 26 x 37 SEMICOLON ';'                  reduce ('z', ('EQ', 'x'))
+DEBUG - Acción obtenida: ['reduce', ('z', ('EQ', 'x'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 z 28 SEMICOLON ';'                  reduce ('e', ('x', 'z'))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x', 'z'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 e 15 SEMICOLON ';'                  reduce ('a', ('ID', 'ASSIGNOP', 'e'))
+DEBUG - Acción obtenida: ['reduce', ('a', ('ID', 'ASSIGNOP', 'e'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 a 2 SEMICOLON ';'                  reduce ('m', ('a',))
+DEBUG - Acción obtenida: ['reduce', ('m', ('a',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON ';'                  shift 8
+DEBUG - Acción obtenida: ['shift', 8]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 'a'                         shift 3
+DEBUG - Acción obtenida: ['shift', 3]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP ':='                  shift 6
+DEBUG - Acción obtenida: ['shift', 6]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 NUMBER '10'                    shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 NUMBER 14 SEMICOLON ';'                  reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 SEMICOLON ';'                  reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 SEMICOLON ';'                  reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 SEMICOLON ';'                  reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 e 15 SEMICOLON ';'                  reduce ('a', ('ID', 'ASSIGNOP', 'e'))
+DEBUG - Acción obtenida: ['reduce', ('a', ('ID', 'ASSIGNOP', 'e'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 a 2 SEMICOLON ';'                  reduce ('m', ('a',))
+DEBUG - Acción obtenida: ['reduce', ('m', ('a',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON ';'                  shift 8
+DEBUG - Acción obtenida: ['shift', 8]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 'b'                         shift 3
+DEBUG - Acción obtenida: ['shift', 3]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP ':='                  shift 6
+DEBUG - Acción obtenida: ['shift', 6]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 NUMBER '20'                    shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 NUMBER 14 SEMICOLON ';'                  reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 SEMICOLON ';'                  reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 SEMICOLON ';'                  reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 SEMICOLON ';'                  reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 e 15 SEMICOLON ';'                  reduce ('a', ('ID', 'ASSIGNOP', 'e'))
+DEBUG - Acción obtenida: ['reduce', ('a', ('ID', 'ASSIGNOP', 'e'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 a 2 SEMICOLON ';'                  reduce ('m', ('a',))
+DEBUG - Acción obtenida: ['reduce', ('m', ('a',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON ';'                  shift 8
+DEBUG - Acción obtenida: ['shift', 8]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 'c'                         shift 3
+DEBUG - Acción obtenida: ['shift', 3]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP ':='                  shift 6
+DEBUG - Acción obtenida: ['shift', 6]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 ID 'a'                         shift 12
+DEBUG - Acción obtenida: ['shift', 12]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 ID 12 PLUS '+'                       reduce ('f', ('ID',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('ID',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 PLUS '+'                       reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 PLUS '+'                       shift 19
+DEBUG - Acción obtenida: ['shift', 19]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 PLUS 19 ID 'b'                         shift 12
+DEBUG - Acción obtenida: ['shift', 12]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 PLUS 19 ID 12 SEMICOLON ';'                  reduce ('f', ('ID',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('ID',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 PLUS 19 f 11 SEMICOLON ';'                  reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 PLUS 19 r 32 SEMICOLON ';'                  reduce ('y', ('PLUS', 'r'))
+DEBUG - Acción obtenida: ['reduce', ('y', ('PLUS', 'r'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 y 17 SEMICOLON ';'                  reduce ('w', ('y',))
+DEBUG - Acción obtenida: ['reduce', ('w', ('y',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 w 20 SEMICOLON ';'                  reduce ('x', ('r', 'w'))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r', 'w'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 SEMICOLON ';'                  reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 e 15 SEMICOLON ';'                  reduce ('a', ('ID', 'ASSIGNOP', 'e'))
+DEBUG - Acción obtenida: ['reduce', ('a', ('ID', 'ASSIGNOP', 'e'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 a 2 SEMICOLON ';'                  reduce ('m', ('a',))
+DEBUG - Acción obtenida: ['reduce', ('m', ('a',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON ';'                  shift 8
+DEBUG - Acción obtenida: ['shift', 8]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 'var1'                      shift 3
+DEBUG - Acción obtenida: ['shift', 3]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP ':='                  shift 6
+DEBUG - Acción obtenida: ['shift', 6]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 NUMBER '3.14E-2'               shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 NUMBER 14 SEMICOLON ';'                  reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 SEMICOLON ';'                  reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 SEMICOLON ';'                  reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 SEMICOLON ';'                  reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 e 15 SEMICOLON ';'                  reduce ('a', ('ID', 'ASSIGNOP', 'e'))
+DEBUG - Acción obtenida: ['reduce', ('a', ('ID', 'ASSIGNOP', 'e'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 a 2 SEMICOLON ';'                  reduce ('m', ('a',))
+DEBUG - Acción obtenida: ['reduce', ('m', ('a',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON ';'                  shift 8
+DEBUG - Acción obtenida: ['shift', 8]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 'var2'                      shift 3
+DEBUG - Acción obtenida: ['shift', 3]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP ':='                  shift 6
+DEBUG - Acción obtenida: ['shift', 6]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 NUMBER '100'                   shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 NUMBER 14 TIMES '*'                      reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES '*'                      shift 23
+DEBUG - Acción obtenida: ['shift', 23]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 ID 'var1'                      shift 12
+DEBUG - Acción obtenida: ['shift', 12]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 ID 12 SEMICOLON ';'                  reduce ('f', ('ID',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('ID',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 f 34 SEMICOLON ';'                  reduce ('j', ('TIMES', 'f'))
+DEBUG - Acción obtenida: ['reduce', ('j', ('TIMES', 'f'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 j 25 SEMICOLON ';'                  reduce ('v', ('j',))
+DEBUG - Acción obtenida: ['reduce', ('v', ('j',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 v 22 SEMICOLON ';'                  reduce ('r', ('f', 'v'))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f', 'v'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 SEMICOLON ';'                  reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 SEMICOLON ';'                  reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 e 15 SEMICOLON ';'                  reduce ('a', ('ID', 'ASSIGNOP', 'e'))
+DEBUG - Acción obtenida: ['reduce', ('a', ('ID', 'ASSIGNOP', 'e'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 a 2 SEMICOLON ';'                  reduce ('m', ('a',))
+DEBUG - Acción obtenida: ['reduce', ('m', ('a',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON ';'                  shift 8
+DEBUG - Acción obtenida: ['shift', 8]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 'complex'                   shift 3
+DEBUG - Acción obtenida: ['shift', 3]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP ':='                  shift 6
+DEBUG - Acción obtenida: ['shift', 6]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN '('                     shift 10
+DEBUG - Acción obtenida: ['shift', 10]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 ID 'x'                         shift 12
+DEBUG - Acción obtenida: ['shift', 12]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 ID 12 PLUS '+'                       reduce ('f', ('ID',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('ID',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 f 11 PLUS '+'                       reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 PLUS '+'                       shift 19
+DEBUG - Acción obtenida: ['shift', 19]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 PLUS 19 ID 'y'                         shift 12
+DEBUG - Acción obtenida: ['shift', 12]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 PLUS 19 ID 12 RPAREN ')'                     reduce ('f', ('ID',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('ID',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 PLUS 19 f 11 RPAREN ')'                     reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 PLUS 19 r 32 RPAREN ')'                     reduce ('y', ('PLUS', 'r'))
+DEBUG - Acción obtenida: ['reduce', ('y', ('PLUS', 'r'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 y 17 RPAREN ')'                     reduce ('w', ('y',))
+DEBUG - Acción obtenida: ['reduce', ('w', ('y',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 w 20 RPAREN ')'                     reduce ('x', ('r', 'w'))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r', 'w'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 x 13 RPAREN ')'                     reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 e 21 RPAREN ')'                     shift 33
+DEBUG - Acción obtenida: ['shift', 33]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 e 21 RPAREN 33 TIMES '*'                      reduce ('f', ('LPAREN', 'e', 'RPAREN'))
+DEBUG - Acción obtenida: ['reduce', ('f', ('LPAREN', 'e', 'RPAREN'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES '*'                      shift 23
+DEBUG - Acción obtenida: ['shift', 23]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN '('                     shift 10
+DEBUG - Acción obtenida: ['shift', 10]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 ID 'a'                         shift 12
+DEBUG - Acción obtenida: ['shift', 12]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 ID 12 MINUS '-'                      reduce ('f', ('ID',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('ID',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 f 11 MINUS '-'                      reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 r 9 MINUS '-'                      shift 18
+DEBUG - Acción obtenida: ['shift', 18]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 r 9 MINUS 18 ID 'b'                         shift 12
+DEBUG - Acción obtenida: ['shift', 12]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 r 9 MINUS 18 ID 12 RPAREN ')'                     reduce ('f', ('ID',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('ID',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 r 9 MINUS 18 f 11 RPAREN ')'                     reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 r 9 MINUS 18 r 31 RPAREN ')'                     reduce ('y', ('MINUS', 'r'))
+DEBUG - Acción obtenida: ['reduce', ('y', ('MINUS', 'r'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 r 9 y 17 RPAREN ')'                     reduce ('w', ('y',))
+DEBUG - Acción obtenida: ['reduce', ('w', ('y',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 r 9 w 20 RPAREN ')'                     reduce ('x', ('r', 'w'))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r', 'w'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 x 13 RPAREN ')'                     reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 e 21 RPAREN ')'                     shift 33
+DEBUG - Acción obtenida: ['shift', 33]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 LPAREN 10 e 21 RPAREN 33 SEMICOLON ';'                  reduce ('f', ('LPAREN', 'e', 'RPAREN'))
+DEBUG - Acción obtenida: ['reduce', ('f', ('LPAREN', 'e', 'RPAREN'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 TIMES 23 f 34 SEMICOLON ';'                  reduce ('j', ('TIMES', 'f'))
+DEBUG - Acción obtenida: ['reduce', ('j', ('TIMES', 'f'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 j 25 SEMICOLON ';'                  reduce ('v', ('j',))
+DEBUG - Acción obtenida: ['reduce', ('v', ('j',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 v 22 SEMICOLON ';'                  reduce ('r', ('f', 'v'))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f', 'v'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 SEMICOLON ';'                  reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 SEMICOLON ';'                  reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 e 15 SEMICOLON ';'                  reduce ('a', ('ID', 'ASSIGNOP', 'e'))
+DEBUG - Acción obtenida: ['reduce', ('a', ('ID', 'ASSIGNOP', 'e'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 a 2 SEMICOLON ';'                  reduce ('m', ('a',))
+DEBUG - Acción obtenida: ['reduce', ('m', ('a',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON ';'                  shift 8
+DEBUG - Acción obtenida: ['shift', 8]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 'nested'                    shift 3
+DEBUG - Acción obtenida: ['shift', 3]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP ':='                  shift 6
+DEBUG - Acción obtenida: ['shift', 6]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN '('                     shift 10
+DEBUG - Acción obtenida: ['shift', 10]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN '('                     shift 10
+DEBUG - Acción obtenida: ['shift', 10]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 NUMBER '5'                     shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 NUMBER 14 PLUS '+'                       reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 f 11 PLUS '+'                       reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 r 9 PLUS '+'                       shift 19
+DEBUG - Acción obtenida: ['shift', 19]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 r 9 PLUS 19 NUMBER '3'                     shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 r 9 PLUS 19 NUMBER 14 RPAREN ')'                     reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 r 9 PLUS 19 f 11 RPAREN ')'                     reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 r 9 PLUS 19 r 32 RPAREN ')'                     reduce ('y', ('PLUS', 'r'))
+DEBUG - Acción obtenida: ['reduce', ('y', ('PLUS', 'r'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 r 9 y 17 RPAREN ')'                     reduce ('w', ('y',))
+DEBUG - Acción obtenida: ['reduce', ('w', ('y',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 r 9 w 20 RPAREN ')'                     reduce ('x', ('r', 'w'))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r', 'w'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 x 13 RPAREN ')'                     reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 e 21 RPAREN ')'                     shift 33
+DEBUG - Acción obtenida: ['shift', 33]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 LPAREN 10 e 21 RPAREN 33 TIMES '*'                      reduce ('f', ('LPAREN', 'e', 'RPAREN'))
+DEBUG - Acción obtenida: ['reduce', ('f', ('LPAREN', 'e', 'RPAREN'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 f 11 TIMES '*'                      shift 23
+DEBUG - Acción obtenida: ['shift', 23]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 f 11 TIMES 23 NUMBER '2'                     shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 f 11 TIMES 23 NUMBER 14 RPAREN ')'                     reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 f 11 TIMES 23 f 34 RPAREN ')'                     reduce ('j', ('TIMES', 'f'))
+DEBUG - Acción obtenida: ['reduce', ('j', ('TIMES', 'f'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 f 11 j 25 RPAREN ')'                     reduce ('v', ('j',))
+DEBUG - Acción obtenida: ['reduce', ('v', ('j',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 f 11 v 22 RPAREN ')'                     reduce ('r', ('f', 'v'))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f', 'v'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 r 9 RPAREN ')'                     reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 x 13 RPAREN ')'                     reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 e 21 RPAREN ')'                     shift 33
+DEBUG - Acción obtenida: ['shift', 33]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 LPAREN 10 e 21 RPAREN 33 LT '<'                         reduce ('f', ('LPAREN', 'e', 'RPAREN'))
+DEBUG - Acción obtenida: ['reduce', ('f', ('LPAREN', 'e', 'RPAREN'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 f 11 LT '<'                         reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 r 9 LT '<'                         reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT '<'                         shift 27
+DEBUG - Acción obtenida: ['shift', 27]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN '('                     shift 10
+DEBUG - Acción obtenida: ['shift', 10]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 NUMBER '10'                    shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 NUMBER 14 DIV '/'                        reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV '/'                        shift 24
+DEBUG - Acción obtenida: ['shift', 24]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN '('                     shift 10
+DEBUG - Acción obtenida: ['shift', 10]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 NUMBER '1'                     shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 NUMBER 14 PLUS '+'                       reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 f 11 PLUS '+'                       reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 r 9 PLUS '+'                       shift 19
+DEBUG - Acción obtenida: ['shift', 19]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 r 9 PLUS 19 NUMBER '1'                     shift 14
+DEBUG - Acción obtenida: ['shift', 14]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 r 9 PLUS 19 NUMBER 14 RPAREN ')'                     reduce ('f', ('NUMBER',))
+DEBUG - Acción obtenida: ['reduce', ('f', ('NUMBER',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 r 9 PLUS 19 f 11 RPAREN ')'                     reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 r 9 PLUS 19 r 32 RPAREN ')'                     reduce ('y', ('PLUS', 'r'))
+DEBUG - Acción obtenida: ['reduce', ('y', ('PLUS', 'r'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 r 9 y 17 RPAREN ')'                     reduce ('w', ('y',))
+DEBUG - Acción obtenida: ['reduce', ('w', ('y',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 r 9 w 20 RPAREN ')'                     reduce ('x', ('r', 'w'))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r', 'w'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 x 13 RPAREN ')'                     reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 e 21 RPAREN ')'                     shift 33
+DEBUG - Acción obtenida: ['shift', 33]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 LPAREN 10 e 21 RPAREN 33 RPAREN ')'                     reduce ('f', ('LPAREN', 'e', 'RPAREN'))
+DEBUG - Acción obtenida: ['reduce', ('f', ('LPAREN', 'e', 'RPAREN'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 DIV 24 f 35 RPAREN ')'                     reduce ('j', ('DIV', 'f'))
+DEBUG - Acción obtenida: ['reduce', ('j', ('DIV', 'f'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 j 25 RPAREN ')'                     reduce ('v', ('j',))
+DEBUG - Acción obtenida: ['reduce', ('v', ('j',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 f 11 v 22 RPAREN ')'                     reduce ('r', ('f', 'v'))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f', 'v'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 r 9 RPAREN ')'                     reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 x 13 RPAREN ')'                     reduce ('e', ('x',))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 e 21 RPAREN ')'                     shift 33
+DEBUG - Acción obtenida: ['shift', 33]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 LPAREN 10 e 21 RPAREN 33 RPAREN ')'                     reduce ('f', ('LPAREN', 'e', 'RPAREN'))
+DEBUG - Acción obtenida: ['reduce', ('f', ('LPAREN', 'e', 'RPAREN'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 f 11 RPAREN ')'                     reduce ('r', ('f',))
+DEBUG - Acción obtenida: ['reduce', ('r', ('f',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 r 9 RPAREN ')'                     reduce ('x', ('r',))
+DEBUG - Acción obtenida: ['reduce', ('x', ('r',))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 LT 27 x 38 RPAREN ')'                     reduce ('z', ('LT', 'x'))
+DEBUG - Acción obtenida: ['reduce', ('z', ('LT', 'x'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 x 13 z 28 RPAREN ')'                     reduce ('e', ('x', 'z'))
+DEBUG - Acción obtenida: ['reduce', ('e', ('x', 'z'))]
+0 m 4 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 m 16 SEMICOLON 8 ID 3 ASSIGNOP 6 e 15 RPAREN ')'                     Error
+DEBUG - Acción obtenida: None
+❌ Error de sintaxis.
+
+=== ANÁLISIS DETALLADO DEL ERROR ===
+  • Error de sintaxis en el símbolo 'RPAREN' (lexema: ')')
+  • Se esperaba uno de: SEMICOLON o $
+  • Estado actual del parser: 15
+  • Símbolos ya procesados: m SEMICOLON m SEMICOLON m SEMICOLON m SEMICOLON m SEMICOLON m SEMICOLON m SEMICOLON m SEMICOLON m SEMICOLON m SEMICOLON ID ASSIGNOP e
+=====================================
+
+❌ Error de sintaxis en el símbolo 'RPAREN' (lexema: ')') - Se esperaba uno de: SEMICOLON o $

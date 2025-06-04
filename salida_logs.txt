@@ -151,3 +151,4 @@
 ✔️ Token: return NUMBER, lexeme: '1'
 ✔️ Token: return RPAREN, lexeme: ')'
 ✔️ Token: return RPAREN, lexeme: ')'
+✔️ Token: return RPAREN, lexeme: ')'
